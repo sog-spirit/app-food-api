@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework import status
 from .serializers import UserSerializer
 from .models import User
 import jwt, datetime
@@ -39,6 +40,28 @@ class LoginView(APIView):
             'jwt': token
         }
 
+        return response
+
+class UpdateUserView(APIView):
+    def patch(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            raise AuthenticationFailed('User is not authenticated')
+        
+        try:
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('JWT token expired')
+        
+        user = User.objects.filter(id=payload['id']).first()
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        response = Response()
+        response.data = {
+            'message': 'User info updated successfully'
+        }
         return response
 
 class UserView(APIView):

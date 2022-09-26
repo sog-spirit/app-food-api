@@ -130,3 +130,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'api.User'
+
+REST_FRAMEWORK = {
+    'DATE_INPUT_FORMATS': [
+        '%d-%m-%Y',
+        '%d/%m/%Y',
+    ],
+}
