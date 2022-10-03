@@ -32,12 +32,19 @@ class LoginView(APIView):
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
             'iat': datetime.datetime.utcnow()
         }
-
+        if user.is_superuser:
+            user_role = 'Admin'
+        elif user.is_staff:
+            user_role = 'Staff'
+        else:
+            user_role = 'Customer'
+        
         token = jwt.encode(payload, 'secret', algorithm='HS256')
         response = Response()
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
-            'jwt': token
+            'jwt': token,
+            'role': user_role
         }
 
         return response
