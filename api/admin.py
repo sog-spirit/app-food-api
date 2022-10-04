@@ -3,7 +3,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from .models import User
+from .models import (
+    User,
+    Category,
+    Product
+)
 # Register your models here.
 
 class UserCreationForm(forms.ModelForm):
@@ -58,3 +62,5 @@ class CustomUserAdmin(UserAdmin):
     filter_horizontal = ()
 
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Category)
+admin.site.register(Product)

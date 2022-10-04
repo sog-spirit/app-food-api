@@ -16,33 +16,43 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['password', 'email', 'phone']
 
 class Category(models.Model):
+    _created = models.CharField(max_length=255, null=True, blank=True)
+    _creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='category_creator')
+    _updated = models.CharField(max_length=255, null=True, blank=True)
+    _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="category_updater")
+    _deleted = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
 
 class Product(models.Model):
+    _created = models.CharField(max_length=255, null=True, blank=True)
+    _creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_creator')
+    _updated = models.CharField(max_length=255, null=True, blank=True)
+    _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="product_updater")
+    _deleted = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=255)
     image = models.TextField(null=True, blank=True)
     price = models.FloatField(default=0.0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_fk')
+    description = models.TextField(null=True, blank=True)
     quantity = models.IntegerField(default=0)
 
-class OrderDetail(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_details')
-    quantity = models.IntegerField(default=0)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_details')
+# class OrderDetail(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_details')
+#     quantity = models.IntegerField(default=0)
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_details')
     
-class Order(models.Model):
-    price = models.FloatField(default=0.0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    payment_method =
-    order_status =
+# class Order(models.Model):
+#     price = models.FloatField(default=0.0)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+#     payment_method =
+#     order_status =
 
-class Review(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='reviews')
-    content = models.TextField()
-    rating = models.FloatField()
+# class Review(models.Model):
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='reviews')
+#     content = models.TextField()
+#     rating = models.FloatField()
 
-class Coupon(models.Model):
-    discount = models.IntegerField(default=0)
-    name = models.CharField(max_length=255)
+# class Coupon(models.Model):
+#     discount = models.IntegerField(default=0)
+#     name = models.CharField(max_length=255)
