@@ -6,7 +6,10 @@ from django.core.exceptions import ValidationError
 from .models import (
     User,
     Category,
-    Product
+    Product,
+    Order,
+    OrderDetail,
+    Review
 )
 # Register your models here.
 
@@ -64,3 +67,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Category)
 admin.site.register(Product)
+admin.site.register(Order)
+admin.site.register(OrderDetail)
+admin.site.register(Review)
