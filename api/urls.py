@@ -6,7 +6,9 @@ from .views import (
     LogoutView,
     UpdateUserView,
     ProductsAPIView,
-    SingleProductAPIView
+    SingleProductAPIView,
+    CategoriesAPIView,
+    SingleCategoryAPIView,
 )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('user/update', UpdateUserView.as_view()),
     path('product', ProductsAPIView.as_view()),
     path('product/<str:id>', SingleProductAPIView.as_view()),
+    path('category', CategoriesAPIView.as_view()),
+    path('category/<str:id>', SingleCategoryAPIView.as_view()),
 ]

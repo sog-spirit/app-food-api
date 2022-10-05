@@ -1,15 +1,11 @@
-from bson import is_valid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
-from .serializers import UserSerializer
-from .models import User
+from .serializers import UserSerializer, ProductSerializer, CategorySerializer
+from .models import User, Product, Category
 import jwt
 from datetime import datetime
-
-from .models import Product
-from .serializers import ProductSerialize
 
 # Create your views here.
 class RegisterView(APIView):
@@ -105,12 +101,12 @@ class LogoutView(APIView):
 class ProductsAPIView(APIView):
     def get(self, request):
         products = Product.objects.all().filter(_deleted=None)
-        serializer = ProductSerialize(products, many=True)
+        serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         data = request.data
-        serializer = ProductSerialize(data=data)
+        serializer = ProductSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
@@ -122,7 +118,7 @@ class ProductsAPIView(APIView):
 class SingleProductAPIView(APIView):
     def get(self, request, id):
         product = Product.objects.get(id=id)
-        serializer = ProductSerialize(product, many=False)
+        serializer = ProductSerializer(product, many=False)
 
         if product._deleted == None:
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -132,7 +128,7 @@ class SingleProductAPIView(APIView):
     def put(self, request, id):
         data = request.data
         product = Product.objects.get(id=id)
-        serializer = ProductSerialize(instance=product, data=data, partial=True)
+        serializer = ProductSerializer(instance=product, data=data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
@@ -140,9 +136,57 @@ class SingleProductAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request, id):
+    def delete(self, request, id):
         product = Product.objects.get(id=id)
-        serializer = ProductSerialize(instance=product, data={ "_deleted": datetime.now() }, partial=True)
+        serializer = ProductSerializer(instance=product, data={ "_deleted": datetime.now() }, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CategoriesAPIView(APIView):
+    def get(self, request):
+        categories = Category.objects.all().filter(_deleted=None)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        data = request.data
+        serializer = CategorySerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SingleCategoryAPIView(APIView):
+    def get(self, request, id):
+        data = request.data
+        category = Category.objects.get(id=id)
+        serializer = CategorySerializer(category, many=False)
+
+        if category._deleted == None:
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, id):
+        data = request.data
+        category = Category.objects.get(id=id)
+        serializer = CategorySerializer(instance=category, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        category = Category.objects.get(id=id)
+        serializer = CategorySerializer(instance=category, data={'_deleted': datetime.now() }, partial=True)
 
         if serializer.is_valid():
             serializer.save()
