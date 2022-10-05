@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Product
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,3 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
         instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
         instance.save()
         return instance
+
+class ProductSerialize(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
