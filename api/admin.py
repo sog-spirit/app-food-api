@@ -64,7 +64,12 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
+
 admin.site.register(User, CustomUserAdmin)
+
+# class CategoryAdmin(admin.ModelAdmin):
+#     fields = ('_created', '_creator', '_updated', '_updater', '_deleted', 'name', 'description')
+
 admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(Order)
