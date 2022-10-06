@@ -47,7 +47,7 @@ class Product(models.Model):
     status = models.CharField(max_length=10, choices=PRODUCT_STATUS, default="E")
 
     def __str__(self):
-        return self.name
+        return self.name + ', id ' + str(self.id)
 
 class Order(models.Model):
     _created = models.DateTimeField(auto_now_add=True)

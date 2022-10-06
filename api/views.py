@@ -5,17 +5,39 @@ from rest_framework import status
 from .serializers import UserSerializer, ProductSerializer, CategorySerializer
 from .models import User, Product, Category
 import jwt
-from datetime import datetime
+from datetime import datetime, timedelta
+from .helper import user_authentication, user_permission_authentication
 
-# Create your views here.
 class RegisterView(APIView):
+    """
+    Required fields:
+    email
+    username
+    password
+    phone
+    """
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        user = User.objects.create_user(
+            email=request.data['email'],
+            username=request.data['username'],
+            password=request.data['password'],
+            phone=request.data['phone'],
+        )
+        return Response(
+            {
+                'detail': 'User created successfully',
+            },
+            status=status.HTTP_201_CREATED
+        )
 
 class LoginView(APIView):
+    """
+    Required fields:
+    username
+    password
+    """
     def post(self, request):
         username = request.data['username']
         password = request.data['password']
@@ -30,7 +52,7 @@ class LoginView(APIView):
         
         payload = {
             'id': user.id,
-            'exp': datetime.utcnow() + datetime.timedelta(minutes=60),
+            'exp': datetime.utcnow() + timedelta(minutes=60),
             'iat': datetime.utcnow()
         }
         if user.is_superuser:
@@ -45,45 +67,30 @@ class LoginView(APIView):
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
             'jwt': token,
-            'role': user_role
+            'detail': 'Login successfully'
         }
 
         return response
 
 class UpdateUserView(APIView):
+    """
+    Any fields defined in User class from models.py
+    """
     def patch(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
-            raise AuthenticationFailed('User is not authenticated')
-        
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('JWT token expired')
-        
+        payload = user_authentication(request)
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        response = Response()
-        response.data = {
-            'message': 'User info updated successfully'
-        }
-        return response
+        return Response(
+            {
+                'detail': 'User info updated successfully'
+            }
+        )
 
 class UserView(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
-            raise AuthenticationFailed('User is not authenticated')
-        
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('JWT token expired')
-        
+        payload = user_authentication(request)
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user)
 
@@ -94,7 +101,7 @@ class LogoutView(APIView):
         response = Response()
         response.delete_cookie('jwt')
         response.data = {
-            'message': 'Logout successfully'
+            'detail': 'Logout successfully'
         }
         return response
 
@@ -104,13 +111,21 @@ class ProductsAPIView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
+    """
+    Required:
+    category
+    _creator (auto created with user id)
+    _updater (auto created with user id)
+    """
     def post(self, request):
-        data = request.data
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
         serializer = ProductSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -126,8 +141,16 @@ class SingleProductAPIView(APIView):
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
-        data = request.data
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_updater'] = payload['id']
         product = Product.objects.get(id=id)
+        if product._deleted is not None:
+            return Response({
+                'detail': 'Product is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = ProductSerializer(instance=product, data=data, partial=True)
 
         if serializer.is_valid():
@@ -137,8 +160,21 @@ class SingleProductAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id):
+        payload = user_permission_authentication(request)
         product = Product.objects.get(id=id)
-        serializer = ProductSerializer(instance=product, data={ "_deleted": datetime.now() }, partial=True)
+        if product._deleted is not None:
+            return Response({
+                'detail': 'Product is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        serializer = ProductSerializer(
+            instance=product,
+            data={
+                "_deleted": datetime.now(),
+                '_updater': payload['id']
+            },
+            partial=True
+            )
 
         if serializer.is_valid():
             serializer.save()
@@ -152,8 +188,17 @@ class CategoriesAPIView(APIView):
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
     
+    """
+    Required fields:
+    name
+    _creator (auto created with user id)
+    _updater (auto created with user id)
+    """
     def post(self, request):
-        data = request.data
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
         serializer = CategorySerializer(data=data)
 
         if serializer.is_valid():
@@ -174,8 +219,15 @@ class SingleCategoryAPIView(APIView):
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
     
     def put(self, request, id):
+        payload = user_permission_authentication(request)
         data = request.data
+        data['_updater'] = payload['id']
         category = Category.objects.get(id=id)
+        if category._deleted is not None:
+            return Response({
+                'detail': 'Category is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
         serializer = CategorySerializer(instance=category, data=data, partial=True)
 
         if serializer.is_valid():
@@ -185,8 +237,21 @@ class SingleCategoryAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, id):
+        payload = user_permission_authentication(request)
         category = Category.objects.get(id=id)
-        serializer = CategorySerializer(instance=category, data={'_deleted': datetime.now() }, partial=True)
+        if category._deleted is not None:
+            return Response({
+                'detail': 'Category is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = CategorySerializer(
+            instance=category,
+            data={
+                '_deleted': datetime.now(),
+                '_updater': payload['id']
+            },
+            partial=True)
 
         if serializer.is_valid():
             serializer.save()
