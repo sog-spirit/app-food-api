@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 
 import { Container, Row, Col } from "reactstrap";
 
-import products from "../assets/fake-data/products";
+//import products from "../assets/fake-data/products";
 import ProductCard from "../components/UI/product-card/ProductCard";
 import ReactPaginate from "react-paginate";
 
@@ -16,11 +16,24 @@ const AllFoods = () => {
 
   const [pageNumber, setPageNumber] = useState(0);
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    getProducts();
+  });
+
+  let getProducts = async () => {
+    let response = await fetch("http://localhost:8000/api/product");
+    let data = await response.json();
+    setProducts(data);
+  };
+
   const searchedProduct = products.filter((item) => {
     if (searchTerm.value === "") {
       return item;
     }
-    if (item.title.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
       return item;
     } else {
       return console.log("not found");

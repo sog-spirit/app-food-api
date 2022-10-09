@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
@@ -7,7 +7,23 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const loginNameRef = useRef();
   const loginPasswordRef = useRef();
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  async function login() {
+    let item = { username: username, password: password };
+    let result = await fetch("http://localhost:8000/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        Accept: "application/json, text/plain, */*",
+      },
+      body: JSON.stringify(item),
+    });
+    result = await result.json();
+    if (result.detail == "Login successfully") {
+    }
+    console.log(result);
+  }
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -25,7 +41,9 @@ const Login = () => {
                     type="text"
                     placeholder="Username"
                     required
-                    ref={loginNameRef}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                   />
                 </div>
                 <div className="form__group">
@@ -33,10 +51,16 @@ const Login = () => {
                     type="password"
                     placeholder="Password"
                     required
-                    ref={loginPasswordRef}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </div>
-                <button type="submit" className="addTOCart__btn">
+                <button
+                  onClick={login}
+                  type="submit"
+                  className="addTOCart__btn"
+                >
                   Login
                 </button>
               </form>
