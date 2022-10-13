@@ -97,6 +97,10 @@ class OrderDetail(models.Model):
     def __str__(self):
         return 'Order detail id {id} of order id {order_id} for product id {product_id}'.format(id=self.id, order_id=self.order, product_id=self.product.id)
 
+class History(models.Model):
+    _created = models.DateTimeField(auto_now_add=True)
+    _creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='history_creator')
+    message = models.TextField(null=True, blank=True)
 
 # class Coupon(models.Model):
 #     discount = models.IntegerField(default=0)

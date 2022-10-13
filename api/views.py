@@ -3,7 +3,12 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
 from .serializers import UserSerializer, ProductSerializer, CategorySerializer
-from .models import User, Product, Category
+from .models import (
+    User,
+    Product,
+    Category,
+    History,
+)
 import jwt
 from datetime import datetime, timedelta
 from .helper import user_authentication, user_permission_authentication
@@ -24,6 +29,10 @@ class RegisterView(APIView):
             username=request.data['username'],
             password=request.data['password'],
             phone=request.data['phone'],
+        )
+        History.objects.create(
+            _creator = user,
+            message = "create new user",
         )
         return Response(
             {
@@ -69,7 +78,10 @@ class LoginView(APIView):
             'jwt': token,
             'detail': 'Login successfully'
         }
-
+        History.objects.create(
+            _creator = user,
+            message = "was login",
+        )
         return response
 
 class UpdateUserView(APIView):
@@ -82,6 +94,10 @@ class UpdateUserView(APIView):
         serializer = UserSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        History.objects.create(
+            _creator = user,
+            message = "update user",
+        )
         return Response(
             {
                 'detail': 'User info updated successfully'
@@ -103,6 +119,7 @@ class LogoutView(APIView):
         response.data = {
             'detail': 'Logout successfully'
         }
+
         return response
 
 class ProductsAPIView(APIView):
@@ -126,6 +143,10 @@ class ProductsAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "create new product",
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -155,6 +176,10 @@ class SingleProductAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "update product",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -167,6 +192,7 @@ class SingleProductAPIView(APIView):
                 'detail': 'Product is already deleted'
             },
             status=status.HTTP_400_BAD_REQUEST)
+
         serializer = ProductSerializer(
             instance=product,
             data={
@@ -174,10 +200,14 @@ class SingleProductAPIView(APIView):
                 '_updater': payload['id']
             },
             partial=True
-            )
+        )
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "delete product",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -203,6 +233,10 @@ class CategoriesAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "create new category",
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -232,6 +266,10 @@ class SingleCategoryAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "update category",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -255,6 +293,10 @@ class SingleCategoryAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            History.objects.create(
+                _creator = user,
+                message = "delete category",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
