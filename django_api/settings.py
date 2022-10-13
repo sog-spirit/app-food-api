@@ -137,3 +137,6 @@ REST_FRAMEWORK = {
         '%d/%m/%Y',
     ],
 }
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'media/'

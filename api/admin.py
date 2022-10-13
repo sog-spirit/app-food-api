@@ -57,7 +57,7 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ('is_superuser', 'is_staff',)
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
-        ('Personal info', {'fields': ('name', 'phone', 'avatar', 'address', 'date_of_birth')}),
+        ('Personal info', {'fields': ('name', 'phone', 'image', 'address', 'date_of_birth')}),
         ('Permissions', {'fields': ('is_superuser', 'is_staff')}),
     )
     search_fields = ('email',)
@@ -66,9 +66,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
-
-# class CategoryAdmin(admin.ModelAdmin):
-#     fields = ('_created', '_creator', '_updated', '_updater', '_deleted', 'name', 'description')
 
 admin.site.register(Category)
 admin.site.register(Product)

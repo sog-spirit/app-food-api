@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 # Create your models here.
 # TODO: coupon model
+
 class User(AbstractUser):
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-    avatar = models.TextField(null=True, blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to='user_image')
     address = models.TextField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
 
@@ -35,7 +35,7 @@ class Product(models.Model):
     _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="product_updater")
     _deleted = models.DateTimeField(null=True, blank=True)
     name = models.CharField(max_length=255)
-    image = models.TextField(null=True, blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to='product_image')
     price = models.FloatField(default=0.0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_fk')
     description = models.TextField(null=True, blank=True)
