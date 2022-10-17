@@ -24,6 +24,7 @@ class Category(models.Model):
     _deleted = models.DateTimeField(null=True, blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to='category_image')
 
     def __str__(self):
         return self.name
