@@ -13,6 +13,8 @@ const Layout = () => {
     <div>
       <Header />
 
+      {showCart && <Carts />}
+
       <div>
         <Routes />
       </div>
