@@ -143,6 +143,7 @@ class ProductsAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "create new product",
@@ -176,6 +177,7 @@ class SingleProductAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "update product",
@@ -204,6 +206,7 @@ class SingleProductAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "delete product",
@@ -233,6 +236,7 @@ class CategoriesAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "create new category",
@@ -266,6 +270,7 @@ class SingleCategoryAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "update category",
@@ -293,6 +298,7 @@ class SingleCategoryAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
             History.objects.create(
                 _creator = user,
                 message = "delete category",
