@@ -1,3 +1,4 @@
+import 'package:app_food_mobile/views/screens/cart/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -26,7 +27,10 @@ AppBar HomeAppBar(BuildContext context) {
     actions: [
       IconButton(
         icon: SvgPicture.asset("assets/icons/notification.svg"),
-        onPressed: () {},
+        onPressed: () {
+            Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CartScreen()));
+        },
       )
     ],
   );

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../../constants.dart';
+import '../../../../../constants.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({
@@ -17,8 +17,8 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: press,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: Container(
+        margin: EdgeInsets.only(right: 15),
         child: Column(
           children: [
             Text(

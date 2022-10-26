@@ -36,7 +36,7 @@ class DetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      ItemImage(srcImage: "http://192.168.1.135:8000/${product.image}"),
+      ItemImage(srcImage: "http://192.168.1.4:8000/${product.image}"),
       Expanded(
         child: ItemInfo(
           product: product,

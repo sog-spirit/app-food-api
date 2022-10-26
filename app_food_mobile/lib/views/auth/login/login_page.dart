@@ -1,4 +1,4 @@
-import 'package:app_food_mobile/views/auth/main_page.dart';
+import 'package:app_food_mobile/views/pages/main_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
-import '../screens/home/home_page.dart';
+import '../../screens/home/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -24,13 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
     //xu ly login
     try {
       Response response = await post(
-          Uri.parse("http://192.168.1.135:8000/api/user/login"),
+          Uri.parse("http://192.168.1.4:8000/api/user/login"),
           body: {"username": "admin", "password": "admin"});
       print('adduyen thanh cong');
-      //check resigter is successful ?
       if (response.statusCode == 200) {
         print('adduyen thanh cong');
-        // ignore: use_build_context_synchronously
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
         //chuyen qua man hinh main

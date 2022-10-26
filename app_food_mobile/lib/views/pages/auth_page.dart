@@ -2,8 +2,8 @@
 // ignore: unused_import
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import '../pages/login_page.dart';
-import '../pages/register_page.dart';
+import '../auth/login/login_page.dart';
+import '../auth/register/register_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});

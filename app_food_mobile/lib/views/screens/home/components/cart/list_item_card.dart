@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../models/product.dart';
-import '../../details/detail_page.dart';
+import '../../../../../models/product.dart';
+import '../../../details/detail_page.dart';
 import 'item_card.dart';
 
 class ListItemCard extends StatelessWidget {
