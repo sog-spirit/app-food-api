@@ -92,7 +92,7 @@ class OrderDetail(models.Model):
     _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="detail_updater")
     _deleted = models.DateTimeField(blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product_details')
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='detail_order_fk')
     
     def __str__(self):

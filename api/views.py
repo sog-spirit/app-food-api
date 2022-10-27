@@ -1,13 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ParseError
 from rest_framework import status
-from .serializers import UserSerializer, ProductSerializer, CategorySerializer
+from .serializers import UserSerializer, ProductSerializer, CategorySerializer, OrderDetailSerializer
+from django.db import IntegrityError, transaction
 from .models import (
     User,
     Product,
     Category,
     History,
+    Order,
+    OrderDetail,
 )
 import jwt
 from datetime import datetime, timedelta
@@ -306,3 +309,55 @@ class SingleCategoryAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderAPIView(APIView):
+    def post(self, request):
+        payload = user_authentication(request)
+        user = User.objects.filter(id=payload['id']).first()
+        price = 0.0
+
+        for item in request.data['data']:
+            print(item)
+        
+        try:
+            with transaction.atomic():
+                order = Order.objects.create(
+                    _creator = user,
+                    _updater = user,
+                    user = user
+                )
+
+                History.objects.create(
+                    _creator = user,
+                    message = "create order",
+                )
+
+                for item in request.data['data']:
+                    product = Product.objects.filter(id=item['product']).first()
+                    data = item.copy()
+                    data['_creator'] = payload['id']
+                    data['_updater'] = payload['id']
+                    data['order'] = order.id
+
+                    serializer = OrderDetailSerializer(data=data)
+
+                    if serializer.is_valid(raise_exception=True):
+                        serializer.save()
+                        History.objects.create(
+                            _creator = user,
+                            message = "create order detail"
+                        )
+                        price += product.price * item['quantity']
+                        continue
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                
+                order.price = price
+                order.save()
+
+        except IntegrityError:
+            return Response({'detail': 'Query error'},status=status.HTTP_400_BAD_REQUEST)
+
+        except KeyError:
+            return Response({'detail': 'Missing parameters'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(request.data)

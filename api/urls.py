@@ -9,6 +9,7 @@ from .views import (
     SingleProductAPIView,
     CategoriesAPIView,
     SingleCategoryAPIView,
+    OrderAPIView,
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
     path('product/<str:id>', SingleProductAPIView.as_view()),
     path('category', CategoriesAPIView.as_view()),
     path('category/<str:id>', SingleCategoryAPIView.as_view()),
+    path('order', OrderAPIView.as_view()),
 ]
