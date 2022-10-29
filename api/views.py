@@ -2,7 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from rest_framework import status
-from .serializers import UserSerializer, ProductSerializer, CategorySerializer, OrderDetailSerializer
+from .serializers import (
+    UserSerializer,
+    ProductSerializer,
+    CategorySerializer,
+    OrderDetailSerializer,
+    CartSerializer,
+)
 from django.db import IntegrityError, transaction
 from .models import (
     User,
@@ -11,6 +17,7 @@ from .models import (
     History,
     Order,
     OrderDetail,
+    Cart,
 )
 import jwt
 from datetime import datetime, timedelta
@@ -339,6 +346,15 @@ class OrderAPIView(APIView):
                     data['_updater'] = payload['id']
                     data['order'] = order.id
 
+                    cart_item = Cart.objects.filter(
+                        product=product,
+                        _creator=user,
+                        _deleted=None
+                        ).first()
+                    cart_item._deleted = datetime.now()
+                    cart_item._updater = user
+                    cart_item.save()
+
                     serializer = OrderDetailSerializer(data=data)
 
                     if serializer.is_valid(raise_exception=True):
@@ -361,3 +377,96 @@ class OrderAPIView(APIView):
             return Response({'detail': 'Missing parameters'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(request.data)
+
+class CartsAPIView(APIView):
+    def get(self, request, user_id):
+        cart_items = Cart.objects.filter(_deleted=None, _creator=user_id)
+        serializer = CartSerializer(cart_items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, user_id):
+        payload = user_authentication(request)
+        if user_id != payload['id']:
+            return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data.copy()
+        data['_creator'] = user_id
+        data['_updater'] = user_id
+        user = User.objects.filter(id=user_id).first()
+
+        try:
+            with transaction.atomic():
+                serializer = CartSerializer(data=data)
+
+                if serializer.is_valid():
+                    serializer.save()
+                    History.objects.create(
+                        _creator = user,
+                        message = "create cart item"
+                    )
+                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except IntegrityError:
+            return Response({'detail': 'Error creating cart item'}, status=status.HTTP_400_BAD_REQUEST)
+
+class SingleCartAPIView(APIView):
+    def delete(self, request, user_id, cart_id):
+        payload = user_authentication(request)
+        if user_id != payload['id']:
+            return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        cart_item = Cart.objects.filter(id=cart_id, _creator=user_id).first()
+
+        if cart_item._deleted is not None:
+            return Response({
+                'detail': 'Cart item is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = CartSerializer(
+            instance=cart_item,
+            data = {
+                '_deleted': datetime.now(),
+                '_updater': payload['id']
+            },
+            partial = True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "delete cart item"
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, user_id, cart_id):
+        payload = user_authentication(request)
+        if user_id != payload['id']:
+            return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data.copy()
+        cart_item = Cart.objects.get(id=cart_id)
+        if cart_item._deleted is not None:
+            return Response({
+                'detail': 'Cart item is already deleted'
+            },
+            status = status.HTTP_400_BAD_REQUEST)
+        
+        serializer = CartSerializer(instance=cart_item, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "Update cart item",
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
