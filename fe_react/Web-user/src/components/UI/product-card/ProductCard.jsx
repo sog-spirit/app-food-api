@@ -20,12 +20,17 @@ const ProductCard = (props) => {
         price,
       })
     );
+    console.log(props.item);
   };
 
   return (
     <div className="product__item">
       <div className="product__img">
-        <img src={image} alt="product-img" className="w-50" />
+        <img
+          src={"http://localhost:8000" + image}
+          alt="product-img"
+          className="w-50"
+        />
       </div>
 
       <div className="product__content">

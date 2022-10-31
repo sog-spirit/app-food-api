@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
 
 const CartItem = ({ item }) => {
-  const { id, title, price, image01, quantity, totalPrice } = item;
+  const { id, name, price, image, quantity, totalPrice } = item;
 
   const dispatch = useDispatch();
 
@@ -15,9 +15,9 @@ const CartItem = ({ item }) => {
     dispatch(
       cartActions.addItem({
         id,
-        title,
+        name,
         price,
-        image01,
+        image,
       })
     );
   };
@@ -33,11 +33,11 @@ const CartItem = ({ item }) => {
   return (
     <ListGroupItem className="border-0 cart__item">
       <div className="cart__item-info d-flex gap-2">
-        <img src={image01} alt="product-img" />
+        <img src={"http://localhost:8000" + image} alt="product-img" />
 
         <div className="cart__product-info w-100 d-flex align-items-center gap-4 justify-content-between">
           <div>
-            <h6 className="cart__product-title">{title}</h6>
+            <h6 className="cart__product-title">{name}</h6>
             <p className=" d-flex align-items-center gap-5 cart__product-price">
               {quantity}x <span>${totalPrice}</span>
             </p>

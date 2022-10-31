@@ -22,8 +22,8 @@ const FoodDetails = () => {
   const dispatch = useDispatch();
 
   const product = products.find((product) => product.id === id);
-  const [previewImg, setPreviewImg] = useState(product.image01);
-  const { title, price, category, desc, image01 } = product;
+  const [previewImg, setPreviewImg] = useState(product.image);
+  const { name, price, category, desc, image } = product;
 
   const relatedProduct = products.filter((item) => category === item.category);
 
@@ -31,9 +31,9 @@ const FoodDetails = () => {
     dispatch(
       cartActions.addItem({
         id,
-        title,
+        name,
         price,
-        image01,
+        image,
       })
     );
   };
@@ -45,7 +45,7 @@ const FoodDetails = () => {
   };
 
   useEffect(() => {
-    setPreviewImg(product.image01);
+    setPreviewImg(product.image);
   }, [product]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const FoodDetails = () => {
 
   return (
     <Helmet title="Product-details">
-      <CommonSection title={title} />
+      <CommonSection title={name} />
 
       <section>
         <Container>
@@ -63,22 +63,22 @@ const FoodDetails = () => {
               <div className="product__images ">
                 <div
                   className="img__item mb-3"
-                  onClick={() => setPreviewImg(product.image01)}
+                  onClick={() => setPreviewImg(product.image)}
                 >
-                  <img src={product.image01} alt="" className="w-50" />
+                  <img src={product.image} alt="" className="w-50" />
                 </div>
                 <div
                   className="img__item mb-3"
-                  onClick={() => setPreviewImg(product.image02)}
+                  onClick={() => setPreviewImg(product.image)}
                 >
-                  <img src={product.image02} alt="" className="w-50" />
+                  <img src={product.image} alt="" className="w-50" />
                 </div>
 
                 <div
                   className="img__item"
-                  onClick={() => setPreviewImg(product.image03)}
+                  onClick={() => setPreviewImg(product.image)}
                 >
-                  <img src={product.image03} alt="" className="w-50" />
+                  <img src={product.image} alt="" className="w-50" />
                 </div>
               </div>
             </Col>
@@ -91,7 +91,7 @@ const FoodDetails = () => {
 
             <Col lg="6" md="6">
               <div className="single__product-content">
-                <h2 className="product__title mb-3">{title}</h2>
+                <h2 className="product__title mb-3">{name}</h2>
                 <p className="product__price">
                   {" "}
                   Price: <span>${price}</span>

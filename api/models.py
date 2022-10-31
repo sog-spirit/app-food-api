@@ -92,11 +92,23 @@ class OrderDetail(models.Model):
     _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="detail_updater")
     _deleted = models.DateTimeField(blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product_details')
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='detail_order_fk')
     
     def __str__(self):
         return 'Order detail id {id} of order id {order_id} for product id {product_id}'.format(id=self.id, order_id=self.order, product_id=self.product.id)
+
+class Cart(models.Model):
+    _created = models.DateTimeField(auto_now_add=True)
+    _creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_creator')
+    _updated = models.DateTimeField(auto_now=True)
+    _updater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart_updater")
+    _deleted = models.DateTimeField(blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart_item')
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f'Cart item id {self.product.id}, user id {self._creator.id}, quantity {self.quantity}'
 
 class History(models.Model):
     _created = models.DateTimeField(auto_now_add=True)

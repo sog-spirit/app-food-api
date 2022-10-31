@@ -11,6 +11,7 @@ from .models import (
     OrderDetail,
     Review,
     History,
+    Cart,
 )
 # Register your models here.
 
@@ -74,3 +75,4 @@ admin.site.register(Order)
 admin.site.register(OrderDetail)
 admin.site.register(Review)
 admin.site.register(History)
+admin.site.register(Cart)
