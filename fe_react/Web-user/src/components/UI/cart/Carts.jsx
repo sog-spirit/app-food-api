@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { ListGroup } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -10,8 +10,22 @@ import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
 import "../../../styles/shopping-cart.css";
 
 const Carts = () => {
+  const [carts, setCarts] = useState([]);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    getCarts();
+  }, []);
+
+  let getCarts = async () => {
+    let response = await fetch("http://localhost:8000/api/user/1/cart");
+    let data = await response.json();
+    setCarts(data);
+  };
   const dispatch = useDispatch();
-  const cartProducts = useSelector((state) => state.cart.cartItems);
+
+  //const cartProducts = useSelector((state) => state.cart.cartItems);
+
   const totalAmount = useSelector((state) => state.cart.totalAmount);
 
   const toggleCart = () => {
@@ -27,12 +41,10 @@ const Carts = () => {
         </div>
 
         <div className="cart__item-list">
-          {cartProducts.length === 0 ? (
+          {carts.length === 0 ? (
             <h6 className="text-center mt-5">No item added to the cart</h6>
           ) : (
-            cartProducts.map((item, index) => (
-              <CartItem item={item} key={index} />
-            ))
+            carts.map((item, index) => <CartItem item={item} key={index} />)
           )}
         </div>
 

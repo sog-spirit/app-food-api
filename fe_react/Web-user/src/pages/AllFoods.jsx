@@ -21,7 +21,7 @@ const AllFoods = () => {
   useEffect(() => {
     // Update the document title using the browser API
     getProducts();
-  });
+  }, []);
 
   let getProducts = async () => {
     let response = await fetch("http://localhost:8000/api/product");
