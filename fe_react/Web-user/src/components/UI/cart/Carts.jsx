@@ -8,25 +8,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cartUiActions } from '../../../store/shopping-cart/cartUiSlice'
 
 import '../../../styles/shopping-cart.css'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
 const Carts = () => {
-  const [carts, setCarts] = useState([])
+  const {carts, setCarts} = useContext(AppContext)
 
-  useEffect(() => {
-    // Update the document title using the browser API
-    getCarts()
-  }, [carts.length])
-
-  let getCarts = async () => {
-    let response = await fetch('http://localhost:8000/api/user/1/cart')
-    let data = await response.json()
-    setCarts(data)
-  }
   const dispatch = useDispatch()
 
   //const cartProducts = useSelector((state) => state.cart.cartItems);
 
-  const totalAmount = useSelector((state) => state.cart.totalAmount)
+  const totalAmount = (cart) => {
+    return cart.reduce((sum, item) => {
+      return sum + item.quantity * item.price
+    }, 0)
+  }
 
   const toggleCart = () => {
     dispatch(cartUiActions.toggle())
@@ -50,7 +46,7 @@ const Carts = () => {
 
         <div className='cart__bottom d-flex align-items-center justify-content-between'>
           <h6>
-            Subtotal : <span>${totalAmount}</span>
+            Subtotal : <span>${totalAmount(carts)}</span>
           </h6>
           <button>
             <Link to='/checkout' onClick={toggleCart}>

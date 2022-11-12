@@ -26,7 +26,7 @@ const ProductCard = (props) => {
     let response = await fetch(`http://localhost:8000/api/user/1/product/${id}`)
     let data = await response.json()
     if (Object.keys(data).length === 0) {
-      fetch(`http://localhost:8000/api/user/1/cart`, {
+      await fetch(`http://localhost:8000/api/user/1/cart`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const ProductCard = (props) => {
         }),
       })
     } else {
-      fetch(`http://localhost:8000/api/user/1/product/${id}`, {
+      await fetch(`http://localhost:8000/api/user/1/product/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

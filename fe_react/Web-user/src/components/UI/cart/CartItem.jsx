@@ -22,8 +22,8 @@ const CartItem = ({ item }) => {
       })
   }
 
-  const incrementItem = () => {
-    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+  const incrementItem = async () => {
+    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -36,8 +36,8 @@ const CartItem = ({ item }) => {
     getCarts()
   }
 
-  const decreaseItem = () => {
-    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+  const decreaseItem = async () => {
+    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -50,9 +50,9 @@ const CartItem = ({ item }) => {
     getCarts()
   }
 
-  const deleteItem = () => {
+  const deleteItem = async () => {
     // dispatch(cartActions.deleteItem(id));
-    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
       method: 'DELETE',
     })
     setQuantity(0)
