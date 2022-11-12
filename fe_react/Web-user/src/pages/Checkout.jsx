@@ -93,7 +93,15 @@ const Checkout = () => {
                     onChange={(e) => setPostalCode(e.target.value)}
                   />
                 </div>
-                <button type="submit" className="addTOCart__btn">
+                <button
+                  type="submit"
+                  className="addTOCart__btn"
+                  onClick={() => {
+                    console.log(
+                      ">>> LOCAL STORAGE " + JSON.stringify(localStorage)
+                    );
+                  }}
+                >
                   Payment
                 </button>
               </form>

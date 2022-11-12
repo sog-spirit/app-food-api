@@ -1,54 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 
-import { ListGroup } from "reactstrap";
-import { Link } from "react-router-dom";
-import CartItem from "./CartItem";
+import { ListGroup } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import CartItem from './CartItem'
 
-import { useDispatch, useSelector } from "react-redux";
-import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
+import { useDispatch, useSelector } from 'react-redux'
+import { cartUiActions } from '../../../store/shopping-cart/cartUiSlice'
 
-import "../../../styles/shopping-cart.css";
+import '../../../styles/shopping-cart.css'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
 const Carts = () => {
-  const dispatch = useDispatch();
-  const cartProducts = useSelector((state) => state.cart.cartItems);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const {carts, setCarts} = useContext(AppContext)
+
+  const dispatch = useDispatch()
+
+  //const cartProducts = useSelector((state) => state.cart.cartItems);
+
+  const totalAmount = (cart) => {
+    return cart.reduce((sum, item) => {
+      return sum + item.quantity * item.price
+    }, 0)
+  }
 
   const toggleCart = () => {
-    dispatch(cartUiActions.toggle());
-  };
+    dispatch(cartUiActions.toggle())
+  }
   return (
-    <div className="cart__container">
-      <ListGroup className="cart">
-        <div className="cart__close">
+    <div className='cart__container'>
+      <ListGroup className='cart'>
+        <div className='cart__close'>
           <span onClick={toggleCart}>
-            <i class="ri-close-fill"></i>
+            <i class='ri-close-fill'></i>
           </span>
         </div>
 
-        <div className="cart__item-list">
-          {cartProducts.length === 0 ? (
-            <h6 className="text-center mt-5">No item added to the cart</h6>
+        <div className='cart__item-list'>
+          {carts.length === 0 ? (
+            <h6 className='text-center mt-5'>No item added to the cart</h6>
           ) : (
-            cartProducts.map((item, index) => (
-              <CartItem item={item} key={index} />
-            ))
+            carts.map((item, index) => <CartItem item={item} key={index} />)
           )}
         </div>
 
-        <div className="cart__bottom d-flex align-items-center justify-content-between">
+        <div className='cart__bottom d-flex align-items-center justify-content-between'>
           <h6>
-            Subtotal : <span>${totalAmount}</span>
+            Subtotal : <span>${totalAmount(carts)}</span>
           </h6>
           <button>
-            <Link to="/checkout" onClick={toggleCart}>
+            <Link to='/checkout' onClick={toggleCart}>
               Checkout
             </Link>
           </button>
         </div>
       </ListGroup>
     </div>
-  );
-};
+  )
+}
 
-export default Carts;
+export default Carts
