@@ -21,8 +21,8 @@ const Cart = () => {
     let data = await response.json();
     setCarts(data);
   };
-  //const cartItems = useSelector((state) => state.cart.cartItems);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+
+  const totalAmount = 5;
   return (
     <Helmet title="Cart">
       <CommonSection title="Your Cart" />

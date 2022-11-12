@@ -15,7 +15,7 @@ const Carts = () => {
   useEffect(() => {
     // Update the document title using the browser API
     getCarts();
-  }, []);
+  }, [carts.length]);
 
   let getCarts = async () => {
     let response = await fetch("http://localhost:8000/api/user/1/cart");

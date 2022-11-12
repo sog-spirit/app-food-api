@@ -12,6 +12,7 @@ from .views import (
     OrderAPIView,
     CartsAPIView,
     SingleCartAPIView,
+    GetProductOnCartAPIView,
 )
 
 urlpatterns = [
@@ -27,4 +28,5 @@ urlpatterns = [
     path('order', OrderAPIView.as_view()),
     path('user/<int:user_id>/cart', CartsAPIView.as_view()),
     path('user/<int:user_id>/cart/<int:cart_id>', SingleCartAPIView.as_view()),
+    path('user/<int:user_id>/product/<int:product_id>', GetProductOnCartAPIView.as_view()),
 ]

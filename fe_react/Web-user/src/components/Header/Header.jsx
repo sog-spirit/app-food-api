@@ -4,11 +4,13 @@ import { Container } from "reactstrap";
 import bannerImg from "../../assets/images/bannerImg.png";
 
 import { NavLink, Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
 
 import "../../styles/header.css";
+import { AppContext } from "../../context";
+import { useContext } from "react";
 
 const nav__links = [
   {
@@ -30,35 +32,15 @@ const nav__links = [
 ];
 
 const Header = () => {
-  const [totalQty, setTotalQty] = useState(0);
-
-  const [carts, setCarts] = useState([]);
-
-  useEffect(() => {
-    // Update the document title using the browser API
-    getCarts();
-    console.log(">>>> " + carts);
-  }, []);
-
-  let getCarts = async () => {
-    let response = await fetch("http://localhost:8000/api/user/1/cart");
-    let data = await response.json();
-    setCarts(data);
+  const carts = useContext(AppContext);
+  const getAmountItems = (cart) => {
+    return cart.reduce((sum, item) => {
+      return sum + item.quantity;
+    }, 0);
   };
-  console.log("HERE");
-  console.log(carts);
-  let tempTotal = 0;
-  useEffect(() => {
-    carts.forEach((item) => {
-      tempTotal += item.quantity;
-    });
-    setTotalQty(tempTotal);
-  }, [carts]);
 
-  console.log(tempTotal);
   const menuRef = useRef(null);
   const headerRef = useRef(null);
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const dispatch = useDispatch();
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
@@ -111,7 +93,7 @@ const Header = () => {
           <div className="nav__right d-flex align-items-center gap-4">
             <span className="cart__icon" onClick={toggleCart}>
               <i class="ri-shopping-basket-line"></i>
-              <span className="cart__badge">{totalQty}</span>
+              <span className="cart__badge">{getAmountItems(carts)}</span>
             </span>
 
             <span className="user">

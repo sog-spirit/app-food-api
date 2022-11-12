@@ -11,16 +11,32 @@ const ProductCard = (props) => {
   const { id, name, image, price } = props.item;
   const dispatch = useDispatch();
 
-  const addToCart = () => {
-    dispatch(
-      cartActions.addItem({
-        id,
-        name,
-        image,
-        price,
+  const addToCart = async () => {
+    let response = await fetch(`http://localhost:8000/api/user/1/product/${id}`);
+    let data = await response.json();
+    if (Object.keys(data).length === 0) {
+      fetch(`http://localhost:8000/api/user/1/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'product': id,
+          'quantity': 1
+        })
       })
-    );
-    console.log(props.item);
+    }
+    else {
+      fetch(`http://localhost:8000/api/user/1/product/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'quantity': data.quantity + 1
+        })
+      })
+    }
   };
 
   return (

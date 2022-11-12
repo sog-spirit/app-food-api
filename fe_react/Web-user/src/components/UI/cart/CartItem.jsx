@@ -5,31 +5,52 @@ import "../../../styles/cart-item.css";
 
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
+import { useState } from "react";
 
 const CartItem = ({ item }) => {
-  const { id, name, price, image, quantity, totalPrice } = item;
+  let { id, name, price, image, quantity } = item;
 
   const dispatch = useDispatch();
 
+  const [currentQuantity, setQuantity] = useState(quantity);
+
   const incrementItem = () => {
-    dispatch(
-      cartActions.addItem({
-        id,
-        name,
-        price,
-        image,
+    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'quantity': currentQuantity + 1
       })
-    );
+    });
+    setQuantity(currentQuantity + 1)
   };
 
   const decreaseItem = () => {
-    dispatch(cartActions.removeItem(id));
+    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'quantity': currentQuantity - 1
+      })
+    });
+    setQuantity(currentQuantity - 1)
   };
 
   const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+    // dispatch(cartActions.deleteItem(id));
+    fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+      method: 'DELETE'
+    })
+    setQuantity(0);
   };
-
+  if (currentQuantity == 0) {
+    return (<></>)
+  }
+  else
   return (
     <ListGroupItem className="border-0 cart__item">
       <div className="cart__item-info d-flex gap-2">
@@ -39,13 +60,13 @@ const CartItem = ({ item }) => {
           <div>
             <h6 className="cart__product-title">{name}</h6>
             <p className=" d-flex align-items-center gap-5 cart__product-price">
-              {quantity}x <span>${totalPrice}</span>
+              {currentQuantity}x <span>${price*currentQuantity}</span>
             </p>
             <div className=" d-flex align-items-center justify-content-between increase__decrease-btn">
               <span className="increase__btn" onClick={incrementItem}>
                 <i class="ri-add-line"></i>
               </span>
-              <span className="quantity">{quantity}</span>
+              <span className="quantity">{currentQuantity}</span>
               <span className="decrease__btn" onClick={decreaseItem}>
                 <i class="ri-subtract-line"></i>
               </span>
