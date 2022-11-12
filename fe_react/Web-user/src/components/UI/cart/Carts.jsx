@@ -1,66 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 
-import { ListGroup } from "reactstrap";
-import { Link } from "react-router-dom";
-import CartItem from "./CartItem";
+import { ListGroup } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import CartItem from './CartItem'
 
-import { useDispatch, useSelector } from "react-redux";
-import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
+import { useDispatch, useSelector } from 'react-redux'
+import { cartUiActions } from '../../../store/shopping-cart/cartUiSlice'
 
-import "../../../styles/shopping-cart.css";
+import '../../../styles/shopping-cart.css'
 
 const Carts = () => {
-  const [carts, setCarts] = useState([]);
+  const [carts, setCarts] = useState([])
 
   useEffect(() => {
     // Update the document title using the browser API
-    getCarts();
-  }, [carts.length]);
+    getCarts()
+  }, [carts.length])
 
   let getCarts = async () => {
-    let response = await fetch("http://localhost:8000/api/user/1/cart");
-    let data = await response.json();
-    setCarts(data);
-  };
-  const dispatch = useDispatch();
+    let response = await fetch('http://localhost:8000/api/user/1/cart')
+    let data = await response.json()
+    setCarts(data)
+  }
+  const dispatch = useDispatch()
 
   //const cartProducts = useSelector((state) => state.cart.cartItems);
 
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const totalAmount = useSelector((state) => state.cart.totalAmount)
 
   const toggleCart = () => {
-    dispatch(cartUiActions.toggle());
-  };
+    dispatch(cartUiActions.toggle())
+  }
   return (
-    <div className="cart__container">
-      <ListGroup className="cart">
-        <div className="cart__close">
+    <div className='cart__container'>
+      <ListGroup className='cart'>
+        <div className='cart__close'>
           <span onClick={toggleCart}>
-            <i class="ri-close-fill"></i>
+            <i class='ri-close-fill'></i>
           </span>
         </div>
 
-        <div className="cart__item-list">
+        <div className='cart__item-list'>
           {carts.length === 0 ? (
-            <h6 className="text-center mt-5">No item added to the cart</h6>
+            <h6 className='text-center mt-5'>No item added to the cart</h6>
           ) : (
             carts.map((item, index) => <CartItem item={item} key={index} />)
           )}
         </div>
 
-        <div className="cart__bottom d-flex align-items-center justify-content-between">
+        <div className='cart__bottom d-flex align-items-center justify-content-between'>
           <h6>
             Subtotal : <span>${totalAmount}</span>
           </h6>
           <button>
-            <Link to="/checkout" onClick={toggleCart}>
+            <Link to='/checkout' onClick={toggleCart}>
               Checkout
             </Link>
           </button>
         </div>
       </ListGroup>
     </div>
-  );
-};
+  )
+}
 
-export default Carts;
+export default Carts

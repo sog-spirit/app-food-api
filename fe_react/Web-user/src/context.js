@@ -1,20 +1,25 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState, useMemo } from 'react'
 
-export const AppContext = createContext();
+export const AppContext = createContext()
 
 export const AppProvider = ({ children }) => {
-  const [carts, setCarts] = useState([]);
+  const [carts, setCarts] = useState([])
+  const providerValue = useMemo(() => ({ carts, setCarts }), [carts, setCarts])
+
   useEffect(() => {
-    fetch(`http://localhost:8000/api/user/1/cart`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      setCarts(data);
-    });
-  }, [carts]);
+    getCarts()
+  }, [])
+
+  var getCarts = async () => {
+    await fetch(`http://localhost:8000/api/user/1/cart`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setCarts(data)
+      })
+  }
+
   return (
-    <AppContext.Provider  value={carts}>
-      {children}
-    </AppContext.Provider>
-  );
-};
+    <AppContext.Provider value={providerValue}>{children}</AppContext.Provider>
+  )
+}
