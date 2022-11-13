@@ -1,10 +1,12 @@
 import Layout from "./components/Layout/Layout";
-import {AppProvider} from './context';
+import {CartProvider, UserProvider} from './context';
 function App() {
   return (
-    <AppProvider>
-      <Layout />
-    </AppProvider>
+    <UserProvider>
+      <CartProvider>
+        <Layout />
+      </CartProvider>
+    </UserProvider>
   );
 }
 

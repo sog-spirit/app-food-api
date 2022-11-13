@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import products from "../assets/fake-data/products";
 import { useParams } from "react-router-dom";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
@@ -19,23 +18,31 @@ const FoodDetails = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [reviewMsg, setReviewMsg] = useState("");
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const [previewImg, setPreviewImg] = useState("");
 
-  const product = products.find((product) => product.id === id);
-  const [previewImg, setPreviewImg] = useState(product.image);
-  const { name, price, category, desc, image } = product;
+  // const relatedProduct = products.filter((item) => product.category === item.category);
 
-  const relatedProduct = products.filter((item) => category === item.category);
-
-  const addItem = () => {
-    dispatch(
-      cartActions.addItem({
-        id,
-        name,
-        price,
-        image,
+  const [product, setProduct] = useState({})
+  useEffect(() => {
+    getProductDetail()
+  }, [])
+  const getProductDetail = async () => {
+    await fetch(`http://localhost:8000/api/product/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data)
+        setPreviewImg("http://localhost:8000" + data.image)
       })
-    );
+  }
+  const addItem = () => {
+    // dispatch(
+    //   cartActions.addItem({
+    //     id,
+    //     name,
+    //     price,
+    //     image,
+    //   })
+    // );
   };
 
   const submitHandler = (e) => {
@@ -45,40 +52,20 @@ const FoodDetails = () => {
   };
 
   useEffect(() => {
-    setPreviewImg(product.image);
-  }, [product]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, [product]);
 
   return (
     <Helmet title="Product-details">
-      <CommonSection title={name} />
+      <CommonSection title={product.name} />
 
       <section>
         <Container>
           <Row>
             <Col lg="2" md="2">
               <div className="product__images ">
-                <div
-                  className="img__item mb-3"
-                  onClick={() => setPreviewImg(product.image)}
-                >
-                  <img src={product.image} alt="" className="w-50" />
-                </div>
-                <div
-                  className="img__item mb-3"
-                  onClick={() => setPreviewImg(product.image)}
-                >
-                  <img src={product.image} alt="" className="w-50" />
-                </div>
-
-                <div
-                  className="img__item"
-                  onClick={() => setPreviewImg(product.image)}
-                >
-                  <img src={product.image} alt="" className="w-50" />
+                <div className="img__item" >
+                  <img src={previewImg} alt="" className="w-50" />
                 </div>
               </div>
             </Col>
@@ -91,13 +78,13 @@ const FoodDetails = () => {
 
             <Col lg="6" md="6">
               <div className="single__product-content">
-                <h2 className="product__title mb-3">{name}</h2>
+                <h2 className="product__title mb-3">{product.name}</h2>
                 <p className="product__price">
                   {" "}
-                  Price: <span>${price}</span>
+                  Price: <span>${product.price}</span>
                 </p>
                 <p className="category mb-5">
-                  Category: <span>{category}</span>
+                  Category: <span>{product.category_name}</span>
                 </p>
 
                 <button onClick={addItem} className="addTOCart__btn">
@@ -124,7 +111,7 @@ const FoodDetails = () => {
 
               {tab === "desc" ? (
                 <div className="tab__content">
-                  <p>{desc}</p>
+                  <p>{product.description}</p>
                 </div>
               ) : (
                 <div className="tab__form mb-3">
@@ -186,11 +173,11 @@ const FoodDetails = () => {
               <h2 className="related__Product-title">You might also like</h2>
             </Col>
 
-            {relatedProduct.map((item) => (
+            {/* {relatedProduct.map((item) => (
               <Col lg="3" md="4" sm="6" xs="6" className="mb-4" key={item.id}>
                 <ProductCard item={item} />
               </Col>
-            ))}
+            ))} */}
           </Row>
         </Container>
       </section>

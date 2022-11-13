@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { cartUiActions } from '../../store/shopping-cart/cartUiSlice'
 
 import '../../styles/header.css'
-import { AppContext } from '../../context'
+import { CartContext } from '../../context'
 import { useContext } from 'react'
 
 const nav__links = [
@@ -32,7 +32,7 @@ const nav__links = [
 ]
 
 const Header = () => {
-  const { carts, setCarts } = useContext(AppContext)
+  const { carts, setCarts } = useContext(CartContext)
   const getAmountItems = (cart) => {
     return cart.reduce((sum, item) => {
       return sum + item.quantity
