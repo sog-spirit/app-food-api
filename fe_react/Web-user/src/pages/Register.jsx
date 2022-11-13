@@ -20,35 +20,67 @@ const Register = () => {
         <Container>
           <Row>
             <Col lg="6" md="6" sm="12" className="m-auto text-center">
-              <form className="form mb-5" onSubmit={submitHandler}>
-                <div className="form__group">
+              <form
+                className="form"
+                onSubmit={submitHandler}
+                style={{width: "70%"}}
+               
+              >
+                <div className="form-group text-left">
+                  <label>FullName</label>
+                  <input type="text" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Email</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Username</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Phone Number</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Address</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Date of Birth</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Image</label>
+                  <input
+                    type="file"
+                    accept="image/jpeg, image/png, image/jpg"
+                    multiple
+                  />
+                  <div id="display-image"></div>
+                </div>
+                <div className="form-group text-left">
+                  <label>Password</label>
+                  <input type="text" class="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Confirm Password</label>
+                  <input type="text" class="form-control" required />
+                </div>
+                {/* <div className="form__group">
                   <input
                     type="text"
                     placeholder="Full name"
                     required
                     ref={signupNameRef}
                   />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    required
-                    ref={signupEmailRef}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    required
-                    ref={signupPasswordRef}
-                  />
-                </div>
+                </div> */}
+
                 <button type="submit" className="addTOCart__btn">
                   Sign Up
                 </button>
               </form>
+
               <Link to="/login">Already have an account? Login</Link>
             </Col>
           </Row>

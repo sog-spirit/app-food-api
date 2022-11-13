@@ -1,7 +1,5 @@
 import React from "react";
-
 import Header from "../Header/Header.jsx";
-
 import Routes from "../../routes/Routers";
 
 import Carts from "../UI/cart/Carts.jsx";

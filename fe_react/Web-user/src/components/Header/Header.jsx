@@ -1,86 +1,86 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from "react";
 
-import { Container } from 'reactstrap'
-import bannerImg from '../../assets/images/bannerImg.png'
+import { Container } from "reactstrap";
+import bannerImg from "../../assets/images/bannerImg.png";
 
-import { NavLink, Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { NavLink, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-import { cartUiActions } from '../../store/shopping-cart/cartUiSlice'
+import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
 
-import '../../styles/header.css'
-import { CartContext } from '../../context'
-import { useContext } from 'react'
+import "../../styles/header.css";
+import { CartContext } from "../../context";
+import { useContext } from "react";
 
 const nav__links = [
   {
-    display: 'Home',
-    path: '/home',
+    display: "Home",
+    path: "/home",
   },
   {
-    display: 'Foods',
-    path: '/foods',
+    display: "Foods",
+    path: "/foods",
   },
   {
-    display: 'Cart',
-    path: '/cart',
+    display: "Cart",
+    path: "/cart",
   },
   {
-    display: 'Contact',
-    path: '/contact',
+    display: "Contact",
+    path: "/contact",
   },
-]
+];
 
 const Header = () => {
-  const { carts, setCarts } = useContext(CartContext)
+  const { carts, setCarts } = useContext(CartContext);
   const getAmountItems = (cart) => {
     return cart.reduce((sum, item) => {
-      return sum + item.quantity
-    }, 0)
-  }
+      return sum + item.quantity;
+    }, 0);
+  };
 
-  const menuRef = useRef(null)
-  const headerRef = useRef(null)
-  const dispatch = useDispatch()
+  const menuRef = useRef(null);
+  const headerRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const toggleMenu = () => menuRef.current.classList.toggle('show__menu')
+  const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
   const toggleCart = () => {
-    dispatch(cartUiActions.toggle())
-  }
+    dispatch(cartUiActions.toggle());
+  };
 
   useEffect(() => {
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
       ) {
-        headerRef.current.classList.add('header__shrink')
+        headerRef.current.classList.add("header__shrink");
       } else {
-        headerRef.current.classList.remove('header__shrink')
+        headerRef.current.classList.remove("header__shrink");
       }
-    })
+    });
 
-    return () => window.removeEventListener('scroll')
-  }, [])
+    return () => window.removeEventListener("scroll");
+  }, []);
 
   return (
-    <header className='header' ref={headerRef}>
+    <header className="header" ref={headerRef}>
       <Container>
-        <div className='nav__wrapper d-flex align-items-center justify-content-between'>
-          <div className='logo'>
-            <img src={bannerImg} alt='logo' />
+        <div className="nav__wrapper d-flex align-items-center justify-content-between">
+          <div className="logo">
+            <img src={bannerImg} alt="logo" />
           </div>
 
           {/* ======= menu ======= */}
-          <div className='navigation' ref={menuRef} onClick={toggleMenu}>
-            <div className='menu d-flex align-items-center gap-5'>
+          <div className="navigation" ref={menuRef} onClick={toggleMenu}>
+            <div className="menu d-flex align-items-center gap-5">
               {nav__links.map((item, index) => (
                 <NavLink
                   to={item.path}
                   key={index}
                   className={(navClass) =>
-                    navClass.isActive ? 'active__menu' : ''
+                    navClass.isActive ? "active__menu" : ""
                   }
                 >
                   {item.display}
@@ -90,26 +90,57 @@ const Header = () => {
           </div>
 
           {/* ======== nav right icons ========= */}
-          <div className='nav__right d-flex align-items-center gap-4'>
-            <span className='cart__icon' onClick={toggleCart}>
-              <i class='ri-shopping-basket-line'></i>
-              <span className='cart__badge'>{getAmountItems(carts)}</span>
+          <div className="nav__right d-flex align-items-center gap-4">
+            <span className="cart__icon" onClick={toggleCart}>
+              <i class="ri-shopping-basket-line"></i>
+              <span className="cart__badge">{getAmountItems(carts)}</span>
             </span>
-
-            <span className='user'>
-              <Link to='/login'>
-                <i class='ri-user-line'></i>
+                  {/* user chua login */}
+            {/* <span className="user">
+              <Link to="/login">
+                <i class="ri-user-line"></i>
               </Link>
+            </span> */}
+
+            {/* user da login */}
+            <span className="user">
+              <div className="dropdown">
+                <button
+                  className="btn btn-success dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Truong my duyen
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Action
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      Another action
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="#">
+                     Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </span>
 
-            <span className='mobile__menu' onClick={toggleMenu}>
-              <i class='ri-menu-line'></i>
+            <span className="mobile__menu" onClick={toggleMenu}>
+              <i class="ri-menu-line"></i>
             </span>
           </div>
         </div>
       </Container>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
