@@ -6,24 +6,27 @@ import '../../../styles/cart-item.css'
 import { useDispatch } from 'react-redux'
 import { cartActions } from '../../../store/shopping-cart/cartSlice'
 import { useState, useContext } from 'react'
-import { AppContext } from '../../../context'
+import { CartContext, UserContext } from '../../../context'
 
 const CartItem = ({ item }) => {
   let { id, name, price, image, quantity } = item
   const [currentQuantity, setQuantity] = useState(quantity)
-  const { carts, setCarts } = useContext(AppContext)
+  const { carts, setCarts } = useContext(CartContext)
+  const { user, setUser } = useContext(UserContext)
 
   const dispatch = useDispatch()
   var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/user/1/cart`)
+    await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
       .then((res) => res.json())
       .then((data) => {
         setCarts(data)
-      })
+        })
   }
 
+
   const incrementItem = async () => {
-    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
+    if (user.id !== undefined) {
+      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -32,31 +35,66 @@ const CartItem = ({ item }) => {
         quantity: currentQuantity + 1,
       }),
     })
-    setQuantity(currentQuantity + 1)
     getCarts()
   }
+  else {
+    const index = carts.findIndex((item) => {
+      return item.id === id
+    })
+    let newCart = [...carts]
+    newCart[index] = {...newCart[index], quantity: newCart[index].quantity + 1}
+    setCarts(newCart)
+  }
+  setQuantity(currentQuantity + 1)
+}
 
   const decreaseItem = async () => {
-    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        quantity: currentQuantity - 1,
-      }),
-    })
+    if (user.id !== undefined) {
+      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          quantity: currentQuantity - 1,
+        }),
+      })
+      getCarts()
+    }
+    else {
+      const index = carts.findIndex((item) => {
+        return item.id === id;
+      });
+  
+      let newCart = [...carts];
+  
+      if (newCart[index].quantity === 1) {
+        newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
+      } else {
+        newCart[index] = { ...newCart[index], quantity: newCart[index].quantity - 1 };
+      }
+      setCarts(newCart)
+    }
     setQuantity(currentQuantity - 1)
-    getCarts()
   }
 
   const deleteItem = async () => {
-    // dispatch(cartActions.deleteItem(id));
-    await fetch(`http://localhost:8000/api/user/1/cart/${id}`, {
-      method: 'DELETE',
-    })
+    if (user.id !== undefined) {
+      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+        method: 'DELETE',
+      })
+      getCarts()
+    }
+    else {
+      const index = carts.findIndex((item) => {
+        return item.id === id;
+      });
+      
+      let newCart = [...carts];
+      newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
+      setCarts(newCart)
+    }
     setQuantity(0)
-    getCarts()
   }
   if (currentQuantity == 0) {
     return <></>

@@ -3,13 +3,20 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context";
 
 const Login = () => {
+  const navigate = useNavigate()
   const loginNameRef = useRef();
   const loginPasswordRef = useRef();
+  const {user, setUser} = useContext(UserContext)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  async function login() {
+  async function login(e) {
+    e.preventDefault();
     let item = { username: username, password: password };
     let result = await fetch("http://localhost:8000/api/user/login", {
       method: "POST",
@@ -21,8 +28,20 @@ const Login = () => {
     });
     result = await result.json();
     if (result.detail == "Login successfully") {
+      Cookies.set('jwt', result.jwt)
+      await fetch(`http://localhost:8000/api/user/view`, {
+        headers: {
+          'Authorization': `jwt=${result.jwt}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data)
+      })
+      navigate('/foods')
     }
-    console.log(result);
   }
   const submitHandler = (e) => {
     e.preventDefault();

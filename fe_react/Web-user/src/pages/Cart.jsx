@@ -7,22 +7,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import { cartActions } from "../store/shopping-cart/cartSlice";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext, UserContext } from "../context";
 
 const Cart = () => {
-  const [carts, setCarts] = useState([]);
+  const {carts, setCarts} = useContext(CartContext);
+  const {user, setUser} = useContext(UserContext);
 
-  useEffect(() => {
-    // Update the document title using the browser API
-    getCarts();
-  }, []);
+  const totalAmount = (cart) => {
+    return cart.reduce((sum, item) => {
+      return sum + item.quantity * item.price
+    }, 0)
+  }
 
-  let getCarts = async () => {
-    let response = await fetch("http://localhost:8000/api/user/1/cart");
-    let data = await response.json();
-    setCarts(data);
-  };
-
-  const totalAmount = 5;
   return (
     <Helmet title="Cart">
       <CommonSection title="Your Cart" />
@@ -45,7 +42,7 @@ const Cart = () => {
                   </thead>
                   <tbody>
                     {carts.map((item) => (
-                      <Tr item={item} key={item.id} />
+                      <Tr item={item} key={item.id}/>
                     ))}
                   </tbody>
                 </table>
@@ -54,7 +51,7 @@ const Cart = () => {
               <div className="mt-4">
                 <h6>
                   Subtotal: $
-                  <span className="cart__subtotal">{totalAmount}</span>
+                  <span className="cart__subtotal">{totalAmount(carts)}</span>
                 </h6>
                 <p>Taxes and shipping will calculate at checkout</p>
                 <div className="cart__page-btn">
@@ -76,12 +73,34 @@ const Cart = () => {
 
 const Tr = (props) => {
   const { id, name, image, price, quantity } = props.item;
-  //console.log(props.item);
+  const {carts, setCarts} = useContext(CartContext);
+  const {user, setUser} = useContext(UserContext);
 
-  const dispatch = useDispatch();
+  var getCarts = async () => {
+    await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCarts(data)
+      })
+  }
 
-  const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+  const deleteItem = async () => {
+    console.log(user.id);
+    if (user.id !== undefined) {
+      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+        method: 'DELETE',
+      })
+      getCarts()
+    }
+    else {
+      const index = carts.findIndex((item) => {
+        return item.id === id;
+      });
+      
+      let newCart = [...carts];
+      newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
+      setCarts(newCart)
+    }
   };
   return (
     <tr>
@@ -90,7 +109,7 @@ const Tr = (props) => {
       </td>
       <td className="text-center">{name}</td>
       <td className="text-center">${price}</td>
-      <td className="text-center">{quantity}px</td>
+      <td className="text-center">{quantity}</td>
       <td className="text-center cart__item-del">
         <i className="ri-delete-bin-line" onClick={deleteItem}></i>
       </td>

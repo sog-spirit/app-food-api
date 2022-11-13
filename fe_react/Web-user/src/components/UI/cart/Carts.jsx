@@ -9,10 +9,10 @@ import { cartUiActions } from '../../../store/shopping-cart/cartUiSlice'
 
 import '../../../styles/shopping-cart.css'
 import { useContext } from 'react'
-import { AppContext } from '../../../context'
+import { CartContext } from '../../../context'
 
 const Carts = () => {
-  const {carts, setCarts} = useContext(AppContext)
+  const {carts, setCarts} = useContext(CartContext)
 
   const dispatch = useDispatch()
 
