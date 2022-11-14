@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function ChangePassword() {
+    const navigate = useNavigate();
     const [isError, setIsError] = useState(false)
     const [passwordInfo, setPasswordInfo] = useState({
         oldPassword: "",
@@ -13,7 +16,7 @@ function ChangePassword() {
     const handleChange = (event) => {
         setPasswordInfo({ ...passwordInfo, [event.target.name]: event.target.value });
       };
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
       e.preventDefault();
       if (passwordInfo.newPassword !== passwordInfo.confirmPassword) {
         setIsError(true)
@@ -21,8 +24,20 @@ function ChangePassword() {
             setIsError(false)
         }, 2000);
       }
+      else {
+        await fetch(`http://localhost:8000/api/user/update`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+          },
+          body: JSON.stringify({password: passwordInfo.newPassword}),
+          credentials: 'include'
+        })
+        navigate('/home')
+      }
     };
-  
+
     return (
       <Helmet title="Update Password">
         <CommonSection title="Update Password" />
@@ -34,7 +49,7 @@ function ChangePassword() {
                   <div className="form__group">
                     <input
                       type="password"
-                      placeholder="Password"
+                      placeholder="Mật khẩu cũ"
                       name="oldPassword"
                       required
                       onChange={(e) => {
@@ -45,7 +60,7 @@ function ChangePassword() {
                   <div className="form__group">
                     <input
                       type="password"
-                      placeholder="Password"
+                      placeholder="Mật khẩu mới"
                       name="newPassword"
                       required
                       onChange={(e) => {
@@ -56,7 +71,7 @@ function ChangePassword() {
                   <div className="form__group">
                     <input
                       type="password"
-                      placeholder="Confirm Password"
+                      placeholder="Nhập lại mật khẩu"
                       name="confirmPassword"
                       required
                       onChange={(e) => {

@@ -121,12 +121,12 @@ const Header = () => {
                   </li>
                   <li>
                     <Link to="/update-password" className="dropdown-item">
-                      Change password
+                      Change Password
                     </Link>
                   </li>
                   <li>
-                    <Link to="/history" className="dropdown-item">
-                      History
+                    <Link to="/order" className="dropdown-item">
+                      Your Order
                     </Link>
                   </li>
                   <li>

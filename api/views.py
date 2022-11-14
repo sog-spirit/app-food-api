@@ -324,7 +324,7 @@ class OrderAPIView(APIView):
         Get orders list
         """
         payload = user_authentication(request)
-        orders = Order.objects.filter(user=payload['id'])
+        orders = Order.objects.filter(user=payload['id']).order_by('-_created')
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
@@ -389,8 +389,9 @@ class OrderAPIView(APIView):
         return Response(request.data)
 
 class OrderDetailAPIView(APIView):
-    def get(self, request, user_id, order_id):
-        order_detail = OrderDetail.objects.filter(order=order_id, _creator=user_id)
+    def get(self, request, order_id):
+        payload = user_authentication(request)
+        order_detail = OrderDetail.objects.filter(order=order_id, _creator=payload['id'])
         serializer = OrderDetailSerializer(order_detail, many=True)
         return Response(serializer.data)
 

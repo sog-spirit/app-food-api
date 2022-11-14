@@ -4,9 +4,11 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { useContext } from "react";
 import { UserContext } from "../context";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function Profile() {
+    const navigate = useNavigate()
     const { user, setUser } = useContext(UserContext)
     const [profile, setProfile] = useState({
       name: user.name,
@@ -16,9 +18,40 @@ function Profile() {
       date_of_birth: user.date_of_birth,
     })
 
-    const handleChange = (event) => {
+    const handleChange = async (event) => {
       setProfile({ ...profile, [event.target.name]: event.target.value });
     };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      await fetch(`http://localhost:8000/api/user/update`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        body: JSON.stringify(profile),
+        credentials: 'include'
+      })
+      getUser()
+      navigate('/home')
+    }
+
+    var getUser = async () => {
+      var cookie = Cookies.get('jwt')
+      if (cookie) {
+        await fetch(`http://localhost:8000/api/user/view`, {
+          headers: {
+            'Authorization': `jwt=${cookie}`
+          },
+          method: 'GET',
+          credentials: 'include'
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data)
+        })
+    }}
 
     return (
         <Helmet title="Profile">
@@ -28,7 +61,7 @@ function Profile() {
               <Row>
                 <Col lg="6" md="6">
                   <h6 className="mb-4">Profile</h6>
-                  <form className="checkout__form">
+                  <form className="checkout__form" onSubmit={(e) => handleSubmit(e)}>
                     <div className="form__group">
                       <label for="name">Name</label>
                       <input
@@ -85,11 +118,11 @@ function Profile() {
                     <div className="form__group">
                       <label for="date_of_birth">Date of Birth</label>
                       <input
-                        type="datetime-local"
+                        type="date"
                         name="date_of_birth"
-                        placeholder="Note"
+                        placeholder="Date of Birth"
                         required
-                        value={user.date_of_birth}
+                        value={profile.date_of_birth}
                         onChange={(e) => {
                           handleChange(e)
                       }}
@@ -98,6 +131,7 @@ function Profile() {
                     <button
                       type="submit"
                       className="addTOCart__btn"
+                      onClick={(e) => handleSubmit(e)}
                     >
                       Save changes
                     </button>

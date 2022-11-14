@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/cart-page.css";
-import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-import { cartActions } from "../store/shopping-cart/cartSlice";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
@@ -30,7 +28,7 @@ const Cart = () => {
               {carts.length === 0 ? (
                 <h5 className="text-center">Your cart is empty</h5>
               ) : (
-                <table className="table table-bordered">
+                <table className="table table-bordered text-center">
                   <thead>
                     <tr>
                       <th>Image</th>
