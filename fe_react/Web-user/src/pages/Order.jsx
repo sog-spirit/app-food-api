@@ -15,11 +15,11 @@ function Order() {
     const [order, setOrder] = useState([])
     useEffect(async () => {
         await fetch(`http://localhost:8000/api/order`, {
-            headers: {
-            'Authorization': `jwt=${Cookies.get('jwt')}`
-            },
-            method: 'GET',
-            credentials: 'include'
+          headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+          },
+          method: 'GET',
+          credentials: 'include'
         })
         .then((res) => res.json())
         .then((data) => {
@@ -64,14 +64,14 @@ const Tr = (props) => {
     const { id, _created, price, order_status, address, note} = props.item
     return (
       <tr>
-        <td className="text-center">{props.index}</td>
+        <td className="text-center">{props.index + 1}</td>
         <td className="text-center">{_created}</td>
         <td className="text-center">${price}</td>
         <td className="text-center">{order_status}</td>
         <td className="text-center">{address}</td>
         <td className="text-center">{note}</td>
         <td className="text-center cart__item-del">
-          <Link href={`/${}`}>Detail</Link>
+          <Link to={`/detail/${id}`}>Detail</Link>
         </td>
       </tr>
     );

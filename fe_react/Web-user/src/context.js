@@ -43,7 +43,13 @@ export const CartProvider = ({ children }) => {
 
   var getCarts = async () => {
     if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
+      await fetch(`http://localhost:8000/api/cart`, {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
         .then((res) => res.json())
         .then((data) => {
           setCarts(data)

@@ -7,6 +7,7 @@ import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
+import Cookies from "js-cookie";
 
 const Cart = () => {
   const {carts, setCarts} = useContext(CartContext);
@@ -75,7 +76,13 @@ const Tr = (props) => {
   const {user, setUser} = useContext(UserContext);
 
   var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
+    await fetch(`http://localhost:8000/api/cart`, {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
       .then((res) => res.json())
       .then((data) => {
         setCarts(data)
@@ -85,8 +92,12 @@ const Tr = (props) => {
   const deleteItem = async () => {
     console.log(user.id);
     if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        credentials: 'include'
       })
       getCarts()
     }

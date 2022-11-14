@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { cartActions } from '../../../store/shopping-cart/cartSlice'
 import { CartContext, UserContext } from '../../../context'  
+import Cookies from 'js-cookie'
 
 const ProductCard = (props) => {
   const { id, name, image, price } = props.item
@@ -15,7 +16,13 @@ const ProductCard = (props) => {
   const dispatch = useDispatch()
 
   var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
+    await fetch(`http://localhost:8000/api/cart`, {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
       .then((res) => res.json())
       .then((data) => {
         setCarts(data)
@@ -24,28 +31,38 @@ const ProductCard = (props) => {
 
   const addToCart = async () => {
     if (user.id !== undefined) {
-      let response = await fetch(`http://localhost:8000/api/user/${user.id}/product/${id}`)
+      let response = await fetch(`http://localhost:8000/api/cart/product/${id}`, {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
       let data = await response.json()
       if (Object.keys(data).length === 0) {
-        await fetch(`http://localhost:8000/api/user/${user.id}/cart`, {
+        await fetch(`http://localhost:8000/api/cart`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
           },
           body: JSON.stringify({
             product: id,
             quantity: 1,
           }),
+          credentials: 'include'
         })
       } else {
-        await fetch(`http://localhost:8000/api/user/${user.id}/product/${id}`, {
+        await fetch(`http://localhost:8000/api/cart/product/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
           },
           body: JSON.stringify({
             quantity: data.quantity + 1,
           }),
+          credentials: 'include'
         })
       }
       getCarts()

@@ -13,6 +13,7 @@ import Admin from "../pages/Admin";
 import ChangePassword from "../pages/ChangePassword";
 import Profile from "../pages/Profile";
 import Order from "../pages/Order";
+import Detail from "../pages/Detail";
 
 const Routers = () => {
   return (
@@ -26,6 +27,7 @@ const Routers = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/update-password" element={<ChangePassword />} />
       <Route path="/order" element={<Order />} />
+      <Route path="/detail/:id" element={<Detail />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />

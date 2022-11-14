@@ -4,9 +4,9 @@ import { ListGroupItem } from 'reactstrap'
 import '../../../styles/cart-item.css'
 
 import { useDispatch } from 'react-redux'
-import { cartActions } from '../../../store/shopping-cart/cartSlice'
 import { useState, useContext } from 'react'
 import { CartContext, UserContext } from '../../../context'
+import Cookies from 'js-cookie'
 
 const CartItem = ({ item }) => {
   let { id, name, price, image, quantity } = item
@@ -16,7 +16,13 @@ const CartItem = ({ item }) => {
 
   const dispatch = useDispatch()
   var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/user/${user.id}/cart`)
+    await fetch(`http://localhost:8000/api/cart`, {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
       .then((res) => res.json())
       .then((data) => {
         setCarts(data)
@@ -26,14 +32,16 @@ const CartItem = ({ item }) => {
 
   const incrementItem = async () => {
     if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `jwt=${Cookies.get('jwt')}`
       },
       body: JSON.stringify({
         quantity: currentQuantity + 1,
       }),
+      credentials: 'include'
     })
     getCarts()
   }
@@ -50,14 +58,16 @@ const CartItem = ({ item }) => {
 
   const decreaseItem = async () => {
     if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `jwt=${Cookies.get('jwt')}`
         },
         body: JSON.stringify({
           quantity: currentQuantity - 1,
         }),
+        credentials: 'include'
       })
       getCarts()
     }
@@ -77,11 +87,15 @@ const CartItem = ({ item }) => {
     }
     setQuantity(currentQuantity - 1)
   }
-
+  
   const deleteItem = async () => {
     if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/user/${user.id}/cart/${id}`, {
+      await fetch(`http://localhost:8000/api/cart/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        credentials: 'include'
       })
       getCarts()
     }
