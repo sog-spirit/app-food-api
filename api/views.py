@@ -396,20 +396,19 @@ class OrderDetailAPIView(APIView):
         return Response(serializer.data)
 
 class CartsAPIView(APIView):
-    def get(self, request, user_id):
-        cart_items = Cart.objects.filter(_deleted=None, _creator=user_id)
+    def get(self, request):
+        payload = user_authentication(request)
+        cart_items = Cart.objects.filter(_deleted=None, _creator=payload['id'])
         serializer = CartSerializer(cart_items, many=True)
         return Response(serializer.data)
 
-    def post(self, request, user_id):
-        # payload = user_authentication(request)
-        # if user_id != payload['id']:
-        #     return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        payload = user_authentication(request)
         
         data = request.data.copy()
-        data['_creator'] = user_id
-        data['_updater'] = user_id
-        user = User.objects.filter(id=user_id).first()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
+        user = User.objects.filter(id=payload['id']).first()
 
         try:
             with transaction.atomic():
@@ -429,12 +428,10 @@ class CartsAPIView(APIView):
             return Response({'detail': 'Error creating cart item'}, status=status.HTTP_400_BAD_REQUEST)
 
 class SingleCartAPIView(APIView):
-    def delete(self, request, user_id, cart_id):
-        # payload = user_authentication(request)
-        # if user_id != payload['id']:
-        #     return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, cart_id):
+        payload = user_authentication(request)
         
-        cart_item = Cart.objects.filter(id=cart_id, _creator=user_id).first()
+        cart_item = Cart.objects.filter(id=cart_id, _creator=payload['id']).first()
 
         if cart_item._deleted is not None:
             return Response({
@@ -446,30 +443,27 @@ class SingleCartAPIView(APIView):
             instance=cart_item,
             data = {
                 '_deleted': datetime.now(),
-                '_updater': user_id
-                # '_updater': payload['id']
+                '_updater': payload['id']
             },
             partial = True
         )
 
         if serializer.is_valid():
             serializer.save()
-            # user = User.objects.filter(id=payload['id']).first()
-            # History.objects.create(
-            #     _creator = user,
-            #     message = "delete cart item"
-            # )
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "delete cart item"
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self, request, user_id, cart_id):
-        # payload = user_authentication(request)
-        # if user_id != payload['id']:
-        #     return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, cart_id):
+        payload = user_authentication(request)
         
         data = request.data.copy()
-        cart_item = Cart.objects.get(id=cart_id)
+        cart_item = Cart.objects.get(id=cart_id, _creator=payload['id'])
         if cart_item._deleted is not None:
             return Response({
                 'detail': 'Cart item is already deleted'
@@ -480,19 +474,20 @@ class SingleCartAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            # user = User.objects.filter(id=payload['id']).first()
-            # History.objects.create(
-            #     _creator = user,
-            #     message = "Update cart item",
-            # )
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "Update cart item",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetProductOnCartAPIView(APIView):
-    def get(self, request, user_id, product_id):
+    def get(self, request, product_id):
+        payload = user_authentication(request)
         try:
-            cart_item = Cart.objects.get(product=product_id, _deleted=None, _creator=user_id)
+            cart_item = Cart.objects.get(product=product_id, _deleted=None, _creator=payload['id'])
         except Cart.DoesNotExist:
             return Response(
                 {},
@@ -501,14 +496,12 @@ class GetProductOnCartAPIView(APIView):
         serializer = CartSerializer(cart_item)
         return Response(serializer.data)
     
-    def put(self, request, user_id, product_id):
-        # payload = user_authentication(request)
-        # if user_id != payload['id']:
-        #     return Response({'detail': 'Permission denied'}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, product_id):
+        payload = user_authentication(request)
         
         data = request.data.copy()
         try:
-            cart_item = Cart.objects.get(product=product_id, _deleted=None, _creator=user_id)
+            cart_item = Cart.objects.get(product=product_id, _deleted=None, _creator=payload['id'])
         except Cart.DoesNotExist:
             return Response(
                 {'detail': 'cart item does not exist'},
@@ -519,11 +512,11 @@ class GetProductOnCartAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            # user = User.objects.filter(id=payload['id']).first()
-            # History.objects.create(
-            #     _creator = user,
-            #     message = "Update cart item",
-            # )
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "Update cart item",
+            )
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

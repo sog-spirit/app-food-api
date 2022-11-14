@@ -43,6 +43,10 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderDetailSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='product.name', read_only=True)
+    image = serializers.ImageField(source='product.image', read_only=True)
+    price = serializers.FloatField(source='product.price', read_only=True)
+
     class Meta:
         model = OrderDetail
         fields = '__all__'
