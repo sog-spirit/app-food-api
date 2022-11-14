@@ -10,6 +10,8 @@ import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Admin from "../pages/Admin";
+import ChangePassword from "../pages/ChangePassword";
+import Profile from "../pages/Profile";
 
 const Routers = () => {
   return (
@@ -21,6 +23,8 @@ const Routers = () => {
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/update-password" element={<ChangePassword />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<Admin />} />

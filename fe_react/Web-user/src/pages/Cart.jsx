@@ -59,7 +59,7 @@ const Cart = () => {
                     <Link to="/foods">Continue Shopping</Link>
                   </button>
                   <button className="addTOCart__btn">
-                    <Link to="/checkout">Proceed to checkout</Link>
+                    <Link to={user.id !== undefined ? "/checkout" : "/login"}>Proceed to checkout</Link>
                   </button>
                 </div>
               </div>

@@ -1,38 +1,29 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 
 import "../styles/checkout.css";
+import { useContext } from "react";
+import { CartContext, UserContext } from "../context";
 
 const Checkout = () => {
-  const [enterName, setEnterName] = useState("");
-  const [enterEmail, setEnterEmail] = useState("");
-  const [enterNumber, setEnterNumber] = useState("");
-  const [enterCountry, setEnterCountry] = useState("");
+  const { user, setUser } = useContext(UserContext)
+  const [address, setAddress] = useState("");
   const [enterCity, setEnterCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
+  const [note, setNote] = useState("");
 
-  const shippingInfo = [];
-  const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
-  const shippingCost = 30;
+  const { carts, setCarts } = useContext(CartContext)
 
-  const totalAmount = cartTotalAmount + Number(shippingCost);
+  const totalAmount = (cart) => {
+    return cart.reduce((sum, item) => {
+      return sum + item.quantity * item.price
+    }, 0)
+  }
+  const shippingCost = 30000;
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const userShippingAddress = {
-      name: enterName,
-      email: enterEmail,
-      phone: enterNumber,
-      country: enterCountry,
-      city: enterCity,
-      postalCode: postalCode,
-    };
-
-    shippingInfo.push(userShippingAddress);
-    console.log(shippingInfo);
   };
 
   return (
@@ -47,18 +38,11 @@ const Checkout = () => {
                 <div className="form__group">
                   <input
                     type="text"
+                    name="name"
                     placeholder="Enter your name"
                     required
-                    onChange={(e) => setEnterName(e.target.value)}
-                  />
-                </div>
-
-                <div className="form__group">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    required
-                    onChange={(e) => setEnterEmail(e.target.value)}
+                    value={user.name}
+                    readOnly
                   />
                 </div>
                 <div className="form__group">
@@ -66,15 +50,25 @@ const Checkout = () => {
                     type="number"
                     placeholder="Phone number"
                     required
-                    onChange={(e) => setEnterNumber(e.target.value)}
+                    value={user.phone} 
+                    readOnly
+                  />
+                </div>
+                <div className="form__group">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    required
+                    value={user.email}
+                    readOnly
                   />
                 </div>
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Country"
+                    placeholder="Address"
                     required
-                    onChange={(e) => setEnterCountry(e.target.value)}
+                    onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
                 <div className="form__group">
@@ -83,24 +77,19 @@ const Checkout = () => {
                     placeholder="City"
                     required
                     onChange={(e) => setEnterCity(e.target.value)}
-                  />
+                    />
                 </div>
                 <div className="form__group">
                   <input
-                    type="number"
-                    placeholder="Postal code"
+                    type="text"
+                    placeholder="Note"
                     required
-                    onChange={(e) => setPostalCode(e.target.value)}
+                    onChange={(e) => setNote(e.target.value)}
                   />
                 </div>
                 <button
                   type="submit"
                   className="addTOCart__btn"
-                  onClick={() => {
-                    console.log(
-                      ">>> LOCAL STORAGE " + JSON.stringify(localStorage)
-                    );
-                  }}
                 >
                   Payment
                 </button>
@@ -110,14 +99,14 @@ const Checkout = () => {
             <Col lg="4" md="6">
               <div className="checkout__bill">
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  Subtotal: <span>${cartTotalAmount}</span>
+                  Subtotal: <span>${totalAmount(carts)}</span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
                   Shipping: <span>${shippingCost}</span>
                 </h6>
                 <div className="checkout__total">
                   <h5 className="d-flex align-items-center justify-content-between">
-                    Total: <span>${totalAmount}</span>
+                    Total: <span>${totalAmount(carts) + shippingCost}</span>
                   </h5>
                 </div>
               </div>

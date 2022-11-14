@@ -84,7 +84,7 @@ const FoodDetails = () => {
                   Price: <span>${product.price}</span>
                 </p>
                 <p className="category mb-5">
-                  Category: <span>{product.category_name}</span>
+                  <span>{product.category_name}</span>
                 </p>
 
                 <button onClick={addItem} className="addTOCart__btn">

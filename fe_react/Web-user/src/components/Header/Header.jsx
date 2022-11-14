@@ -9,8 +9,9 @@ import { useDispatch } from "react-redux";
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
 
 import "../../styles/header.css";
-import { CartContext } from "../../context";
+import { CartContext, UserContext } from "../../context";
 import { useContext } from "react";
+import Cookies from "js-cookie";
 
 const nav__links = [
   {
@@ -24,15 +25,12 @@ const nav__links = [
   {
     display: "Cart",
     path: "/cart",
-  },
-  {
-    display: "Contact",
-    path: "/contact",
-  },
+  }
 ];
 
 const Header = () => {
   const { carts, setCarts } = useContext(CartContext);
+  const { user, setUser } = useContext(UserContext)
   const getAmountItems = (cart) => {
     return cart.reduce((sum, item) => {
       return sum + item.quantity;
@@ -63,6 +61,11 @@ const Header = () => {
 
     return () => window.removeEventListener("scroll");
   }, []);
+
+  const logOut = () => {
+    Cookies.remove('jwt')
+    setUser({})
+  }
 
   return (
     <header className="header" ref={headerRef}>
@@ -95,15 +98,7 @@ const Header = () => {
               <i class="ri-shopping-basket-line"></i>
               <span className="cart__badge">{getAmountItems(carts)}</span>
             </span>
-                  {/* user chua login */}
-            {/* <span className="user">
-              <Link to="/login">
-                <i class="ri-user-line"></i>
-              </Link>
-            </span> */}
-
-            {/* user da login */}
-            <span className="user">
+            {user.id !== undefined ? (<span className="user">
               <div className="dropdown">
                 <button
                   className="btn btn-success dropdown-toggle"
@@ -111,27 +106,41 @@ const Header = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Truong my duyen
+                  {user.username}
                 </button>
                 <ul className="dropdown-menu">
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
+                    <Link to="/profile" className="dropdown-item">
+                      Profile
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
+                    <Link to="/cart" className="dropdown-item">
+                      Your Cart
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <Link to="/update-password" className="dropdown-item">
+                      Change password
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/history" className="dropdown-item">
+                      History
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/login" className="dropdown-item" onClick={() => logOut()}>
                      Logout
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
-            </span>
+            </span>) : (<span className="user">
+              <Link to="/login">
+                <i class="ri-user-line"></i>
+              </Link>
+            </span>)}            
 
             <span className="mobile__menu" onClick={toggleMenu}>
               <i class="ri-menu-line"></i>
