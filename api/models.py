@@ -12,6 +12,7 @@ class User(AbstractUser):
     image = models.ImageField(blank=True, null=True, upload_to='user_image')
     address = models.TextField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+    balance = models.FloatField(default=0.0)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['password', 'email', 'phone']
@@ -68,6 +69,8 @@ class Order(models.Model):
     ]
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_ENUM, default="COD")
     order_status = models.CharField(max_length=10, choices=ORDER_STATUS_ENUM, default="PENDING")
+    address = models.TextField(null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "Order id {id}".format(id=self.id)

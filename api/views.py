@@ -7,6 +7,7 @@ from .serializers import (
     ProductSerializer,
     CategorySerializer,
     OrderDetailSerializer,
+    OrderSerializer,
     CartSerializer,
 )
 from django.db import IntegrityError, transaction
@@ -318,6 +319,15 @@ class SingleCategoryAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderAPIView(APIView):
+    def get(self, request):
+        """
+        Get orders list
+        """
+        payload = user_authentication(request)
+        orders = Order.objects.filter(user=payload['id'])
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
         payload = user_authentication(request)
         user = User.objects.filter(id=payload['id']).first()
@@ -377,6 +387,12 @@ class OrderAPIView(APIView):
             return Response({'detail': 'Missing parameters'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(request.data)
+
+class OrderDetailAPIView(APIView):
+    def get(self, request, user_id, order_id):
+        order_detail = OrderDetail.objects.filter(order=order_id, _creator=user_id)
+        serializer = OrderDetailSerializer(order_detail, many=True)
+        return Response(serializer.data)
 
 class CartsAPIView(APIView):
     def get(self, request, user_id):

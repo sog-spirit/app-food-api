@@ -4,11 +4,7 @@ from .models import User, Product, Category, Order, OrderDetail, Cart
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        # fields = ['username', 'password', 'email', 'phone']
         fields = '__all__'
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
     
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -24,6 +20,9 @@ class UserSerializer(serializers.ModelSerializer):
         instance.phone = validated_data.get('phone', instance.phone)
         instance.address = validated_data.get('address', instance.address)
         instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
+        new_password = validated_data.get('password', None)
+        if new_password is not None:
+            instance.set_password(new_password)
         instance.save()
         return instance
 
@@ -51,7 +50,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='product.name', read_only=True)
     image = serializers.ImageField(source='product.image', read_only=True)
-    price = serializers.IntegerField(source='product.price', read_only=True)
+    price = serializers.FloatField(source='product.price', read_only=True)
 
     class Meta:
         model = Cart
