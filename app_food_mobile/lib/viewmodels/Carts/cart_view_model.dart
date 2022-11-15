@@ -61,11 +61,14 @@ class CartViewModel extends ChangeNotifier {
     int total = 0;
     if (cartListModel != []) {
       try {
-        total = cartListModel
-            .map<int>((item) => item.quantity)
-            .reduce((value1, value2) => value1 + value2);
+        // total = cartListModel
+        //     .map<int>((item) => item.quantity)
+        //     .reduce((value1, value2) => value1 + value2);
+        print('co loi trong get total product trong cart');
+        total = 5;
+        return total;
       } catch (err) {
-        print('error: ' + err.toString());
+        print('error3333: ' + err.toString());
         return 0;
       }
       return total;
