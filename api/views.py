@@ -361,6 +361,7 @@ class OrderAPIView(APIView):
         user = User.objects.filter(id=payload['id']).first()
         address = request.data.get('address', None)
         note = request.data.get('note', None)
+        shipping_cost = request.data.get('shippingCost', 0)
         if address is None:
             return Response(
                 {'detail': 'Address is required'},
@@ -421,6 +422,7 @@ class OrderAPIView(APIView):
                         )
                         continue
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                price += shipping_cost
                 order.price = price
                 order.save()
                 user.balance -= price
@@ -455,6 +457,27 @@ class CartsAPIView(APIView):
         data['_creator'] = payload['id']
         data['_updater'] = payload['id']
         user = User.objects.filter(id=payload['id']).first()
+        product_id = request.data.get('product', None)
+        if product_id is None:
+            return Response(
+                {'detail': 'product is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            cart_item = Cart.objects.get(product=product_id, _deleted=None, _creator=payload['id'])
+            cart_item_quantity = request.data.get('quantity', None)
+            if cart_item_quantity is None:
+                return Response(
+                    {'detail': 'quantity is required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            cart_item.quantity += int(cart_item_quantity)
+            cart_item.save()
+            serializer = CartSerializer(cart_item)
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        except Cart.DoesNotExist:
+            pass
 
         try:
             with transaction.atomic():
