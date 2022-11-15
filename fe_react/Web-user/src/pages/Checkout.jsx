@@ -6,8 +6,12 @@ import Helmet from "../components/Helmet/Helmet";
 import "../styles/checkout.css";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
+  const [isError, setIsError] = useState(false)
+  const navigate = useNavigate()
   const { user, setUser } = useContext(UserContext)
   const [address, setAddress] = useState("");
   const [enterCity, setEnterCity] = useState("");
@@ -22,8 +26,37 @@ const Checkout = () => {
   }
   const shippingCost = 30000;
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    if (carts.length === 0) {
+      setIsError(true)
+        setTimeout(() => {
+            setIsError(false)
+        }, 2000);
+    }
+    else {
+      await fetch(`http://localhost:8000/api/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          products: carts, 
+          address: address + ", " + enterCity, 
+          note 
+        })
+      }).then((response) => {
+        if (response.status === 200) {
+          setCarts([])
+          navigate('/success')
+        } else {
+          console.log(response.json());
+          navigate('/error')
+        }
+      })
+    }
   };
 
   return (
@@ -90,6 +123,7 @@ const Checkout = () => {
                 <button
                   type="submit"
                   className="addTOCart__btn"
+                  onClick={e => submitHandler(e)}
                 >
                   Payment
                 </button>
@@ -112,6 +146,7 @@ const Checkout = () => {
               </div>
             </Col>
           </Row>
+          {isError && <span style={{color: "red"}}>Xin hãy chọn sản phẩm !!</span>}
         </Container>
       </section>
     </Helmet>

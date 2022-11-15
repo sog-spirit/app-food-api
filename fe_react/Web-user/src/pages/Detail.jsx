@@ -50,6 +50,9 @@ function Detail() {
                   </tbody>
                 </table>
             </Col>
+            <Link to='/order'>
+              Quay lại
+            </Link>
             <Link to='/home'>
               Về trang chủ
             </Link>

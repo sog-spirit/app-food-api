@@ -25,16 +25,27 @@ function ChangePassword() {
         }, 2000);
       }
       else {
-        await fetch(`http://localhost:8000/api/user/update`, {
+        await fetch(`http://localhost:8000/api/user/update/password`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `jwt=${Cookies.get('jwt')}`
           },
-          body: JSON.stringify({password: passwordInfo.newPassword}),
+          body: JSON.stringify({
+            current_password: passwordInfo.oldPassword,
+            new_password: passwordInfo.newPassword}),
           credentials: 'include'
+        }).then((response) => {
+          if (response.status !== 200) {
+            setIsError(true)
+            setTimeout(() => {
+                setIsError(false)
+            }, 2000);
+          }
+          else {
+            navigate('/home')
+          }
         })
-        navigate('/home')
       }
     };
 

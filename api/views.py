@@ -390,11 +390,11 @@ class OrderAPIView(APIView):
                 for item in request.data['products']:
                     product = Product.objects.filter(id=item['product']).first()
                     price += product.price * item['quantity']
-                if user.balance < price:
-                    return Response(
-                        {'detail': 'Account balance is insufficient'},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+                # if user.balance < price:
+                #     return Response(
+                #         {'detail': 'Account balance is insufficient'},
+                #         status=status.HTTP_400_BAD_REQUEST
+                #     )
 
                 for item in request.data['products']:
                     product = Product.objects.filter(id=item['product']).first()
@@ -425,7 +425,7 @@ class OrderAPIView(APIView):
                 price += shipping_cost
                 order.price = price
                 order.save()
-                user.balance -= price
+                # user.balance -= price
                 user.save()
 
         except IntegrityError:
