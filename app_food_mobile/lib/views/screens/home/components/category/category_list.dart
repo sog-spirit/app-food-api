@@ -17,22 +17,22 @@ class CategoryList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             CategoryItem(
-              title: "Combo Meal",
+              title: "Cơm",
               isActive: true,
               press: () {},
             ),
             CategoryItem(
-              title: "Ckicken",
+              title: "Burgur",
               isActive: false,
               press: () {},
             ),
             CategoryItem(
-              title: "Beveriages",
+              title: "Đồ uống",
               isActive: false,
               press: () {},
             ),
             CategoryItem(
-              title: "Snacks & Slides",
+              title: "Gà",
               isActive: false,
               press: () {},
             ),

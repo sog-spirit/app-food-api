@@ -7,7 +7,9 @@ import 'item_card.dart';
 class ListItemCard extends StatelessWidget {
   ListItemCard({Key? key, required this.products}) : super(key: key);
   List<Product> products;
+  //get fake cards
 
+  void getCards() async {}
   @override
   Widget build(BuildContext context) {
     return Container(

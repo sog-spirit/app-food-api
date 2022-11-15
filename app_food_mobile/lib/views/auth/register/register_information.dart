@@ -1,52 +1,19 @@
-import 'package:app_food_mobile/views/pages/main_page.dart';
-import 'package:flutter/foundation.dart';
+import 'package:app_food_mobile/components/register_infor_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../components/login_form.dart';
+import '../../../components/register_form.dart';
 import '../../../components/social_card.dart';
 import '../../../constants.dart';
-import '../../screens/home/home_page.dart';
 
-class LoginScreen extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginScreen({super.key, required this.showRegisterPage});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  void login(String username, String password) async {
-    print("login2332");
-    //xu ly login
-    try {
-      Response response = await post(Uri.parse("${baseApi}api/user/login"),
-          body: {"username": "admin", "password": "admin"});
-      if (response.statusCode == 200) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
-      } else {
-        print('failed');
-      }
-    } catch (e) {
-      print('failedsdfds');
-      print(e.toString());
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+class RegisterInformationScreen extends StatelessWidget {
+  RegisterInformationScreen({super.key});
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Login',
+          'Resgister',
           style: Theme.of(context)
               .appBarTheme
               .textTheme
@@ -70,29 +37,26 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
               child: Column(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.04,
-              ),
               Text(
-                "Welcome Back",
+                "Complete Profile",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 28,
                     fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 10),
               Text(
-                "Sign in with your email and password  \nor continue with social media",
+                "Complete your details information or countinue \n with your social media",
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
-              SignForm(
-                login: () {
-                  login(_emailController.text.toString(),
-                      _passwordController.text.toString());
-                },
-                emailController: _emailController,
-                passwordController: _passwordController,
+              SizedBox(height: 10),
+              RegisterInforForm(
+                register: () {},
+                addressController: _addressController,
+                firstNameController: _firstNameController,
+                lastNameController: _lastNameController,
+                phoneController: _phoneNumberController,
               ),
               SizedBox(height: MediaQuery.of(context).size.width * 0.08),
               Row(
@@ -112,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
               //no - account - text
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   GestureDetector(
-                    onTap: widget.showRegisterPage,
+                    onTap: () {},
                     child: Text(
                       "Sign Up",
                       style: TextStyle(fontSize: 16, color: kPrimaryColor),

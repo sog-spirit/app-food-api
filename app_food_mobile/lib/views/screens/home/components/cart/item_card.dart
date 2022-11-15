@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tiengviet/tiengviet.dart';
 
+import '../../../../../constants.dart';
 import '../../../../../models/product.dart';
 
 class ItemCard extends StatelessWidget {
@@ -38,10 +39,10 @@ class ItemCard extends StatelessWidget {
                 topLeft: Radius.circular(8.0),
                 topRight: Radius.circular(8.0),
               ),
-              child: Image.network('http://192.168.1.4:8000/${product.image}',
+              child: Image.network('${baseApi}${product.image}',
                   width: 150, fit: BoxFit.fill),
             ),
-            Text(product.name + "trương"),
+            Text(product.name),
             SizedBox(height: 12),
             Text(
               TiengViet.parse('Gà rán (3 miếng)'),

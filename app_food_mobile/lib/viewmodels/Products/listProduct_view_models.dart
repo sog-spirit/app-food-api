@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../../models/product.dart';
 
-class ListProductsViewModel with ChangeNotifier {
-  List<ProductViewModel> products = [];
-
+class ListProductsViewModel extends ChangeNotifier {
+  List<Product> _products = [];
+  List<Product> get products => _products;
+  ListProductsViewModel() {
+    getProducts();
+  }
   void getProducts() async {
-    List<ProductViewModel> _products =
-        (await ProductServices().getProducts()).cast<ProductViewModel>();
+    List<Product> products = (await ProductServices().getProducts());
+    _products = products;
     notifyListeners();
-    print('duyen dang debug');
     print(_products);
   }
 }

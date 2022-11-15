@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+// import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:tiengviet/tiengviet.dart';
 
 import '../../../../constants.dart';
@@ -8,47 +8,51 @@ class TitlePriceRating extends StatelessWidget {
   final String name;
   final double rating;
   final double numOfReviews, price;
-  final RatingChangeCallback onRatingChanged;
+  // final RatingChangeCallback onRatingChanged;
 
   const TitlePriceRating({
     Key? key,
     required this.rating,
     required this.numOfReviews,
-    required this.onRatingChanged,
+    // required this.onRatingChanged,
     required this.name,
     required this.price,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        children: [
-          Expanded(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Row(
-                children: [
-                  SmoothStarRating(
-                    borderColor: kPrimaryColor,
-                    rating: rating,
-                  ),
-                  SizedBox(width: 10),
-                  Text("${numOfReviews} reviews")
-                ],
-              )
-            ],
-          )),
-          PriceTag(context)
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Row(
+              children: [
+                // SmoothStarRating(
+                //   borderColor: kPrimaryColor,
+                //   rating: rating,
+                // ),
+                SizedBox(width: 10),
+                Text("${numOfReviews} reviews")
+              ],
+            )
+          ],
+        )),
+        Container(
+          child: Text(
+            price.toString(),
+            style: TextStyle(
+                color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     );
   }
 

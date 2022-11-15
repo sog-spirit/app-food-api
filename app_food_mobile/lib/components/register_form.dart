@@ -4,19 +4,21 @@ import 'default_button.dart';
 import 'custom_surfix_icon.dart';
 import 'form_error.dart';
 
-class SignForm extends StatefulWidget {
-  const SignForm({super.key});
-
-  @override
-  State<SignForm> createState() => _SignFormState();
-}
-
-class _SignFormState extends State<SignForm> {
-  final _formKey = GlobalKey<FormState>();
-  late String email;
-  late String password;
+class RegisterForm extends StatelessWidget {
+  RegisterForm(
+      {super.key,
+      required this.register,
+      required this.emailController,
+      required this.passwordController,
+      required this.passwordConfirmController});
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController passwordConfirmController;
+  final VoidCallback register;
   bool remember = false;
+
   final List<String> errors = [];
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -25,29 +27,12 @@ class _SignFormState extends State<SignForm> {
         SizedBox(height: 30),
         buildPasswordFormField(),
         SizedBox(height: 30),
-        Row(
-          children: [
-            Checkbox(
-              value: remember,
-              activeColor: kPrimaryColor,
-              onChanged: (value) {},
-            ),
-            Text("Remember me"),
-            Spacer(),
-            GestureDetector(
-              onTap: () {},
-              child: Text(
-                "Forgot Password",
-                style: TextStyle(decoration: TextDecoration.underline),
-              ),
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
+        buildPasswordConfirmFormField(),
+        SizedBox(height: 30),
         FormError(errors: errors),
         SizedBox(height: 15),
         DefaultButton(
-          press: () {},
+          press: register,
           text: "Continue",
         )
       ]),
@@ -79,6 +64,25 @@ class _SignFormState extends State<SignForm> {
       decoration: InputDecoration(
         labelText: "Password",
         hintText: "Enter your password",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+      ),
+    );
+  }
+
+  //password confirm text form field
+  TextFormField buildPasswordConfirmFormField() {
+    return TextFormField(
+      obscureText: true,
+      onChanged: (value) {
+        return null;
+      },
+      validator: (value) {
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Password",
+        hintText: "Re-enter your password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
       ),
