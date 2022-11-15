@@ -1,4 +1,3 @@
-import 'package:app_food_mobile/models/cart.dart';
 import 'package:app_food_mobile/viewmodels/Carts/cart_view_model.dart';
 import 'package:app_food_mobile/views/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
@@ -10,61 +9,46 @@ import '../cart/cart_page.dart';
 import '../home/components/icon_btn/icon_btn_counter.dart';
 import 'components/detail_bottom_navigator.dart';
 import 'components/title_price_rating.dart';
-import 'package:tiengviet/tiengviet.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.product});
   final Product product;
 
   @override
-  Widget build(BuildContext context) {
-    // CartViewModel cartViewModel = context.watch<CartViewModel>();
-    // CartViewModel cartViewModel = Provider.of<CartViewModel>(context);
-    return ChangeNotifierProvider<CartViewModel>(
-      create: (context) => CartViewModel(),
-      child: Builder(
-        builder: (context) {
-          return Consumer<CartViewModel>(
-            builder: ((context, provider, child) {
-              return Scaffold(
-                backgroundColor: Colors.white,
-                bottomNavigationBar: DetailBottomNavigator(
-                  cartViewModel: provider,
-                  product: product,
-                ),
-                body: DetailBody(
-                  product: product,
-                  cartViewModel: provider,
-                ),
-              );
-            }),
-          );
-        },
-      ),
-    );
-  }
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class DetailBody extends StatelessWidget {
-  const DetailBody({
-    Key? key,
-    required this.product,
-    required this.cartViewModel,
-  }) : super(key: key);
-  final Product product;
-  final CartViewModel cartViewModel;
-
-  get onPressed => null;
+class _DetailScreenState extends State<DetailScreen> {
+  bool _isLoading = false;
+  @override
+  void initState() {
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<CartViewModel>(context, listen: false)
+        .fetchAndSetCart(1)
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    print('duyen');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return ChangeNotifierProvider<CartViewModel>(
-      create: (context) => cartViewModel,
-      child: Builder(
-        builder: (context) {
-          return Stack(children: [
-            ItemImage(srcImage: "${baseApi}${product.image}"),
+    return Consumer<CartViewModel>(
+      builder: ((context, provider, child) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          bottomNavigationBar: DetailBottomNavigator(
+            cartViewModel: provider,
+            product: widget.product,
+          ),
+          body: Stack(children: [
+            ItemImage(srcImage: "${baseApi}${widget.product.image}"),
             Container(
               margin: EdgeInsets.only(top: 15),
               padding: EdgeInsets.only(top: 15, right: 10, left: 10),
@@ -81,19 +65,14 @@ class DetailBody extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Consumer<CartViewModel>(
-                          builder: ((context, provider, child) =>
-                              IconBtnWithCounter(
-                                // numOfItems: provider.TotalProduct,
-                                // numOfItems: cartViewModel.TotalProduct,
-                                numOfItems: provider.TotalProduct,
-                                press: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => CartScreen()));
-                                },
-                                svgSrc: "assets/icons/Cart Icon.svg",
-                                color: Colors.white,
-                              )),
+                        IconBtnWithCounter(
+                          numOfItems: provider.totalProduct,
+                          press: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CartScreen()));
+                          },
+                          svgSrc: "assets/icons/Cart Icon.svg",
+                          color: Colors.white,
                         ),
                         SizedBox(width: 10),
                         IconBtnWithCounter(
@@ -109,15 +88,85 @@ class DetailBody extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: size.height * 0.35),
               child: ItemInfo(
-                product: product,
+                product: widget.product,
               ),
             )
-          ]);
-        },
-      ),
+          ]),
+        );
+      }),
     );
   }
 }
+
+// class DetailBody extends StatelessWidget {
+//   const DetailBody({
+//     Key? key,
+//     required this.product,
+//     required this.cartViewModel,
+//   }) : super(key: key);
+//   final Product product;
+//   final CartViewModel cartViewModel;
+
+//   get onPressed => null;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Size size = MediaQuery.of(context).size;
+//     return ChangeNotifierProvider<CartViewModel>(
+//         create: (context) => cartViewModel,
+//         child: Stack(children: [
+//           ItemImage(srcImage: "${baseApi}${product.image}"),
+//           Container(
+//             margin: EdgeInsets.only(top: 15),
+//             padding: EdgeInsets.only(top: 15, right: 10, left: 10),
+//             child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   IconBtnWithCounter(
+//                     press: () {
+//                       Navigator.of(context).push(
+//                           MaterialPageRoute(builder: (context) => HomePage()));
+//                     },
+//                     svgSrc: "assets/icons/arrow_narrow_left.svg",
+//                     color: Colors.white,
+//                   ),
+//                   Row(
+//                     children: [
+//                       Consumer<CartViewModel>(
+//                         builder: ((context, provider, child) {
+//                           return IconBtnWithCounter(
+//                             // numOfItems: provider.TotalProduct,
+//                             // numOfItems: cartViewModel.TotalProduct,
+//                             numOfItems: provider.totalPrice,
+//                             press: () {
+//                               Navigator.of(context).push(MaterialPageRoute(
+//                                   builder: (context) => CartScreen()));
+//                             },
+//                             svgSrc: "assets/icons/Cart Icon.svg",
+//                             color: Colors.white,
+//                           );
+//                         }),
+//                       ),
+//                       SizedBox(width: 10),
+//                       IconBtnWithCounter(
+//                         press: () {},
+//                         svgSrc: "assets/icons/Bell.svg",
+//                         numOfItems: 8,
+//                         color: Colors.white,
+//                       ),
+//                     ],
+//                   )
+//                 ]),
+//           ),
+//           Container(
+//             margin: EdgeInsets.only(top: size.height * 0.35),
+//             child: ItemInfo(
+//               product: product,
+//             ),
+//           )
+//         ]));
+//   }
+// }
 
 class ItemInfo extends StatelessWidget {
   const ItemInfo({Key? key, required this.product}) : super(key: key);

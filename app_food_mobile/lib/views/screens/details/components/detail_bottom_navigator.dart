@@ -118,14 +118,6 @@ class _DetailBottomNavigatorState extends State<DetailBottomNavigator> {
                             // provider.checkProductInCart(1, 9);
                             await provider.updateCart(
                                 1, widget.product.id, count);
-                            // await provider.addCarts(
-                            //     1, widget.product.id, count);
-
-                            //duyen dang fix bug
-                            // int cartId =
-                            //     provider.getCartIdByProduct(widget.product.id);
-                            // print('duyen dang fix bug');
-                            // print(cartId);
                           },
                           child: Container(
                             height: 90,

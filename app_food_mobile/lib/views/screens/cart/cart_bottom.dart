@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../../viewmodels/Carts/cart_view_model.dart';
 
 class CartBottomNavigator extends StatelessWidget {
   const CartBottomNavigator({
     Key? key,
-    required this.totalPrice,
   }) : super(key: key);
-  final int totalPrice;
+
   @override
   Widget build(BuildContext context) {
+    CartViewModel cartViewModel = Provider.of<CartViewModel>(context);
     return Container(
       height: 174,
       decoration: BoxDecoration(
@@ -52,7 +55,7 @@ class CartBottomNavigator extends StatelessWidget {
             children: [
               Text.rich(TextSpan(text: "Total \n", children: [
                 TextSpan(
-                    text: totalPrice.toString(),
+                    text: cartViewModel.totalPrice.toString(),
                     style: TextStyle(fontSize: 16, color: Colors.black))
               ])),
               SizedBox(

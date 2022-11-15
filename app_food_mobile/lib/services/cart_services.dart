@@ -60,8 +60,8 @@ class CartServices {
     String json = '{"product": ${productId}, "quantity": ${quantity}}';
     Response response = await post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
-    print('check post: ' + statusCode.toString());
-    print('check eror : ' + response.body);
+    // print('check post: ' + statusCode.toString());
+    // print('check eror : ' + response.body);
     return true;
   }
 
@@ -71,9 +71,9 @@ class CartServices {
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"quantity": "${quantity}"}';
     Response response = await put(url, headers: headers, body: json);
-    int statusCode = response.statusCode;
-    print('check put: ' + statusCode.toString());
-    print('check eror : ' + response.body);
+    // int statusCode = response.statusCode;
+    // print('check put: ' + statusCode.toString());
+    // print('check eror : ' + response.body);
     return true;
   }
 
@@ -81,8 +81,8 @@ class CartServices {
   Future<bool> deleteCarts(int userId, int productId) async {
     var url = Uri.parse("${baseApi}api/user/${userId}/cart/${productId}");
     Response response = await delete(url);
-    print('status: ' + response.statusCode.toString());
-    print('mess: ' + response.body);
+    // print('status: ' + response.statusCode.toString());
+    // print('mess: ' + response.body);
     return true;
   }
 }

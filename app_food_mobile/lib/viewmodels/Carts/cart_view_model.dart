@@ -8,20 +8,15 @@ import '../../models/cart.dart';
 import '../../services/cart_services.dart';
 
 class CartViewModel extends ChangeNotifier {
-  bool _loading = false;
   List<Cart> _cartListModel = [];
-  bool get loading => _loading;
   List<Cart> get cartListModel => _cartListModel;
   int _totalProduct = 0;
-  int get TotalProduct => _totalProduct;
+  int _totalPrice = 0;
+  int get totalProduct => _totalProduct;
+  int get totalPrice => _totalPrice;
 
   CartViewModel() {
-    getCarts(1);
-  }
-
-  setLoading(bool loading) async {
-    _loading = loading;
-    notifyListeners();
+    fetchAndSetCart(1);
   }
 
   setCartListModel(List<Cart> cartListModel) async {
@@ -32,19 +27,24 @@ class CartViewModel extends ChangeNotifier {
 
   setTotalProductCart(int totalProduct) async {
     _totalProduct = totalProduct;
-    print('set carts');
     notifyListeners();
   }
 
-  getCarts(int id) async {
-    setLoading(true);
-    List<Cart> carts = (await CartServices().getCarts(id));
-    if (carts != []) {
-      await setCartListModel(carts);
-      await setTotalProductCart(getTotalProductInCart());
-      setLoading(false);
-    } else {
-      print('error');
+  setTotalPriceCart(int totalPrice) async {
+    _totalPrice = totalPrice;
+    print(': $_totalPrice');
+    notifyListeners();
+  }
+
+  fetchAndSetCart(int id) async {
+    try {
+      List<Cart> carts = (await CartServices().getCarts(id));
+      _cartListModel = carts;
+      _totalProduct = getTotalProductInCart();
+      _totalPrice = getTotalPrice();
+      notifyListeners();
+    } catch (err) {
+      print('error in fetch cart: ${err}');
     }
   }
 
@@ -59,19 +59,16 @@ class CartViewModel extends ChangeNotifier {
   //total product in cart
   int getTotalProductInCart() {
     int total = 0;
+    var t = 0;
     if (cartListModel != []) {
       try {
-        // total = cartListModel
-        //     .map<int>((item) => item.quantity)
-        //     .reduce((value1, value2) => value1 + value2);
-        print('co loi trong get total product trong cart');
-        total = 5;
+        var test = cartListModel.map<int>((item) => item.quantity).toList();
+        total = test.reduce((a, b) => a + b);
         return total;
       } catch (err) {
         print('error3333: ' + err.toString());
         return 0;
       }
-      return total;
     }
     return 0;
   }
@@ -106,30 +103,23 @@ class CartViewModel extends ChangeNotifier {
 
   addCarts(int userId, int productId, int quantity) async {
     await CartServices().addCarts(userId, productId, quantity);
-    await getCarts(1);
+    await fetchAndSetCart(1);
   }
 
   editCarts(int userId, int cartId, int quantity) async {
     await CartServices().updateCarts(userId, cartId, quantity);
-    await getCarts(1);
+    await fetchAndSetCart(1);
   }
 
   void deleteCarts(int userId, int productId) async {
     await CartServices().deleteCarts(userId, productId);
-    await getCarts(1);
-    notifyListeners();
+    await fetchAndSetCart(1);
   }
 
   // get cartId by productId
   Cart getCartIdByProduct(int productId) {
-    // try {
-    //   Cart cart = [...cartListModel.where((e) => e.product == productId)][0];
-    //   return cart;
-    // } catch (err) {
-    //   print('error in get cartid by product' + err.toString());
-    //   return null;
-    // }
     Cart cart = [...cartListModel.where((e) => e.product == productId)][0];
     return cart;
   }
 }
+                                                                                    

@@ -1,6 +1,7 @@
 import 'package:app_food_mobile/viewmodels/Carts/cart_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
@@ -25,6 +26,7 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   late int productQuantityFake = 0;
+  bool _loading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -32,19 +34,12 @@ class _CartItemState extends State<CartItem> {
     productQuantityFake = widget.productQuantity;
   }
 
-  void AddProduct() {
-    setState(() {
-      productQuantityFake = productQuantityFake + 1;
-    });
-  }
-
-  void MinusProduct() {}
-
   // Add Quanlity
   @override
   Widget build(BuildContext context) {
+    CartViewModel cartViewModel =
+        Provider.of<CartViewModel>(context, listen: false);
     //test call update produict
-    CartViewModel cartViewModel = CartViewModel();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -83,60 +78,22 @@ class _CartItemState extends State<CartItem> {
                     ),
                   ],
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(children: [
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              if (productQuantityFake > 1) {
-                                productQuantityFake = productQuantityFake - 1;
-                              } else {
-                                productQuantityFake = 1;
-                              }
-                            });
-                            await cartViewModel.editCarts(
-                                1, widget.cartId, productQuantityFake);
-                            //call getCart to update
-                            // await cartViewModel.getCarts(1);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: SvgPicture.asset(
-                              "assets/icons/minus.svg",
-                              height: 20,
-                              width: 20,
-                              fit: BoxFit.fill,
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          productQuantityFake.toString(),
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 10),
-                        GestureDetector(
-                          child: GestureDetector(
+                Consumer<CartViewModel>(
+                  builder: (context, provider, child) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          GestureDetector(
                             onTap: () async {
                               setState(() {
-                                productQuantityFake = productQuantityFake + 1;
+                                if (productQuantityFake > 1) {
+                                  productQuantityFake = productQuantityFake - 1;
+                                } else {
+                                  productQuantityFake = 1;
+                                }
                               });
                               await cartViewModel.editCarts(
                                   1, widget.cartId, productQuantityFake);
-                              //call getCart to update
-                              await cartViewModel.getCarts(1);
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
@@ -147,7 +104,7 @@ class _CartItemState extends State<CartItem> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10))),
                               child: SvgPicture.asset(
-                                "assets/icons/plus.svg",
+                                "assets/icons/minus.svg",
                                 height: 20,
                                 width: 20,
                                 fit: BoxFit.fill,
@@ -155,9 +112,49 @@ class _CartItemState extends State<CartItem> {
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(width: 10),
+                          Text(
+                            productQuantityFake.toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 10),
+                          GestureDetector(
+                            child: GestureDetector(
+                              onTap: () async {
+                                setState(() {
+                                  productQuantityFake = productQuantityFake + 1;
+                                });
+                                // await cartViewModel.editCarts(
+                                //     1, widget.cartId, productQuantityFake);
+
+                                //test
+
+                                await provider.updateCart(1, 9, 1);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: SvgPicture.asset(
+                                  "assets/icons/plus.svg",
+                                  height: 20,
+                                  width: 20,
+                                  fit: BoxFit.fill,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]),
                       ]),
-                    ]),
+                )
               ],
             ),
           )

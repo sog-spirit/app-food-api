@@ -1,9 +1,4 @@
-import 'package:app_food_mobile/views/pages/main_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
 import '../../../components/login_form.dart';
