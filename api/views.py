@@ -9,6 +9,7 @@ from .serializers import (
     OrderDetailSerializer,
     OrderSerializer,
     CartSerializer,
+    ReviewSerializer,
 )
 from django.db import IntegrityError, transaction
 from .models import (
@@ -19,6 +20,7 @@ from .models import (
     Order,
     OrderDetail,
     Cart,
+    Review,
 )
 import jwt
 from datetime import datetime, timedelta
@@ -294,7 +296,7 @@ class SingleCategoryAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def put(self, request, id):
         payload = user_permission_authentication(request)
         data = request.data
@@ -345,6 +347,12 @@ class SingleCategoryAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetProductFromCategory(APIView):
+    def get(self, request, category_id):
+        products = Product.objects.filter(category=category_id, _deleted=None)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
 
 class OrderAPIView(APIView):
     def get(self, request):
@@ -589,3 +597,55 @@ class GetProductOnCartAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewsAPIView(APIView):
+    def get(self, request):
+        payload = user_authentication(request)
+        reviews = Review.objects.filter(_creator=payload['id']).order_by('-id')
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        order_id = request.data.get('order', None)
+        if order_id is None:
+            return Response(
+                {'detail': 'order is required'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        try:
+            review = Review.objects.get(order=order_id)
+            return Response(
+                {'detail': 'Review for this order is existed'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Review.DoesNotExist:
+            pass
+        payload = user_authentication(request)
+        order = Order.objects.filter(id=order_id).first()
+        if order.user != payload['id']:
+            return Response(
+                {'detail': 'Not user order'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        data = request.data.copy()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
+        serializer = ReviewSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator=user,
+                message='review created',
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewsFromProductAPIView(APIView):
+    def get(self, request, product_id):
+        order_details = OrderDetail.objects.filter(product=product_id)
+        orders = Order.objects.filter(id__in=order_details.values_list('order', flat=True))
+        reviews = Review.objects.filter(order__in=orders.values_list('id', flat=True))
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)

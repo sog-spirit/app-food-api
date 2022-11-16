@@ -84,6 +84,11 @@ class Review(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='review_order_fk')
     content = models.TextField(null=True, blank=True)
     rating = models.FloatField()
+    REVIEW_STATUS = [
+        ("PENDING", "PENDING"),
+        ("APPROVE", "APPROVE")
+    ]
+    status = models.CharField(max_length=7, choices=REVIEW_STATUS, default="PENDING")
 
     def __str__(self):
         return "Review id {review_id} of order id {order_id}".format(review_id=self.id, order_id=self.order.id)
