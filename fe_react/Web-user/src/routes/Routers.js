@@ -9,8 +9,13 @@ import Checkout from "../pages/Checkout";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Admin from "../pages/Admin";
-
+import AddProduct from "../pages/Admin/Products/AddProduct";
+import Products from "../pages/Admin/Products/Products";
+import AdminCategory from "../pages/Admin/Category/Categories";
+import AddCategory from "../pages/Admin/Category/AddCategory";
+import AdminOrder from "../pages/Admin/Orders/Orders";
+import AdminRating from "../pages/Admin/Rating/Rating";
+import AdminCustomer from "../pages/Admin/Customer/Customer";
 const Routers = () => {
   return (
     <Routes>
@@ -23,7 +28,17 @@ const Routers = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/admin" element={<Admin />} />
+
+      {/* Admin */}
+      <Route path="/admin" element={<Products />} />
+      <Route path="/admin/products" element={<Products />} />
+      <Route path="/admin/addProduct" element={<AddProduct />} />
+      <Route path="/admin/categories" element={<AdminCategory />} />
+      <Route path="/admin/addCategory" element={<AddCategory />} />
+      <Route path="/admin/orders" element={<AdminOrder />} />
+      <Route path="/admin/rating" element={<AdminRating />} />
+      <Route path="/admin/customers" element={<AdminCustomer />} />
+      {/* <Route path="/admin/information" element={<AddProduct />} /> */}
     </Routes>
   );
 };

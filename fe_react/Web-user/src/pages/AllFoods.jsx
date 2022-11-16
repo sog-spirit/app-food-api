@@ -55,8 +55,8 @@ const AllFoods = () => {
 
   return (
     <Helmet title="All-Foods">
+      
       <CommonSection title="All Foods" />
-
       <section>
         <Container>
           <Row>

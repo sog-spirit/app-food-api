@@ -66,7 +66,6 @@ const ProductCard = (props) => {
         setCarts(newCart)
       } else {
         let newCart = [...carts, {"id": id, "name": name, "image": image, "price": price, "quantity": 1}]
-        setCarts(newCart)
       }
   }
 }
