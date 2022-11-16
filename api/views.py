@@ -145,6 +145,46 @@ class UpdatePasswordView(APIView):
             status=status.HTTP_200_OK
         )
 
+class UpdateUserBalanceView(APIView):
+    def patch(self, request):
+        payload = user_authentication(request)
+        current_password = request.data.get('current_password', None)
+        amount = request.data.get('amount', None)
+        if current_password is None or amount is None:
+            response = Response()
+            message = {}
+            if current_password is None:
+                message['current_password'] = 'This field is required'
+            if amount is None:
+                message['new_password'] = 'This field is required'
+            response.data = message
+            response.status_code=status.HTTP_400_BAD_REQUEST
+            return response
+        user = User.objects.filter(id=payload['id']).first()
+        if user.check_password(current_password) is False:
+            return Response(
+                {'detail': 'Current password is invalid'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            amount = float(amount)
+        except ValueError:
+            return Response(
+                {'detail': 'Amount is not a number'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if amount <= 0:
+            return Response(
+                {'detail': 'Amount must be a positive number'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user.balance += amount
+        user.save()
+        return Response(
+            {'detail': 'Balance added successfully'},
+            status=status.HTTP_200_OK
+        )
+
 class UserView(APIView):
     def get(self, request):
         payload = user_authentication(request)
@@ -398,11 +438,11 @@ class OrderAPIView(APIView):
                 for item in request.data['products']:
                     product = Product.objects.filter(id=item['product']).first()
                     price += product.price * item['quantity']
-                # if user.balance < price:
-                #     return Response(
-                #         {'detail': 'Account balance is insufficient'},
-                #         status=status.HTTP_400_BAD_REQUEST
-                #     )
+                if user.balance < price:
+                    return Response(
+                        {'detail': 'Account balance is insufficient'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
                 for item in request.data['products']:
                     product = Product.objects.filter(id=item['product']).first()
@@ -433,7 +473,7 @@ class OrderAPIView(APIView):
                 price += shipping_cost
                 order.price = price
                 order.save()
-                # user.balance -= price
+                user.balance -= price
                 user.save()
 
         except IntegrityError:
