@@ -67,14 +67,6 @@ const Register = () => {
                   <label>Confirm Password</label>
                   <input type="text" class="form-control" required />
                 </div>
-                {/* <div className="form__group">
-                  <input
-                    type="text"
-                    placeholder="Full name"
-                    required
-                    ref={signupNameRef}
-                  />
-                </div> */}
 
                 <button type="submit" className="addTOCart__btn">
                   Sign Up

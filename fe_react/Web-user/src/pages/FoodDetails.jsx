@@ -11,21 +11,101 @@ import { cartActions } from "../store/shopping-cart/cartSlice";
 import "../styles/product-details.css";
 
 import ProductCard from "../components/UI/product-card/ProductCard";
+import { useContext } from "react";
+import { CartContext, UserContext } from "../context";
+import Cookies from "js-cookie";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [reviewMsg, setReviewMsg] = useState("");
   const { id } = useParams();
   const [previewImg, setPreviewImg] = useState("");
+  
+  const { carts, setCarts } = useContext(CartContext)
+  const { user, setUser } = useContext(UserContext)
+  
+  const [product, setProduct] = useState({})
+  const [review, setReview] = useState([])
+
+  useEffect(() => {
+    getProductDetail()
+    getReview()
+  }, [])
+
+  var getCarts = async () => {
+    await fetch(`http://localhost:8000/api/cart`, {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCarts(data)
+      })
+  }
+
+  const addToCart = async () => {
+    if (user.id !== undefined) {
+      let response = await fetch(`http://localhost:8000/api/cart/product/${id}`, {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+      let data = await response.json()
+      if (Object.keys(data).length === 0) {
+        await fetch(`http://localhost:8000/api/cart`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+          },
+          body: JSON.stringify({
+            product: id,
+            quantity: 1,
+          }),
+          credentials: 'include'
+        })
+      } else {
+        await fetch(`http://localhost:8000/api/cart/product/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+          },
+          body: JSON.stringify({
+            quantity: data.quantity + 1,
+          }),
+          credentials: 'include'
+        })
+      }
+      getCarts()
+    }
+    else {
+      const index = carts.findIndex((item) => {
+        return item.id === id;
+      });
+  
+      if (index !== -1) {
+        let newCart = [...carts];
+  
+        newCart[index] = {
+          ...newCart[index],
+          quantity: newCart[index].quantity + 1,
+        };
+  
+        setCarts(newCart)
+      } else {
+        let newCart = [...carts, {"id": id, "name": product.name, "image": product.image, "price": product.price, "quantity": 1}]
+        setCarts(newCart)
+      }
+  }
+}
 
   // const relatedProduct = products.filter((item) => product.category === item.category);
 
-  const [product, setProduct] = useState({})
-  useEffect(() => {
-    getProductDetail()
-  }, [])
   const getProductDetail = async () => {
     await fetch(`http://localhost:8000/api/product/${id}`)
       .then((res) => res.json())
@@ -34,22 +114,14 @@ const FoodDetails = () => {
         setPreviewImg("http://localhost:8000" + data.image)
       })
   }
-  const addItem = () => {
-    // dispatch(
-    //   cartActions.addItem({
-    //     id,
-    //     name,
-    //     price,
-    //     image,
-    //   })
-    // );
-  };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    console.log(enteredName, enteredEmail, reviewMsg);
-  };
+  const getReview = async () => {
+    await fetch(`http://localhost:8000/api/review/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setReview(data)
+      })
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,13 +141,11 @@ const FoodDetails = () => {
                 </div>
               </div>
             </Col>
-
             <Col lg="4" md="4">
               <div className="product__main-img">
                 <img src={previewImg} alt="" className="w-100" />
               </div>
             </Col>
-
             <Col lg="6" md="6">
               <div className="single__product-content">
                 <h2 className="product__title mb-3">{product.name}</h2>
@@ -86,8 +156,7 @@ const FoodDetails = () => {
                 <p className="category mb-5">
                   <span>{product.category_name}</span>
                 </p>
-
-                <button onClick={addItem} className="addTOCart__btn">
+                <button onClick={() => addToCart()} className="addTOCart__btn">
                   Add to Cart
                 </button>
               </div>
@@ -114,57 +183,10 @@ const FoodDetails = () => {
                   <p>{product.description}</p>
                 </div>
               ) : (
-                <div className="tab__form mb-3">
-                  <div className="review pt-5">
-                    <p className="user__name mb-0">Jhon Doe</p>
-                    <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
-                  </div>
-
-                  <div className="review">
-                    <p className="user__name mb-0">Jhon Doe</p>
-                    <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
-                  </div>
-
-                  <div className="review">
-                    <p className="user__name mb-0">Jhon Doe</p>
-                    <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
-                  </div>
-                  <form className="form" onSubmit={submitHandler}>
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Enter your name"
-                        onChange={(e) => setEnteredName(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Enter your email"
-                        onChange={(e) => setEnteredEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__group">
-                      <textarea
-                        rows={5}
-                        type="text"
-                        placeholder="Write your review"
-                        onChange={(e) => setReviewMsg(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <button type="submit" className="addTOCart__btn">
-                      Submit
-                    </button>
-                  </form>
+                <div className="tab__form mb-3 pd-5">
+                  {review.map((item) => (
+                    <Tr item={item} key={item.id}/>
+                  ))}
                 </div>
               )}
             </Col>
@@ -184,5 +206,17 @@ const FoodDetails = () => {
     </Helmet>
   );
 };
+
+const Tr = (props) => {
+  const {rating, name, email, content} = props.item
+  return (
+    <div className="review">
+      <p className="user__name mb-0">{name}</p>
+      <p className="user__email">{email}</p>
+      <p className="feedback__text">{rating}</p>
+      <p className="feedback__text">{content}</p>
+    </div>
+  )
+}
 
 export default FoodDetails;

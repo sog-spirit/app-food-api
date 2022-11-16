@@ -16,6 +16,7 @@ import Order from "../pages/Order";
 import Detail from "../pages/Detail";
 import SuccessPage from "../pages/SuccessPage";
 import ErrorPage from "../pages/ErrorPage";
+import Review from "../pages/Review";
 
 const Routers = () => {
   return (
@@ -31,6 +32,7 @@ const Routers = () => {
       <Route path="/order" element={<Order />} />
       <Route path="/detail/:id" element={<Detail />} />
       <Route path="/success" element={<SuccessPage />} />
+      <Route path="/review/:id" element={<Review />} />
       <Route path="/error" element={<ErrorPage />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/register" element={<Register />} />

@@ -622,7 +622,7 @@ class ReviewsAPIView(APIView):
             pass
         payload = user_authentication(request)
         order = Order.objects.filter(id=order_id).first()
-        if order.user != payload['id']:
+        if order.user.id != payload['id']:
             return Response(
                 {'detail': 'Not user order'},
                 status=status.HTTP_403_FORBIDDEN

@@ -52,7 +52,6 @@ const Checkout = () => {
           setCarts([])
           navigate('/success')
         } else {
-          console.log(response.json());
           navigate('/error')
         }
       })

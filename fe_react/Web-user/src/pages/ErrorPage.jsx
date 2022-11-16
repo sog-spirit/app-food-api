@@ -10,7 +10,7 @@ function ErrorPage() {
         <CommonSection title="Đã xảy ra lỗi" />
         <section>
           <Container>
-            <h1>Đã xảy ra lỗi trong quá trình thanh toán</h1>
+            <h1>Đã xảy ra lỗi !!</h1>
             <Link to="/home">Về trang chủ</Link>
           </Container>
         </section>

@@ -44,6 +44,7 @@ function Order() {
                       <th>Địa chỉ</th>
                       <th>Ghi chú</th>
                       <th>Chi tiết</th>
+                      <th>Đánh giá</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -72,6 +73,9 @@ const Tr = (props) => {
         <td className="text-center">{note}</td>
         <td className="text-center cart__item-del">
           <Link to={`/detail/${id}`}>Detail</Link>
+        </td>
+        <td className="text-center cart__item-del">
+          <Link to={`/review/${id}`}>Review</Link>
         </td>
       </tr>
     );
