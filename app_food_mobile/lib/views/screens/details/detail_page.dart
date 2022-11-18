@@ -44,7 +44,6 @@ class _DetailScreenState extends State<DetailScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar: DetailBottomNavigator(
-            cartViewModel: provider,
             product: widget.product,
           ),
           body: Stack(children: [

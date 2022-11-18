@@ -23,7 +23,7 @@ class ListItemCard extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: provider.products.length,
                     itemBuilder: (context, index) {
-                      return ItemCard(
+                      return ItemProduct(
                           product: provider.products[index],
                           press: () {
                             Navigator.push(context, MaterialPageRoute(

@@ -27,59 +27,57 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    CartViewModel cartViewModel = Provider.of<CartViewModel>(context);
-    return ChangeNotifierProvider<CartViewModel>(
-      create: (context) => CartViewModel(),
-      child: Scaffold(
-        appBar: CartAppBar(),
-        bottomNavigationBar: CartBottomNavigator(),
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Consumer<CartViewModel>(
-            builder: ((context, provider, child) {
-              return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 500,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: provider.cartListModel.length,
-                    itemBuilder: (context, index) {
-                      Cart cart = provider.cartListModel[index];
-                      return Slidable(
-                        key: ValueKey(0),
-                        endActionPane: ActionPane(
-                          motion: ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) async {
-                                provider.deleteCarts(1, cart.id);
-                              },
-                              backgroundColor: Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            ),
-                            SlidableAction(
-                              onPressed: doNothing,
-                              backgroundColor: Color(0xFF21B7CA),
-                              foregroundColor: Colors.white,
-                              icon: Icons.share,
-                              label: 'Share',
-                            ),
-                          ],
-                        ),
-                        child: CartItem(
-                          cartId: cart.id,
-                          productImgUrl: "${baseApi}${cart.image}",
-                          productName: cart.name,
-                          productQuantity: cart.quantity,
-                          price: cart.price,
-                        ),
-                      );
-                    },
-                  ));
-            }),
-          ),
+    return Scaffold(
+      appBar: CartAppBar(),
+      bottomNavigationBar: CartBottomNavigator(),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Consumer<CartViewModel>(
+          builder: ((context, provider, child) {
+            return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 500,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: provider.cartListModel.length,
+                  itemBuilder: (context, index) {
+                    Cart cart = provider.cartListModel[index];
+                    return Slidable(
+                      key: ValueKey(0),
+                      endActionPane: ActionPane(
+                        motion: ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) async {
+                              provider.deleteCarts(1, cart.id);
+                              print('delete cart item: ${cart.id}');
+                            },
+                            backgroundColor: Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                          SlidableAction(
+                            onPressed: doNothing,
+                            backgroundColor: Color(0xFF21B7CA),
+                            foregroundColor: Colors.white,
+                            icon: Icons.share,
+                            label: 'Share',
+                          ),
+                        ],
+                      ),
+                      child: CartItem(
+                        cartId: cart.id,
+                        productImgUrl: "${baseApi}${cart.image}",
+                        productName: cart.name,
+                        productQuantity: cart.quantity,
+                        price: cart.price,
+                        productId: cart.product,
+                      ),
+                    );
+                  },
+                ));
+          }),
         ),
       ),
     );

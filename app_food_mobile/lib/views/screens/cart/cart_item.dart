@@ -13,12 +13,14 @@ class CartItem extends StatefulWidget {
     required this.productQuantity,
     required this.cartId,
     required this.price,
+    required this.productId,
   }) : super(key: key);
   final String productName;
   final String productImgUrl;
   final int productQuantity;
   final int cartId;
   final int price;
+  final int productId;
 
   @override
   State<CartItem> createState() => _CartItemState();
@@ -132,7 +134,8 @@ class _CartItemState extends State<CartItem> {
 
                                 //test
 
-                                await provider.updateCart(1, 9, 1);
+                                await provider.updateCart(
+                                    1, widget.productId, 1);
                               },
                               child: Container(
                                 padding: EdgeInsets.all(8),

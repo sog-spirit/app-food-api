@@ -29,7 +29,6 @@ class IconBtnWithCounter extends StatelessWidget {
               width: 16,
               decoration: BoxDecoration(
                   color: Color(0xFFFF4848), shape: BoxShape.circle),
-              
               child: Center(
                 child: Text(
                   "${numOfItems}",

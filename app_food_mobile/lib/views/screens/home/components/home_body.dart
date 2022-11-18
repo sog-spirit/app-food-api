@@ -1,3 +1,4 @@
+import 'package:app_food_mobile/constants.dart';
 import 'package:app_food_mobile/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,6 +37,7 @@ class _HomeBodyState extends State<HomeBody> {
         .then((_) {
       setState(() {
         _isLoading = false;
+        // _isLoading = true;
       });
     });
     print('duyen');
@@ -44,97 +46,170 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return _isLoading
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : ChangeNotifierProvider<CartViewModel>(
-            create: ((context) => CartViewModel()),
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 15),
+        : Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 15),
+                  Search(),
+                  Image(
+                      image: AssetImage('assets/images/poster2.png'),
+                      fit: BoxFit.fill,
+                      width: size.width),
+                  SizedBox(height: 15),
+                  //test list category
+                  Column(children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Search(),
-                        Consumer<CartViewModel>(
-                          builder: ((context, provider, child) {
-                            return IconBtnWithCounter(
-                              numOfItems: provider.totalProduct,
-                              press: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => CartScreen()));
-                              },
-                              svgSrc: "assets/icons/Cart Icon.svg",
-                            );
-                          }),
-                        ),
-                        IconBtnWithCounter(
-                            press: () {},
-                            svgSrc: "assets/icons/Bell.svg",
-                            numOfItems: 2),
+                        Column(children: [
+                          Image(
+                            image: AssetImage('assets/images/all_category.png'),
+                          ),
+                          Text(
+                            "All",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                        Column(children: [
+                          Image(
+                            image:
+                                AssetImage('assets/images/burger_category.png'),
+                          ),
+                          Text(
+                            "Burger",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                        Column(children: [
+                          Image(
+                            image:
+                                AssetImage('assets/images/rice_category.png'),
+                          ),
+                          Text(
+                            "Cơm",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                        Column(children: [
+                          Image(
+                            image: AssetImage(
+                                'assets/images/chicken_category.png'),
+                          ),
+                          Text(
+                            "Gà",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
                       ],
                     ),
-                    SizedBox(height: 15),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Color(0xFF4A3298),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text.rich(TextSpan(
-                          text: "A summer Surprise\n",
-                          style: TextStyle(color: Colors.white),
-                          children: [
-                            TextSpan(
-                                text: "Cashbash 20%",
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold))
-                          ])),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [
+                          Image(
+                            image: AssetImage(
+                                'assets/images/spagety_category.png'),
+                          ),
+                          Text(
+                            "Mì ý",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                        Column(children: [
+                          Image(
+                            image: AssetImage('assets/images/ff_category.png'),
+                          ),
+                          Text(
+                            "Ăn Vặt",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
+                        Column(children: [
+                          Image(
+                            image:
+                                AssetImage('assets/images/drink_category.png'),
+                          ),
+                          Text(
+                            "Đồ uống",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ])
+                      ],
+                    )
+                  ]),
+                  Container(
+                      child: Text(
+                    "Popular Items",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  )),
+                  ListItemCard(),
+                  SizedBox(height: 15),
+                  SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CategoryCard(
+                          icon: "assets/icons/Flash Icon.svg",
+                          text: "Flash Deal",
+                        ),
+                        CategoryCard(
+                          icon: "assets/icons/Bill Icon.svg",
+                          text: "Bill",
+                        ),
+                        CategoryCard(
+                          icon: "assets/icons/Game Icon.svg",
+                          text: "Game",
+                        ),
+                        CategoryCard(
+                          icon: "assets/icons/Gift Icon.svg",
+                          text: "Daily Gift",
+                        ),
+                        CategoryCard(
+                          icon: "assets/icons/Discover.svg",
+                          text: "More",
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 15),
-                    CategoryList(),
-                    ListItemCard(),
-                    SizedBox(height: 15),
-                    SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CategoryCard(
-                            icon: "assets/icons/Flash Icon.svg",
-                            text: "Flash Deal",
-                          ),
-                          CategoryCard(
-                            icon: "assets/icons/Bill Icon.svg",
-                            text: "Bill",
-                          ),
-                          CategoryCard(
-                            icon: "assets/icons/Game Icon.svg",
-                            text: "Game",
-                          ),
-                          CategoryCard(
-                            icon: "assets/icons/Gift Icon.svg",
-                            text: "Daily Gift",
-                          ),
-                          CategoryCard(
-                            icon: "assets/icons/Discover.svg",
-                            text: "More",
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    DiscountCard()
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 15),
+                  DiscountCard()
+                ],
               ),
             ),
           );
