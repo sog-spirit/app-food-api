@@ -17,6 +17,7 @@ import Detail from "../pages/Detail";
 import SuccessPage from "../pages/SuccessPage";
 import ErrorPage from "../pages/ErrorPage";
 import Review from "../pages/Review";
+import AddBalance from "../pages/AddBalance";
 
 const Routers = () => {
   return (
@@ -35,6 +36,7 @@ const Routers = () => {
       <Route path="/review/:id" element={<Review />} />
       <Route path="/error" element={<ErrorPage />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/add-balance" element={<AddBalance />} />
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<Admin />} />

@@ -111,27 +111,32 @@ const Header = () => {
                 <ul className="dropdown-menu">
                   <li>
                     <Link to="/profile" className="dropdown-item">
-                      Profile
+                      Thông tin cá nhân
                     </Link>
                   </li>
                   <li>
                     <Link to="/cart" className="dropdown-item">
-                      Your Cart
+                      Giỏ hàng
                     </Link>
                   </li>
                   <li>
                     <Link to="/update-password" className="dropdown-item">
-                      Change Password
+                      Đổi mật khẩu
                     </Link>
                   </li>
                   <li>
                     <Link to="/order" className="dropdown-item">
-                      Your Order
+                      Lịch sử
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/add-balance" className="dropdown-item">
+                      Nạp tiền
                     </Link>
                   </li>
                   <li>
                     <Link to="/login" className="dropdown-item" onClick={() => logOut()}>
-                     Logout
+                     Đăng xuất
                     </Link>
                   </li>
                 </ul>
