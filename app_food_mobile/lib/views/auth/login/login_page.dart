@@ -1,11 +1,9 @@
-import 'package:app_food_mobile/views/pages/main_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
+import '../../../components/login_form.dart';
+import '../../../components/social_card.dart';
+import '../../../constants.dart';
 import '../../screens/home/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,21 +15,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _usernamelController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
   void login(String username, String password) async {
-    print("login");
+    print("login2332");
     //xu ly login
     try {
-      Response response = await post(
-          Uri.parse("http://192.168.1.4:8000/api/user/login"),
+      Response response = await post(Uri.parse("${baseApi}api/user/login"),
           body: {"username": "admin", "password": "admin"});
-      print('adduyen thanh cong');
       if (response.statusCode == 200) {
-        print('adduyen thanh cong');
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
-        //chuyen qua man hinh main
       } else {
         print('failed');
       }
@@ -43,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _usernamelController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -51,139 +46,89 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //hello again
-                    Text(
-                      'Hello Again',
-                      style: GoogleFonts.bebasNeue(fontSize: 52),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Welcome back, you've been missed",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    //usernamel textfield
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: TextFormField(
-                          controller: _usernamelController,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none, hintText: 'usernamel'),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //password textfield
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: TextFormField(
-                          obscureText: true,
-                          controller: _passwordController,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none, hintText: 'Password'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //forgot button
-
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Text(
-                              "Forgot password ?",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 25, 88, 139),
-                                  fontSize: 15),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //sign in button
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: GestureDetector(
-                        onTap: () {
-                          login(_usernamelController.text.toString(),
-                              _passwordController.text.toString());
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "SIGN IN",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Not a member ?",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        GestureDetector(
-                          onTap: widget.showRegisterPage,
-                          child: const Text(
-                            "Register Now",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        )
-                      ],
-                    )
-                  ]),
-            ),
-          ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Login',
+          style: Theme.of(context)
+              .appBarTheme
+              .textTheme
+              ?.headline6
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
+      body: SafeArea(
+          child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Text(
+                "Welcome Back",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "Sign in with your email and password  \nor continue with social media",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              SignForm(
+                login: () {
+                  login(_emailController.text.toString(),
+                      _passwordController.text.toString());
+                },
+                emailController: _emailController,
+                passwordController: _passwordController,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SocialCard(
+                    icon: "assets/icons/google-icon.svg",
+                    press: () {},
+                  ),
+                  SocialCard(
+                    icon: "assets/icons/facebook-2.svg",
+                    press: () {},
+                  ),
+                  SocialCard(
+                    icon: "assets/icons/twitter.svg",
+                    press: () {},
+                  )
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              //no - account - text
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Don't have an account ? ",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  GestureDetector(
+                    onTap: widget.showRegisterPage,
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 16, color: kPrimaryColor),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )),
+        ),
+      )),
     );
   }
 }

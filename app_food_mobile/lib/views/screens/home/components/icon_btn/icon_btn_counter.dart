@@ -9,10 +9,12 @@ class IconBtnWithCounter extends StatelessWidget {
     required this.svgSrc,
     this.numOfItems = 0,
     required this.press,
+    this.color,
   }) : super(key: key);
   final String svgSrc;
   final int numOfItems;
   final GestureTapCallback press;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -44,13 +46,17 @@ class IconBtnWithCounter extends StatelessWidget {
           height: 46,
           width: 46,
           decoration: BoxDecoration(
-              color: kDarkPrimaryColor.withOpacity(0.1),
+              // color: kDarkPrimaryColor.withOpacity(0.2),
+              color: (color != null)
+                  ? Colors.black.withOpacity(0.3)
+                  : kDarkPrimaryColor.withOpacity(0.2),
               shape: BoxShape.circle),
           child: SvgPicture.asset(
             svgSrc,
             width: 5,
             height: 5,
             fit: BoxFit.scaleDown,
+            color: (color != null) ? color : null,
           ),
         ),
       ]),

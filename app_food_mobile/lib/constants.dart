@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFFFFC61F);
+const baseApi = "http://192.168.1.135:8000/";
+
+const kPrimaryColor = Color(0xFFFF7643);
 const ksecondaryColor = Color(0xFFB5BFD0);
-const kTextColor = Color(0xFF50505D);
+const kTextGreyColor = Color(0xFF50505D);
 const kTextLightColor = Color(0xFF6A727D);
 const double defaultPadding = 16.0;
 

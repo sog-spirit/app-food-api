@@ -1,5 +1,11 @@
+import 'package:app_food_mobile/components/register_form.dart';
+import 'package:app_food_mobile/views/auth/register/register_information.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../components/login_form.dart';
+import '../../../components/social_card.dart';
+import '../../../constants.dart';
 
 class RegisterScreen extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -12,11 +18,11 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _passwordConfirmController = TextEditingController();
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
-  
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -28,195 +34,91 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //hello again
-                      Text(
-                        'Hello Again',
-                        style: GoogleFonts.bebasNeue(fontSize: 52),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        "Register Now",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //first name
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextFormField(
-                            controller: _firstNameController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'First Name'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //last name
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextFormField(
-                            controller: _lastNameController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Last Name'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //age
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextFormField(
-                            controller: _ageController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none, hintText: 'Age'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //email textfield
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextFormField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none, hintText: 'Email'),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //password textfield
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextField(
-                            controller: _passwordController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none, hintText: 'Password'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //confirm passwordsdsd
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: TextFormField(
-                            obscureText: true,
-                            controller: _confirmPasswordController,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Password Again'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      //connform password
-
-                      //sign in button
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.only(top: 20, bottom: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.deepPurple,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "SIGN UP",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Not a member ?",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          GestureDetector(
-                            onTap: widget.showLoginPage,
-                            child: const Text(
-                              "Register Now",
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                          )
-                        ],
-                      )
-                    ]),
-              ),
-            ),
-          ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Resgister',
+          style: Theme.of(context)
+              .appBarTheme
+              .textTheme
+              ?.headline6
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
+      body: SafeArea(
+          child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Text(
+                "Register Account",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Complete your details information or countinue \n with your social media",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              RegisterForm(
+                register: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RegisterInformationScreen()));
+                },
+                emailController: _emailController,
+                passwordController: _passwordController,
+                passwordConfirmController: _passwordConfirmController,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SocialCard(
+                    icon: "assets/icons/google-icon.svg",
+                    press: () {},
+                  ),
+                  SocialCard(
+                    icon: "assets/icons/facebook-2.svg",
+                    press: () {},
+                  ),
+                  SocialCard(
+                    icon: "assets/icons/twitter.svg",
+                    press: () {},
+                  )
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.08),
+              //no - account - text
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Have you had an account? ",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      "Login",
+                      style: TextStyle(fontSize: 16, color: kPrimaryColor),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )),
+        ),
+      )),
     );
   }
 }

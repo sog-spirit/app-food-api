@@ -1,5 +1,7 @@
-import 'package:app_food_mobile/constants.dart';
+import 'package:app_food_mobile/views/pages/main_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../../constants.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreen({super.key});
@@ -74,7 +76,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => MainPage()));
+                        },
                         child: Text(
                           'Continue',
                           style: TextStyle(fontSize: 18, color: Colors.white),
