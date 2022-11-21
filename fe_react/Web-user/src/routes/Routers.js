@@ -9,7 +9,6 @@ import Checkout from "../pages/Checkout";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Admin from "../pages/Admin";
 import ChangePassword from "../pages/ChangePassword";
 import Profile from "../pages/Profile";
 import Order from "../pages/Order";
@@ -18,6 +17,15 @@ import SuccessPage from "../pages/SuccessPage";
 import ErrorPage from "../pages/ErrorPage";
 import Review from "../pages/Review";
 import AddBalance from "../pages/AddBalance";
+
+import AddProduct from "../pages/Admin/Products/AddProduct";
+import Products from "../pages/Admin/Products/Products";
+import AdminCategory from "../pages/Admin/Category/Categories";
+import AddCategory from "../pages/Admin/Category/AddCategory";
+import AdminOrder from "../pages/Admin/Orders/Orders";
+import AdminRating from "../pages/Admin/Rating/Rating";
+import AdminCustomer from "../pages/Admin/Customer/Customer";
+import Admin from "../pages/Admin/Admin";
 
 const Routers = () => {
   return (
@@ -40,6 +48,15 @@ const Routers = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<Admin />} />
+
+      {/* admin */}
+      <Route path="/admin/products" element={<Products />} />
+      <Route path="/admin/addProduct" element={<AddProduct />} />
+      <Route path="/admin/categories" element={<AdminCategory />} />
+      <Route path="/admin/addCategory" element={<AddCategory />} />
+      <Route path="/admin/orders" element={<AdminOrder />} />
+      <Route path="/admin/rating" element={<AdminRating />} />
+      <Route path="/admin/customers" element={<AdminCustomer />} />
     </Routes>
   );
 };

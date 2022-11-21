@@ -1,14 +1,12 @@
 import React from "react";
 import Routes from "../../routes/Routers";
+import Slidebar from "../UI/slider/SlideBar";
 
 const DashBoard = () => {
   return (
-    <div>
-      <Header />
-
-      <div>
-        <Routes />
-      </div>
+    <div class="admin__section d-flex">
+      <Slidebar />
+      <Routes />
     </div>
   );
 };
