@@ -1,10 +1,14 @@
+import Cookies from 'js-cookie';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 import Helmet from '../components/Helmet/Helmet';
 import CommonSection from '../components/UI/common-section/CommonSection';
+import ModalBox from '../components/UI/ModalBox';
 
 function AddBalance() {
-    const [isError, setIsError] = useState(false)
+    const navigate = useNavigate()
+    const [isModal, setIsModal] = useState(false)
     const [balanceForm, setBalanceForm] = useState({
         amount: 0,
         current_password: ""
@@ -15,7 +19,27 @@ function AddBalance() {
     const submitHandler = async (e) => {
         e.preventDefault()
         console.log(balanceForm);
+        let result = await fetch(`http://localhost:8000/api/user/update/balance`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+          },
+          body: JSON.stringify(balanceForm),
+          credentials: 'include'
+        })
+        result = await result.json();
+        if (result.detail == "Balance added successfully") {
+          navigate('/home')
+        }
+        else {
+          setIsModal(true);
+        }
     }
+    const closeModal = (e) => {
+      setIsModal(false);
+    };
+  
   return (
     <Helmet title="Nạp tiền">
         <CommonSection title="Nạp tiền" />
@@ -45,7 +69,6 @@ function AddBalance() {
                           handleChange(e)
                       }}
                       />
-                    {isError && <span style={{color: "red"}}>Error</span>}
                   </div>
                   <button
                     onClick={(e) => submitHandler(e)}
@@ -54,6 +77,11 @@ function AddBalance() {
                     >
                     Nạp tiền
                   </button>
+                  {/* modal box for error */}
+                  <ModalBox show={isModal} handleClose={(e) => closeModal(e)}>
+                    <h2>Đã xảy ra lỗi khi nạp tiền</h2>
+                  </ModalBox>
+                  {/* end modal box for error */}
                 </form>
               </Col>
             </Row>

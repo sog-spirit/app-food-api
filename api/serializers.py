@@ -58,8 +58,8 @@ class CartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReviewSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='__creator.name', read_only=True)
-    email = serializers.CharField(source='__creator.email', read_only=True)
+    name = serializers.CharField(source='_creator.name', read_only=True)
+    email = serializers.CharField(source='_creator.email', read_only=True)
     
     class Meta:
         model = Review
