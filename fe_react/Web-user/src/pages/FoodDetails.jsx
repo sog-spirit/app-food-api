@@ -5,9 +5,6 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 
-import { useDispatch } from "react-redux";
-import { cartActions } from "../store/shopping-cart/cartSlice";
-
 import "../styles/product-details.css";
 
 import ProductCard from "../components/UI/product-card/ProductCard";
@@ -25,10 +22,12 @@ const FoodDetails = () => {
   
   const [product, setProduct] = useState({})
   const [review, setReview] = useState([])
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
     getProductDetail()
     getReview()
+    getProducts()
   }, [])
 
   var getCarts = async () => {
@@ -44,6 +43,12 @@ const FoodDetails = () => {
         setCarts(data)
       })
   }
+
+  let getProducts = async () => {
+    let response = await fetch("http://localhost:8000/api/product");
+    let data = await response.json();
+    setProducts(data);
+  };
 
   const addToCart = async () => {
     if (user.id !== undefined) {
@@ -104,7 +109,7 @@ const FoodDetails = () => {
   }
 }
 
-  // const relatedProduct = products.filter((item) => product.category === item.category);
+  const relatedProduct = products.filter((item) => product.category === item.category);
 
   const getProductDetail = async () => {
     await fetch(`http://localhost:8000/api/product/${id}`)
@@ -195,11 +200,11 @@ const FoodDetails = () => {
               <h2 className="related__Product-title">You might also like</h2>
             </Col>
 
-            {/* {relatedProduct.map((item) => (
+            {relatedProduct.map((item) => (
               <Col lg="3" md="4" sm="6" xs="6" className="mb-4" key={item.id}>
                 <ProductCard item={item} />
               </Col>
-            ))} */}
+            ))}
           </Row>
         </Container>
       </section>
