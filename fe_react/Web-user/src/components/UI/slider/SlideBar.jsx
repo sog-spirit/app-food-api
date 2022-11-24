@@ -1,8 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import "../../../styles/slidebar.scss";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../../context";
 
 const Slidebar = () => {
+  const { user, setUser } = useContext(UserContext)
   const [indexActive, setIndexActive] = useState(0);
   function toggleIndexActive(index) {
     setIndexActive(index);
@@ -11,7 +13,7 @@ const Slidebar = () => {
     <div className="slidebar-container">
       <div className="logo">
         <h3 className="logo-name">FoodyApp</h3>
-        <h5 className="admin-name">Trương Mỹ Duyên</h5>
+        <h5 className="admin-name">{user.name}</h5>
         <hr />
       </div>
       <ul className="menu-choice">
