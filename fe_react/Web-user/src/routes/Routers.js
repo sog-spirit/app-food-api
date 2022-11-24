@@ -26,6 +26,7 @@ import AdminOrder from "../pages/Admin/Orders/Orders";
 import AdminRating from "../pages/Admin/Rating/Rating";
 import AdminCustomer from "../pages/Admin/Customer/Customer";
 import Admin from "../pages/Admin/Admin";
+import EditProduct from "../pages/Admin/Products/EditProduct";
 
 const Routers = () => {
   return (
@@ -50,6 +51,7 @@ const Routers = () => {
       <Route path="/admin" element={<Admin />} />
 
       {/* admin */}
+      <Route path="/admin/product/:id" element={<EditProduct />} />
       <Route path="/admin/products" element={<Products />} />
       <Route path="/admin/addProduct" element={<AddProduct />} />
       <Route path="/admin/categories" element={<AdminCategory />} />

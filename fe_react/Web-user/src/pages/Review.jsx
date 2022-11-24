@@ -14,10 +14,6 @@ function Review() {
     })
     const submitHandler = async (e) => {
         e.preventDefault()
-        console.log({
-            ...review,
-            order: id
-        });
         await fetch(`http://localhost:8000/api/review`, {
             method: 'POST',
             headers: {
