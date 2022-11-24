@@ -12,6 +12,7 @@ import "../styles/all-foods.css";
 import "../styles/pagination.css";
 
 const AllFoods = () => {
+  const [sortTerm, setSortTerm] = useState("default")
   const [searchTerm, setSearchTerm] = useState("");
 
   const [pageNumber, setPageNumber] = useState(0);
@@ -23,6 +24,33 @@ const AllFoods = () => {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    var sorted = null;
+    switch (sortTerm) {
+      case "default":
+        getProducts();
+      break;
+      case "ascending":
+        sorted = [...products].sort(ascending_name)
+        setProducts(sorted)
+      break;
+      case "descending":
+        sorted = [...products].sort(descending_name)
+        setProducts(sorted)
+      break;
+      case "high-price":
+        sorted = [...products].sort(descending_price)
+        setProducts(sorted)
+      break;
+      case "low-price":
+        sorted = [...products].sort(ascending_price)
+        setProducts(sorted)
+      break;
+      default:
+        break;
+    }
+  }, [sortTerm])
+  
   let getProducts = async () => {
     let response = await fetch("http://localhost:8000/api/product");
     let data = await response.json();
@@ -39,6 +67,46 @@ const AllFoods = () => {
       return console.log("not found");
     }
   });
+
+  function ascending_name( a, b ) {
+    if ( a.name < b.name ){
+      return -1;
+    }
+    if ( a.name > b.name ){
+      return 1;
+    }
+    return 0;
+  }
+  
+  function descending_name( a, b ) {
+    if ( a.name < b.name ){
+      return 1;
+    }
+    if ( a.name > b.name ){
+      return -1;
+    }
+    return 0;
+  }
+  
+  function ascending_price( a, b ) {
+    if ( a.price < b.price ){
+      return -1;
+    }
+    if ( a.price > b.price ){
+      return 1;
+    }
+    return 0;
+  }
+  
+  function descending_price( a, b ) {
+    if ( a.price < b.price ){
+      return 1;
+    }
+    if ( a.price > b.price ){
+      return -1;
+    }
+    return 0;
+  }
 
   const productPerPage = 12;
   const visitedPage = pageNumber * productPerPage;
@@ -75,8 +143,8 @@ const AllFoods = () => {
             </Col>
             <Col lg="6" md="6" sm="6" xs="12" className="mb-5">
               <div className="sorting__widget text-end">
-                <select className="w-50">
-                  <option>Default</option>
+                <select className="w-50" onChange={e => setSortTerm(e.target.value)}>
+                  <option value="default">Default</option>
                   <option value="ascending">Alphabetically, A-Z</option>
                   <option value="descending">Alphabetically, Z-A</option>
                   <option value="high-price">High Price</option>

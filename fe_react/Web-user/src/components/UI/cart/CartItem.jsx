@@ -108,7 +108,6 @@ const CartItem = ({ item }) => {
       newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
       setCarts(newCart)
     }
-    setQuantity(0)
   }
   if (currentQuantity == 0) {
     return <></>
