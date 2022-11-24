@@ -19,6 +19,10 @@ from .views import (
     GetProductOnCartAPIView,
     ReviewsAPIView,
     ReviewsFromProductAPIView,
+    AdminGetOrdersAPIView,
+    AdminOrderAPIView,
+    AdminGetReviewsAPIView,
+    AdminEditReviewsAPIView,
 )
 
 urlpatterns = [
@@ -40,5 +44,9 @@ urlpatterns = [
     path('cart/<int:cart_id>', SingleCartAPIView.as_view()),
     path('cart/product/<int:product_id>', GetProductOnCartAPIView.as_view()),
     path('review', ReviewsAPIView.as_view()),
-    path('review/<int:product_id>', ReviewsFromProductAPIView.as_view()),
+    path('product/<int:product_id>/review', ReviewsFromProductAPIView.as_view()),
+    path('admin/orders', AdminGetOrdersAPIView.as_view()),
+    path('admin/orders/detail/<int:order_id>', AdminOrderAPIView.as_view()),
+    path('admin/product/<int:product_id>/reviews', AdminGetReviewsAPIView.as_view()),
+    path('admin/reviews/<int:review_id>', AdminEditReviewsAPIView.as_view()),
 ]

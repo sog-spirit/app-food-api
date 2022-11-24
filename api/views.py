@@ -8,6 +8,7 @@ from .serializers import (
     CategorySerializer,
     OrderDetailSerializer,
     OrderSerializer,
+    AdminOrderSerializer,
     CartSerializer,
     ReviewSerializer,
 )
@@ -686,6 +687,71 @@ class ReviewsFromProductAPIView(APIView):
     def get(self, request, product_id):
         order_details = OrderDetail.objects.filter(product=product_id)
         orders = Order.objects.filter(id__in=order_details.values_list('order', flat=True))
+        reviews = Review.objects.filter(order__in=orders.values_list('id', flat=True), status='APPROVE')
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+class AdminGetOrdersAPIView(APIView):
+    def get(self, request):
+        """
+        Get all orders
+        """
+        payload = user_permission_authentication(request)
+        orders = Order.objects.order_by('_creator', '-order_status', '_created')
+        serializer = AdminOrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+class AdminOrderAPIView(APIView):
+    def get(self, request, order_id):
+        payload = user_permission_authentication(request)
+        order_detail = OrderDetail.objects.filter(order=order_id)
+        serializer = OrderDetailSerializer(order_detail, many=True)
+        return Response(serializer.data)
+
+    def patch(self, request, order_id):
+        payload = user_permission_authentication(request)
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return Response(
+                {'detail': 'Order not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = AdminOrderSerializer(order, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user = User.objects.filter(id=payload['id']).first()
+        History.objects.create(
+            _creator=user,
+            message = 'update order',
+        )
+        return Response({'detail': 'Order updated successfully'})
+
+class AdminGetReviewsAPIView(APIView):
+    def get(self, request, product_id):
+        payload = user_permission_authentication(request)
+        order_details = OrderDetail.objects.filter(product=product_id)
+        orders = Order.objects.filter(id__in=order_details.values_list('order', flat=True))
         reviews = Review.objects.filter(order__in=orders.values_list('id', flat=True))
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data)
+
+class AdminEditReviewsAPIView(APIView):
+    def patch(self, request, review_id):
+        payload = user_permission_authentication(request)
+        try:
+            review = Review.objects.get(id=review_id)
+        except Review.DoesNotExist:
+            return Response(
+                {'detail': 'Review does not exist'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = ReviewSerializer(review, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user = User.objects.filter(id=payload['id']).first()
+        History.objects.create(
+            _creator=user,
+            message='update review'
+        )
+        return Response({'detail': 'Review updated successfully'})

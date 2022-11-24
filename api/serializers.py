@@ -39,6 +39,13 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+class AdminOrderSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='_creator.name', read_only=True)
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+
 class OrderDetailSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='product.name', read_only=True)
     image = serializers.ImageField(source='product.image', read_only=True)
