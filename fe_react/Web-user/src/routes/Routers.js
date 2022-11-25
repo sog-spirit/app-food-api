@@ -23,6 +23,7 @@ import Products from "../pages/Admin/Products/Products";
 import AdminCategory from "../pages/Admin/Category/Categories";
 import AddCategory from "../pages/Admin/Category/AddCategory";
 import AdminOrder from "../pages/Admin/Orders/Orders";
+import AdminOrderDetails from "../pages/Admin/Orders/OrderDetails";
 import AdminRating from "../pages/Admin/Rating/Rating";
 import AdminCustomer from "../pages/Admin/Customer/Customer";
 import Admin from "../pages/Admin/Admin";
@@ -57,6 +58,7 @@ const Routers = () => {
       <Route path="/admin/categories" element={<AdminCategory />} />
       <Route path="/admin/addCategory" element={<AddCategory />} />
       <Route path="/admin/orders" element={<AdminOrder />} />
+      <Route path="/admin/orders/:id" element={<AdminOrderDetails />} />
       <Route path="/admin/rating" element={<AdminRating />} />
       <Route path="/admin/customers" element={<AdminCustomer />} />
     </Routes>

@@ -131,16 +131,16 @@ const AdminProduct = () => {
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Image</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Description</th>
+                  <th scope="col">Tên</th>
+                  <th scope="col">Hình ảnh</th>
+                  <th scope="col">Danh mục</th>
+                  <th scope="col">Giá tiền</th>
+                  <th scope="col">Ghi chú</th>
                   <th scope="col" style={{ color: "green" }}>
-                    Edit
+                    Sửa
                   </th>
                   <th scope="col" style={{ color: "red" }}>
-                    Delete
+                    Xóa
                   </th>
                 </tr>
               </thead>
@@ -159,6 +159,9 @@ const AdminProduct = () => {
 
 const Tr = (props) => {
   const {id, name, image, category_name, price, description} = props.item
+  const slash = (value) => {
+    return value ? value : '-'
+  }
   return (
     <tr class="d-item">
       <th scope="row">{props.index + 1}</th>
@@ -171,7 +174,7 @@ const Tr = (props) => {
       </td>
       <td class="d-item--category">{category_name}</td>
       <td class="d-item--price">{price}</td>
-      <td class="d-item--des">{description}</td>
+      <td class="d-item--des">{slash(description)}</td>
       <Link to={`/admin/product/${id}`} class="d-item--icon d-item--edit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
