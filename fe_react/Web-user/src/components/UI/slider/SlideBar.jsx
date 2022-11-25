@@ -46,7 +46,7 @@ const Slidebar = () => {
           }`}
           onClick={() => toggleIndexActive(1)}
         >
-          <Link to="/admin/categories" class="d-flex">
+          <Link to="/admin/orders" class="d-flex">
             <div className="menu-item--icon">
               <svg
                 class="MuiSvgIcon-root"

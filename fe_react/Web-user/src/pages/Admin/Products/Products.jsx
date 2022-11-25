@@ -73,7 +73,6 @@ const AdminProduct = () => {
       },
       credentials: 'include'
     })
-    /api/product/31/api/product/31()
   }
 
   return (

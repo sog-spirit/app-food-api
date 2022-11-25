@@ -121,7 +121,7 @@ const FoodDetails = () => {
   }
 
   const getReview = async () => {
-    await fetch(`http://localhost:8000/api/review/${id}`)
+    await fetch(`http://localhost:8000/api/product/${id}/review`)
       .then((res) => res.json())
       .then((data) => {
         setReview(data)
