@@ -51,7 +51,6 @@ function EditProduct() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(product);
         await fetch(`http://localhost:8000/api/product/${id}`, {
             method: 'PUT',
             headers: {

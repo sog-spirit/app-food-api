@@ -59,7 +59,7 @@ const Routers = () => {
       <Route path="/admin/addCategory" element={<AddCategory />} />
       <Route path="/admin/orders" element={<AdminOrder />} />
       <Route path="/admin/orders/:id" element={<AdminOrderDetails />} />
-      <Route path="/admin/rating" element={<AdminRating />} />
+      <Route path="/admin/product/:id/reviews" element={<AdminRating />} />
       <Route path="/admin/customers" element={<AdminCustomer />} />
     </Routes>
   );
