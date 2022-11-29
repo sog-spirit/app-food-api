@@ -71,3 +71,27 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        exclude = (
+            'first_name',
+            'last_name',
+            'last_login',
+            'password',
+            'balance',
+            'is_superuser',
+            'is_staff',
+            'groups',
+            'user_permissions',
+        )
+
+    def get_role(self, instance):
+        if instance.is_superuser is True:
+            return 'admin'
+        if instance.is_staff is True:
+            return 'staff'
+        return 'user'

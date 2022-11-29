@@ -11,6 +11,7 @@ from .serializers import (
     AdminOrderSerializer,
     CartSerializer,
     ReviewSerializer,
+    AdminUserSerializer,
 )
 from django.db import IntegrityError, transaction
 from .models import (
@@ -72,6 +73,9 @@ class LoginView(APIView):
         
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password')
+
+        if user.is_active is False:
+            raise AuthenticationFailed('Username or password is invalid')
         
         payload = {
             'id': user.id,
@@ -755,3 +759,140 @@ class AdminEditReviewsAPIView(APIView):
             message='update review'
         )
         return Response({'detail': 'Review updated successfully'})
+
+class AdminUsersAPIView(APIView):
+    def get(self, request):
+        payload = user_permission_authentication(request)
+        users = User.objects.all()
+        serializer = AdminUserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        """
+        Create user
+        """
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        email = request.data.get('email', None)
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+        phone = request.data.get('phone', None)
+        role = request.data.get('role', None)
+        if (
+            data is None or
+            email is None or
+            username is None or
+            password is None or
+            phone is None or
+            role is None
+        ):
+            response = Response()
+            message = {}
+            if data is None:
+                message['data'] = 'This field is required'
+            if email is None:
+                message['email'] = 'This field is required'
+            if username is None:
+                message['username'] = 'This field is required'
+            if password is None:
+                message['password'] = 'This field is required'
+            if phone is None:
+                message['phone'] = 'This field is required'
+            if role is None:
+                message['role'] = 'This field is required'
+            response.data = message
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return response
+
+        try:
+            user = User.objects.get(username=username)
+            return Response(
+                {'detail': 'Username is existed'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except User.DoesNotExist:
+            if role == 'admin':
+                user = User.objects.create_user(
+                    email=email,
+                    username=username,
+                    password=password,
+                    phone=phone,
+                    is_superuser=True
+                )
+            elif role == 'staff':
+                user = User.objects.create_user(
+                    email=email,
+                    username=username,
+                    password=password,
+                    phone=phone,
+                    is_staff=True
+                )
+            else:
+                user = User.objects.create_user(
+                    email=email,
+                    username=username,
+                    password=password,
+                    phone=phone,
+                )
+            return Response(
+                {'detail': 'User created successfully'},
+                status=status.HTTP_200_OK
+            )
+
+class AdminUserAPIView(APIView):
+    def patch(self, request, user_id):
+        """
+        Update user
+        """
+        payload = user_permission_authentication(request)
+        try:
+            user = User.objects.get(id=user_id)
+            name = request.data.get('name', None)
+            role = request.data.get('role', None)
+            email = request.data.get('email', None)
+            password = request.data.get('password', None)
+            if name is not None:
+                user.name = name
+            if email is not None:
+                user.email = email
+            if password is not None:
+                user.set_password(password)
+            if role is not None:
+                if role == 'admin':
+                    user.is_superuser = True
+                    user.is_staff = False
+                elif role == 'staff':
+                    user.is_superuser = False
+                    user.is_staff = True
+                else:
+                    user.is_superuser = False
+                    user.is_staff = False
+            user.save()
+            return Response(
+                {'detail': 'User updated successfully'},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'detail': 'User not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def delete(self, request, user_id):
+        """
+        Delete user
+        """
+        payload = user_permission_authentication(request)
+        try:
+            user = User.objects.get(id=user_id)
+            user.is_active = False
+            user.save()
+            return Response(
+                {'detail': 'User deleted successfully'},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'detail': 'User not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
