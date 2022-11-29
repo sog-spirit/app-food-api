@@ -865,6 +865,9 @@ class AdminUserAPIView(APIView):
             name = request.data.get('name', None)
             role = request.data.get('role', None)
             email = request.data.get('email', None)
+            phone = request.data.get('phone', None)
+            address = request.data.get('address', None)
+            date_of_birth = request.data.get('date_of_birth', None)
             password = request.data.get('password', None)
             if name is not None:
                 user.name = name
@@ -872,6 +875,12 @@ class AdminUserAPIView(APIView):
                 user.email = email
             if password is not None:
                 user.set_password(password)
+            if phone is not None:
+                user.phone = phone
+            if address is not None:
+                user.address = address
+            if date_of_birth is not None:
+                user.date_of_birth = date_of_birth
             if role is not None:
                 if role == 'admin':
                     user.is_superuser = True
