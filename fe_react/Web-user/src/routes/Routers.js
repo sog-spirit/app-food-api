@@ -26,6 +26,7 @@ import AdminOrder from "../pages/Admin/Orders/Orders";
 import AdminOrderDetails from "../pages/Admin/Orders/OrderDetails";
 import AdminRating from "../pages/Admin/Rating/Rating";
 import AdminCustomer from "../pages/Admin/Customer/Customer";
+import CustomerDetail from "../pages/Admin/Customer/CustomerDetail";
 import Admin from "../pages/Admin/Admin";
 import EditProduct from "../pages/Admin/Products/EditProduct";
 
@@ -60,7 +61,8 @@ const Routers = () => {
       <Route path="/admin/orders" element={<AdminOrder />} />
       <Route path="/admin/orders/:id" element={<AdminOrderDetails />} />
       <Route path="/admin/product/:id/reviews" element={<AdminRating />} />
-      <Route path="/admin/customers" element={<AdminCustomer />} />
+      <Route path="/admin/users" element={<AdminCustomer />} />
+      <Route path="/admin/users/:id" element={<CustomerDetail />} />
     </Routes>
   );
 };

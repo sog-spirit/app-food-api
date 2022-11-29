@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
@@ -234,7 +234,7 @@ function EditProduct() {
                     <div className="row w-100">
                     <div className="form-group form-submit">
                         <button type="submit" class="btn select__action--add" onClick={e => handleSubmit(e)}>
-                        Thêm sản phẩm
+                        Lưu
                         </button>
                     </div>
                     </div>
