@@ -16,6 +16,7 @@ import ModalBox from "../../../components/UI/ModalBox";
 import Slidebar from "../../../components/UI/slider/SlideBar";
 
 function CustomerDetail() {
+  const navigate = useNavigate();
   const {id} = useParams()
   const [user, setUser] = useState({})
   const [isModal, setIsModal] = useState(false);
@@ -41,8 +42,24 @@ function CustomerDetail() {
       })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `jwt=${Cookies.get("jwt")}`,
+        },
+        body: JSON.stringify(user),
+        credentials: "include",
+    }).then((response) => {
+        if (response.status === 200) {
+            navigate("/admin/users");
+        }
+        else {
+            setIsModal(true)
+        }
+    })
   }
 
   const closeModal = (e) => {
@@ -95,6 +112,25 @@ function CustomerDetail() {
                         onChange={(e) => {
                         handleChange(e)
                         }}
+                    />
+                    </div>
+                    <div className="form-group string required candidate_name">
+                    <label
+                        className="string required control-label"
+                        for="candidate_name"
+                    >
+                        Username <abbr title="required">*</abbr>
+                    </label>
+                    <input
+                        class="string required form-control"
+                        required
+                        type="text"
+                        name="name"
+                        value={user.username}
+                        onChange={(e) => {
+                        handleChange(e)
+                        }}
+                        readOnly
                     />
                     </div>
                     <div className="form-group string required candidate_name">

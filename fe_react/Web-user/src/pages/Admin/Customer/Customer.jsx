@@ -48,6 +48,13 @@ const AdminCustomer = () => {
         <SlideBar />
         <div className="main__content">
           <h1>Tài Khoản</h1>
+          <div className="select__actions">
+            <Link to="/admin/addUser" class="d-flex">
+              <button type="button" class="btn select__action--add">
+                Tạo tài khoản
+              </button>
+            </Link>
+          </div>
           <div className="d-list">
             <table class="table">
               <thead>
