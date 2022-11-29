@@ -93,9 +93,9 @@ function CustomerDetail() {
             <form action="" className="simple_form new_product">
                 <div className="row w-100">
                 <div class="col-md-2 description--label">
-                    <h3>Mô tả</h3>
+                    <h3>Thông tin</h3>
                 </div>
-                <div className="col-md-8 description--info">
+                <div className="col-md-6 description--info">
                     <div className="form-group string required candidate_name">
                     <label
                         className="string required control-label"
@@ -221,11 +221,11 @@ function CustomerDetail() {
                 </div>
                 </div>
                 <div className="row w-100">
-                <div className="form-group form-submit">
-                    <button type="submit" class="btn select__action--add" onClick={e => handleSubmit(e)}>
-                    Lưu
-                    </button>
-                </div>
+                    <div className="form-group form-submit">
+                        <button type="submit" class="btn select__action--add" onClick={e => handleSubmit(e)}>
+                        Lưu
+                        </button>
+                    </div>
                 </div>
                 <ModalBox show={isModal} handleClose={(e) => closeModal(e)}>
                     <h2>Đã xảy ra lỗi</h2>
