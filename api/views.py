@@ -840,6 +840,21 @@ class AdminUsersAPIView(APIView):
             )
 
 class AdminUserAPIView(APIView):
+    def get(self, request, user_id):
+        """
+        Get single user by user id
+        """
+        payload = user_permission_authentication(request)
+        try:
+            user = User.objects.get(id=user_id)
+            serializer = AdminUserSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response(
+                {'detail': 'User not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
     def patch(self, request, user_id):
         """
         Update user
