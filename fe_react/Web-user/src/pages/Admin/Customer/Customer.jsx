@@ -23,10 +23,31 @@ import { Link } from "react-router-dom";
 const AdminCustomer = () => {
   //date time picker
   const [users, setUsers] = useState([])
+  const [filter, setFilter] = useState("default")
 
   useEffect(() => {
     getUsers()
   }, [])
+
+  useEffect(async () => {
+    if (filter == "default") {
+      getUsers()
+    }
+    else {
+      await fetch(`http://localhost:8000/api/admin/users`, {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          let items = data.filter((item) => item.role == filter);
+          setUsers(items)
+        })
+    }
+  }, [filter])
 
   const getUsers = async () => {
     await fetch("http://localhost:8000/api/admin/users", {
@@ -54,6 +75,21 @@ const AdminCustomer = () => {
                 Tạo tài khoản
               </button>
             </Link>
+            <div className="select__actions-item d-flex">
+              <Form.Group className="mr-1" controlId="formBasicEmail">
+                <Form.Label>Vai trò: </Form.Label>
+                <Form.Select
+                  aria-label="Default select example"
+                  className="mr-3"
+                  onChange={e => setFilter(e.target.value)}
+                >
+                  <option value="default">Mặc định</option> 
+                  <option value="admin">Quản lý</option> 
+                  <option value="staff">Nhân viên</option> 
+                  <option value="user">Khách hàng</option> 
+                </Form.Select>
+              </Form.Group>
+            </div>
           </div>
           <div className="d-list">
             <table class="table">

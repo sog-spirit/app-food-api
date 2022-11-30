@@ -105,7 +105,7 @@ const AdminProduct = () => {
             </Link>
             <div className="select__actions-item d-flex">
               <Form.Group className="mr-1" controlId="formBasicEmail">
-                <Form.Label>Category: </Form.Label>
+                <Form.Label>Danh mục: </Form.Label>
                 <Form.Select
                   aria-label="Default select example"
                   className="mr-3"

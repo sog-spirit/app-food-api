@@ -21,12 +21,32 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const AdminOrder = () => {
-  //date time picker
   const [orders, setOrders] = useState([])
+  const [filter, setFilter] = useState("default")
 
   useEffect(() => {
     getOrders()
   }, [])
+
+  useEffect(async () => {
+    if (filter == "default") {
+      getOrders()
+    }
+    else {
+      await fetch(`http://localhost:8000/api/admin/orders`, {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          let items = data.filter((item) => item.order_status == filter);
+          setOrders(items)
+        })
+    }
+  }, [filter])
 
   function descending_date( a, b ) {
     if ( a._created < b._created ){
@@ -71,6 +91,27 @@ const AdminOrder = () => {
         <SlideBar />
         <div className="main__content">
           <h1>Đơn hàng</h1>
+          <div className="select__actions">
+            <Link to="/admin/addProduct" class="d-flex">
+              <button type="button" class="btn select__action--add">
+                Thêm sản phẩm
+              </button>
+            </Link>
+            <div className="select__actions-item d-flex">
+              <Form.Group className="mr-1" controlId="formBasicEmail">
+                <Form.Label>Trạng thái: </Form.Label>
+                <Form.Select
+                  aria-label="Default select example"
+                  className="mr-3"
+                  onChange={e => setFilter(e.target.value)}
+                >
+                  <option value="default">Mặc định</option> 
+                  <option value="PENDING">Đang xử lý</option> 
+                  <option value="DONE">Đã hoàn thành</option> 
+                </Form.Select>
+              </Form.Group>
+            </div>
+          </div>
           <div className="d-list">
             <table class="table">
               <thead>

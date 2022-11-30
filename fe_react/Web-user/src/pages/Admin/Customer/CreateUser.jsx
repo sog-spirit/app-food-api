@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
-
+import Slidebar from "../../../components/UI/slider/SlideBar";
 import {
     Form,
     Button,
@@ -10,63 +10,48 @@ import {
     FormControl,
     ControlLabel,
   } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
 import ModalBox from "../../../components/UI/ModalBox";
-import Slidebar from "../../../components/UI/slider/SlideBar";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
-function CustomerDetail() {
-  const navigate = useNavigate();
-  const {id} = useParams()
-  const [user, setUser] = useState({})
-  const [isModal, setIsModal] = useState(false);
-  const handleChange = async (event) => {
-    setUser({ ...user, [event.target.name]: event.target.value });
-  };
+function CreateUser() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState({})
+    const [isModal, setIsModal] = useState(false);
+    const handleChange = async (event) => {
+        setUser({ ...user, [event.target.name]: event.target.value });
+    };
 
-  useEffect(() => {
-    getUserDetail()
-  }, [])
-
-  const getUserDetail = async () => {
-    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
-      headers: {
-        'Authorization': `jwt=${Cookies.get('jwt')}`
-      },
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data)
-      })
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `jwt=${Cookies.get("jwt")}`,
-        },
-        body: JSON.stringify(user),
-        credentials: "include",
-    }).then((response) => {
-        if (response.status === 200) {
-            navigate("/admin/users");
-        }
-        else {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (user.password !== user.confirmPassword) {
             setIsModal(true)
         }
-    })
-  }
+        else {
+            console.log(user);
+            await fetch(`http://localhost:8000/api/admin/users`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+            Authorization: `jwt=${Cookies.get("jwt")}`,
+            },
+            body: JSON.stringify(user),
+            credentials: "include",
+        }).then((response) => {
+            if (response.status === 200) {
+                navigate("/admin/users");
+            }
+            else {
+                setIsModal(true)
+            }
+        })
+    }}
+    
+    const closeModal = (e) => {
+        setIsModal(false);
+    };
 
-  const closeModal = (e) => {
-    setIsModal(false);
-  };
-
-  return (
+    return (
     <Helmet title="AdminPage">
         <div className="admin__section d-flex">
         <Slidebar />
@@ -108,7 +93,6 @@ function CustomerDetail() {
                         required
                         type="text"
                         name="name"
-                        value={user.name}
                         onChange={(e) => {
                         handleChange(e)
                         }}
@@ -125,12 +109,10 @@ function CustomerDetail() {
                         class="string required form-control"
                         required
                         type="text"
-                        name="name"
-                        value={user.username}
+                        name="username"
                         onChange={(e) => {
                         handleChange(e)
                         }}
-                        readOnly
                     />
                     </div>
                     <div className="form-group string required candidate_name">
@@ -138,18 +120,50 @@ function CustomerDetail() {
                         className="string required control-label"
                         for="candidate_name"
                     >
-                        Username <abbr title="required">*</abbr>
+                        Mật khẩu <abbr title="required">*</abbr>
                     </label>
                     <input
                         class="string required form-control"
                         required
-                        type="text"
+                        type="password"
+                        name="password"
+                        onChange={(e) => {
+                        handleChange(e)
+                        }}
+                    />
+                    </div>
+                    <div className="form-group string required candidate_name">
+                    <label
+                        className="string required control-label"
+                        for="candidate_name"
+                    >
+                        Nhập lại mật khẩu <abbr title="required">*</abbr>
+                    </label>
+                    <input
+                        class="string required form-control"
+                        required
+                        type="password"
+                        name="confirmPassword"
+                        onChange={(e) => {
+                        handleChange(e)
+                        }}
+                    />
+                    </div>
+                    <div className="form-group string required candidate_name">
+                    <label
+                        className="string required control-label"
+                        for="candidate_name"
+                    >
+                        Email <abbr title="required">*</abbr>
+                    </label>
+                    <input
+                        class="string required form-control"
+                        required
+                        type="email"
                         name="email"
-                        value={user.email}
                         onChange={(e) => {
                         handleChange(e)
                         }}
-                        readOnly
                     />
                     </div>
                     <div className="form-group string required candidate_name">
@@ -164,10 +178,10 @@ function CustomerDetail() {
                         className="mr-3"
                         name="role"
                         onChange={(e) => {
-                        handleChange(e)
-                        }}
-                        value={user.role}
+                            handleChange(e)
+                            }}
                     >
+                        <option value="default">Vai trò</option> 
                         <option value="admin">Quản lý</option> 
                         <option value="staff">Nhân viên</option> 
                         <option value="user">Khách hàng</option> 
@@ -187,7 +201,6 @@ function CustomerDetail() {
                                 required
                                 type="date"
                                 name="date_of_birth"
-                                value={user.date_of_birth}
                                 onChange={(e) => {
                                 handleChange(e)
                                 }}
@@ -209,7 +222,6 @@ function CustomerDetail() {
                                 required
                                 type="text"
                                 name="address"
-                                value={user.address}
                                 onChange={(e) => {
                                 handleChange(e)
                                 }}
@@ -229,7 +241,6 @@ function CustomerDetail() {
                                 required
                                 type="text"
                                 name="phone"
-                                value={user.phone}
                                 onChange={(e) => {
                                 handleChange(e)
                                 }}
@@ -257,4 +268,4 @@ function CustomerDetail() {
     );
 }
 
-export default CustomerDetail
+export default CreateUser
