@@ -772,15 +772,19 @@ class AdminUsersAPIView(APIView):
         Create user
         """
         payload = user_permission_authentication(request)
-        data = request.data.copy()
+        name = request.data.get('name', None)
+        date_of_birth = request.data.get('date_of_birth', None)
+        address = request.data.get('address', None)
         email = request.data.get('email', None)
         username = request.data.get('username', None)
         password = request.data.get('password', None)
         phone = request.data.get('phone', None)
         role = request.data.get('role', None)
         if (
-            data is None or
             email is None or
+            name is None or
+            date_of_birth is None or
+            address is None or
             username is None or
             password is None or
             phone is None or
@@ -788,8 +792,12 @@ class AdminUsersAPIView(APIView):
         ):
             response = Response()
             message = {}
-            if data is None:
-                message['data'] = 'This field is required'
+            if name is None:
+                message['name'] = 'This field is required'
+            if date_of_birth is None:
+                message['date_of_birth'] = 'This field is required'
+            if address is None:
+                message['address'] = 'This field is required'
             if email is None:
                 message['email'] = 'This field is required'
             if username is None:
@@ -817,6 +825,9 @@ class AdminUsersAPIView(APIView):
                     username=username,
                     password=password,
                     phone=phone,
+                    name=name,
+                    date_of_birth=date_of_birth,
+                    address=address,
                     is_superuser=True
                 )
             elif role == 'staff':
@@ -825,6 +836,9 @@ class AdminUsersAPIView(APIView):
                     username=username,
                     password=password,
                     phone=phone,
+                    name=name,
+                    date_of_birth=date_of_birth,
+                    address=address,
                     is_staff=True
                 )
             else:
@@ -833,6 +847,9 @@ class AdminUsersAPIView(APIView):
                     username=username,
                     password=password,
                     phone=phone,
+                    name=name,
+                    date_of_birth=date_of_birth,
+                    address=address,
                 )
             return Response(
                 {'detail': 'User created successfully'},
