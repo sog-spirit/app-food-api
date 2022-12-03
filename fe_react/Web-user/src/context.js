@@ -1,10 +1,12 @@
 import Cookies from 'js-cookie'
 import React, { createContext, useEffect, useState, useMemo, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const CartContext = createContext()
 export const UserContext = createContext()
 
 export const UserProvider = ({children}) => {
+  const navigate = useNavigate()
   const [user, setUser] = useState({})
   const providerValue = useMemo(() => ({ user, setUser }), [user, setUser])
 
@@ -26,6 +28,10 @@ export const UserProvider = ({children}) => {
       .then((data) => {
         setUser(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }}
   return (
     <UserContext.Provider value={providerValue}>{children}</UserContext.Provider>
@@ -33,6 +39,7 @@ export const UserProvider = ({children}) => {
 }
 
 export const CartProvider = ({ children }) => {
+  const navigate = useNavigate()
   const [carts, setCarts] = useState([])
   const {user, setUser} = useContext(UserContext)
   const providerValue = useMemo(() => ({ carts, setCarts }), [carts, setCarts])
@@ -53,6 +60,10 @@ export const CartProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           setCarts(data)
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
         })
     }
     else {

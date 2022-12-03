@@ -33,6 +33,10 @@ function Profile() {
         body: JSON.stringify(profile),
         credentials: 'include'
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
       getUser()
       navigate('/home')
     }
@@ -50,6 +54,10 @@ function Profile() {
         .then((res) => res.json())
         .then((data) => {
           setUser(data)
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
         })
     }}
 

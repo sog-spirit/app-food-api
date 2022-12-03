@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import '../../../styles/product-card.css'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
 import { cartActions } from '../../../store/shopping-cart/cartSlice'
@@ -13,7 +13,7 @@ const ProductCard = (props) => {
   const { id, name, image, price } = props.item
   const { carts, setCarts } = useContext(CartContext)
   const { user, setUser } = useContext(UserContext)
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   var getCarts = async () => {
     await fetch(`http://localhost:8000/api/cart`, {
@@ -27,8 +27,14 @@ const ProductCard = (props) => {
       .then((data) => {
         setCarts(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }
 
+  // TODO: Not use this func anymore
+  // Use the code in block else
   const addToCart = async () => {
     if (user.id !== undefined) {
       let response = await fetch(`http://localhost:8000/api/cart/product/${id}`, {

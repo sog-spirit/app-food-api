@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
@@ -23,6 +23,7 @@ const FoodDetails = () => {
   const [product, setProduct] = useState({})
   const [review, setReview] = useState([])
   const [products, setProducts] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getProductDetail()
@@ -42,6 +43,10 @@ const FoodDetails = () => {
       .then((data) => {
         setCarts(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }
 
   let getProducts = async () => {
@@ -50,6 +55,8 @@ const FoodDetails = () => {
     setProducts(data);
   };
 
+  // TODO: Not use this func anymore
+  // Use the code in block else
   const addToCart = async () => {
     if (user.id !== undefined) {
       let response = await fetch(`http://localhost:8000/api/cart/product/${id}`, {

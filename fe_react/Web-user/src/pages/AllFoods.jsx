@@ -10,8 +10,10 @@ import ReactPaginate from "react-paginate";
 
 import "../styles/all-foods.css";
 import "../styles/pagination.css";
+import { useNavigate } from "react-router-dom";
 
 const AllFoods = () => {
+  const navigate = useNavigate()
   const [sortTerm, setSortTerm] = useState("default")
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -52,9 +54,15 @@ const AllFoods = () => {
   }, [sortTerm])
   
   let getProducts = async () => {
-    let response = await fetch("http://localhost:8000/api/product");
-    let data = await response.json();
-    setProducts(data);
+    await fetch("http://localhost:8000/api/product")
+    .then((res) => res.json())
+    .then((data) => {
+      setProducts(data);
+    })
+    .catch((error) => {
+      console.log(error);
+      navigate('/error')
+    })
   };
 
   const searchedProduct = products.filter((item) => {

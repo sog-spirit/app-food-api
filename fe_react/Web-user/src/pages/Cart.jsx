@@ -4,7 +4,7 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/cart-page.css";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
 import Cookies from "js-cookie";
@@ -74,6 +74,7 @@ const Tr = (props) => {
   const { id, name, image, price, quantity } = props.item;
   const {carts, setCarts} = useContext(CartContext);
   const {user, setUser} = useContext(UserContext);
+  const navigate = useNavigate()
 
   var getCarts = async () => {
     await fetch(`http://localhost:8000/api/cart`, {
@@ -87,8 +88,14 @@ const Tr = (props) => {
       .then((data) => {
         setCarts(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }
 
+  // TODO: Not use this func anymore
+  // Use the code in block else
   const deleteItem = async () => {
     console.log(user.id);
     if (user.id !== undefined) {

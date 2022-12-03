@@ -4,26 +4,34 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/cart-page.css";
 import { Container, Row, Col } from "reactstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 
 function Detail() {
     const { id } = useParams();
-    const [orderDetail, setOrderDetail] = useState([]) 
-    useEffect(async () => {
-        await fetch(`http://localhost:8000/api/order/${id}`, {
-            headers: {
-                'Authorization': `jwt=${Cookies.get('jwt')}`
-            },
-            method: 'GET',
-            credentials: 'include'
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                setOrderDetail(data)
+    const [orderDetail, setOrderDetail] = useState([])
+    const navigate = useNavigate()
+    const getDetailOrder = async () => {
+      await fetch(`http://localhost:8000/api/order/${id}`, {
+        headers: {
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
         })
+        .then((res) => res.json())
+        .then((data) => {
+          setOrderDetail(data)
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
+        })
+      })
+    }
+    useEffect(() => {
+      getDetailOrder()
     }, [])
   return (
     <Helmet title="Order">

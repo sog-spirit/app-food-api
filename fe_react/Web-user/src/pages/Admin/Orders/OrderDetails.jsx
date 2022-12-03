@@ -2,13 +2,14 @@ import Cookies from 'js-cookie'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Helmet from '../../../components/Helmet/Helmet'
 import Slidebar from '../../../components/UI/slider/SlideBar'
 
 function AdminOrderDetails() {
   const {id} = useParams()  
   const [products, setProducts] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getProductFromOrder()
@@ -25,6 +26,10 @@ function AdminOrderDetails() {
       .then((res) => res.json())
       .then((data) => {
         setProducts(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
       })
   }
 

@@ -17,12 +17,13 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const AdminOrder = () => {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState("default")
+  const navigate = useNavigate()
 
   useEffect(() => {
     getOrders()
@@ -44,6 +45,10 @@ const AdminOrder = () => {
         .then((data) => {
           let items = data.filter((item) => item.order_status == filter);
           setOrders(items)
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
         })
     }
   }, [filter])
@@ -70,6 +75,10 @@ const AdminOrder = () => {
       .then((data) => {
         setOrders(data.sort(descending_date))
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }
 
   const completeOrder = async (id) => {
@@ -81,6 +90,10 @@ const AdminOrder = () => {
       },
       body: JSON.stringify({order_status: "DONE"}),
       credentials: 'include',
+    })
+    .catch((error) => {
+      console.log(error);
+      navigate('/error')
     })
     getOrders()
   }

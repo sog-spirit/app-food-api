@@ -28,7 +28,6 @@ function CreateUser() {
             setIsModal(true)
         }
         else {
-            console.log(user);
             await fetch(`http://localhost:8000/api/admin/users`, {
                 method: "POST",
                 headers: {

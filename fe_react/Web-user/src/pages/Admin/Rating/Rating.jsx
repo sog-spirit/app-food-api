@@ -17,13 +17,14 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const AdminRating = () => {
   //date time picker
   const {id} = useParams()
   const [reviews, setReviews] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getReviews()
@@ -39,6 +40,10 @@ const AdminRating = () => {
       credentials: 'include',
       body: JSON.stringify({status: "APPROVE"})
     })
+    .catch((error) => {
+      console.log(error);
+      navigate('/error')
+    })
     getReviews()
   }
 
@@ -53,6 +58,10 @@ const AdminRating = () => {
       .then((res) => res.json())
       .then((data) => {
         setReviews(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
       })
   }
 

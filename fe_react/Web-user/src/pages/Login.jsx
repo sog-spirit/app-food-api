@@ -40,7 +40,14 @@ const Login = () => {
       .then((data) => {
         setUser(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
       navigate('/foods')
+    }
+    else {
+      navigate('/error')
     }
   }
   const submitHandler = (e) => {

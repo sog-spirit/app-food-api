@@ -40,6 +40,10 @@ function CustomerDetail() {
       .then((data) => {
         setUser(data)
       })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   }
 
   const handleSubmit = async (e) => {

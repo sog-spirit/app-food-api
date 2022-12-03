@@ -4,25 +4,30 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import "../styles/cart-page.css";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 
 function Order() {
     const [order, setOrder] = useState([])
+    const navigate = useNavigate()
     useEffect(async () => {
-        await fetch(`http://localhost:8000/api/order`, {
-          headers: {
-          'Authorization': `jwt=${Cookies.get('jwt')}`
-          },
-          method: 'GET',
-          credentials: 'include'
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            setOrder(data)
-        })
+      await fetch(`http://localhost:8000/api/order`, {
+        headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrder(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
     }, [])
 
   return (

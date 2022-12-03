@@ -3,7 +3,7 @@ import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Form,
@@ -24,6 +24,7 @@ const AdminProduct = () => {
   const [products, setProducts] = useState([])
   const [filter, setFilter] = useState("default")
   const [categories, setCategories] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getProducts()
@@ -72,6 +73,10 @@ const AdminProduct = () => {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
       credentials: 'include'
+    })
+    .catch((error) => {
+      console.log(error);
+      navigate('/error')
     })
   }
 
