@@ -55,7 +55,7 @@ urlpatterns = [
     path('admin/product', AdminProductsAPIView.as_view()),
     path('admin/product/<int:product_id>', AdminSingleProductAPIView.as_view()),
     path('admin/category', AdminCategoriesAPIView.as_view()),
-    path('admin/category/<int:product_id>', AdminSingleCategoryAPIView.as_view()),
+    path('admin/category/<int:category_id>', AdminSingleCategoryAPIView.as_view()),
     path('admin/category/detail/<int:category_id>', AdminGetProductFromCategory.as_view()),
     path('admin/orders', AdminGetOrdersAPIView.as_view()),
     path('admin/orders/detail/<int:order_id>', AdminOrderAPIView.as_view()),

@@ -818,9 +818,9 @@ class AdminProductsAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminSingleProductAPIView(APIView):
-    def get(self, request, id):
+    def get(self, request, product_id):
         payload = user_permission_authentication(request)
-        product = Product.objects.get(id=id)
+        product = Product.objects.get(id=product_id)
         serializer = ProductSerializer(product, many=False)
 
         if product._deleted == None:
@@ -828,11 +828,11 @@ class AdminSingleProductAPIView(APIView):
 
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id):
+    def put(self, request, product_id):
         payload = user_permission_authentication(request)
         data = request.data.copy()
         data['_updater'] = payload['id']
-        product = Product.objects.get(id=id)
+        product = Product.objects.get(id=product_id)
         if product._deleted is not None:
             return Response({
                 'detail': 'Product is already deleted'
@@ -913,9 +913,9 @@ class AdminCategoriesAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminSingleCategoryAPIView(APIView):
-    def get(self, request, id):
+    def get(self, request, category_id):
         payload = user_permission_authentication(request)
-        category = Category.objects.get(id=id)
+        category = Category.objects.get(id=category_id)
         serializer = CategorySerializer(category, many=False)
 
         if category._deleted == None:
@@ -923,11 +923,11 @@ class AdminSingleCategoryAPIView(APIView):
         
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id):
+    def put(self, request, category_id):
         payload = user_permission_authentication(request)
         data = request.data
         data['_updater'] = payload['id']
-        category = Category.objects.get(id=id)
+        category = Category.objects.get(id=category_id)
         if category._deleted is not None:
             return Response({
                 'detail': 'Category is already deleted'
@@ -946,9 +946,9 @@ class AdminSingleCategoryAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, id):
+    def delete(self, request, category_id):
         payload = user_permission_authentication(request)
-        category = Category.objects.get(id=id)
+        category = Category.objects.get(id=category_id)
         if category._deleted is not None:
             return Response({
                 'detail': 'Category is already deleted'
