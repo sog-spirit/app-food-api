@@ -6,17 +6,9 @@ import "../../../styles/admin.scss";
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
-  Form,
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel,
+  Form
 } from "react-bootstrap";
 
-import TextField from "@mui/material/TextField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Cookies from "js-cookie";
 
 const AdminProduct = () => {
@@ -36,23 +28,59 @@ const AdminProduct = () => {
       getProducts()
     }
     else {
-      let response = await fetch("http://localhost:8000/api/product");
-      let data = await response.json();
-      let items = data.filter((item) => item.category == filter);
-      setProducts(items)
+      await fetch("http://localhost:8000/api/admin/product", {
+        headers: {
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          let items = data.filter((item) => item.category == filter);
+          setProducts(items)
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
+        });     
     }
   }, [filter])
 
   let getProducts = async () => {
-    let response = await fetch("http://localhost:8000/api/product");
-    let data = await response.json();
-    setProducts(data);
+    await fetch("http://localhost:8000/api/admin/product", {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      });
   };
 
   let getCategories = async () => {
-    let response = await fetch("http://localhost:8000/api/category");
-    let data = await response.json();
-    setCategories(data);
+    await fetch("http://localhost:8000/api/admin/category", {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      });
   };
 
   const handleSearch = (e) => {
@@ -67,7 +95,7 @@ const AdminProduct = () => {
   }
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:8000/api/product/${id}`, {
+    await fetch(`http://localhost:8000/api/admin/product/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
@@ -78,6 +106,7 @@ const AdminProduct = () => {
       console.log(error);
       navigate('/error')
     })
+    getProducts()
   }
 
   return (

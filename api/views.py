@@ -852,9 +852,9 @@ class AdminSingleProductAPIView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id):
+    def delete(self, request, product_id):
         payload = user_permission_authentication(request)
-        product = Product.objects.get(id=id)
+        product = Product.objects.get(id=product_id)
         if product._deleted is not None:
             return Response({
                 'detail': 'Product is already deleted'

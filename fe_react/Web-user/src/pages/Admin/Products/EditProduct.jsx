@@ -31,17 +31,39 @@ function EditProduct() {
     };
 
     const getProductDetail = async () => {
-        await fetch(`http://localhost:8000/api/product/${id}`)
-            .then((res) => res.json())
-            .then((data) => {
+        await fetch(`http://localhost:8000/api/admin/product/${id}`, {
+        headers: {
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+        })
+        .then((res) => res.json())
+        .then((data) => {
             setProduct(data)
         })
+        .catch((error) => {
+            console.log(error);
+            navigate('/error')
+          })
     }
 
     let getCategories = async () => {
-        let response = await fetch("http://localhost:8000/api/category");
-        let data = await response.json();
-        setCategories(data);
+        await fetch("http://localhost:8000/api/admin/category", {
+        headers: {
+            'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        method: 'GET',
+        credentials: 'include'
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            setCategories(data)
+        })
+        .catch((error) => {
+            console.log(error);
+            navigate('/error')
+        });
       };
 
     useEffect(() => {
@@ -51,7 +73,7 @@ function EditProduct() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch(`http://localhost:8000/api/product/${id}`, {
+        await fetch(`http://localhost:8000/api/admin/product/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

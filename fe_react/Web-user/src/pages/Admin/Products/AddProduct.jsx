@@ -26,9 +26,21 @@ const AddProduct = () => {
   }, [])
 
   let getCategories = async () => {
-    let response = await fetch("http://localhost:8000/api/category");
-    let data = await response.json();
-    setCategories(data);
+    await fetch("http://localhost:8000/api/admin/category", {
+      headers: {
+        'Authorization': `jwt=${Cookies.get('jwt')}`
+      },
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data)
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
   };
 
   const handleChange = async (event) => {
@@ -41,7 +53,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`http://localhost:8000/api/product`, {
+    await fetch(`http://localhost:8000/api/admin/product`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

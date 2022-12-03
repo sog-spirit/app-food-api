@@ -105,11 +105,6 @@ const AdminOrder = () => {
         <div className="main__content">
           <h1>Đơn hàng</h1>
           <div className="select__actions">
-            <Link to="/admin/addProduct" className="d-flex">
-              <button type="button" className="btn select__action--add">
-                Thêm sản phẩm
-              </button>
-            </Link>
             <div className="select__actions-item d-flex">
               <Form.Group className="mr-1" controlId="formBasicEmail">
                 <Form.Label>Trạng thái: </Form.Label>

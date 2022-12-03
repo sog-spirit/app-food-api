@@ -35,6 +35,9 @@ const Checkout = () => {
         }, 2000);
     }
     else {
+      let newCart = carts.map((cart) => {
+        return {...cart, "product": cart.id}
+      })
       await fetch(`http://localhost:8000/api/order`, {
         method: 'POST',
         headers: {
@@ -43,7 +46,7 @@ const Checkout = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          products: carts, 
+          products: newCart, 
           address: address + ", " + enterCity, 
           note 
         })
