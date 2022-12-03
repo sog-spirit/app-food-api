@@ -7,6 +7,7 @@ import Helmet from '../components/Helmet/Helmet';
 import CommonSection from '../components/UI/common-section/CommonSection';
 import ModalBox from '../components/UI/ModalBox';
 import { UserContext } from '../context';
+import { HOST } from '../env/config';
 
 function AddBalance() {
     const navigate = useNavigate()
@@ -22,7 +23,7 @@ function AddBalance() {
     const submitHandler = async (e) => {
       e.preventDefault()
       console.log(balanceForm);
-      let result = await fetch(`http://localhost:8000/api/user/update/balance`, {
+      let result = await fetch(`${HOST}/api/user/update/balance`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -31,8 +32,8 @@ function AddBalance() {
         body: JSON.stringify(balanceForm),
         credentials: 'include'
       })
-      result = await result.json();
-      if (result.detail == "Balance added successfully") {
+      let data = await result.json();
+      if (data.detail == "Balance added successfully") {
         navigate('/home')
         getUser()
       }
@@ -44,7 +45,7 @@ function AddBalance() {
     var getUser = async () => {
       var cookie = Cookies.get('jwt')
       if (cookie) {
-        await fetch(`http://localhost:8000/api/user/view`, {
+        await fetch(`${HOST}/api/user/view`, {
           headers: {
             'Authorization': `jwt=${cookie}`
           },

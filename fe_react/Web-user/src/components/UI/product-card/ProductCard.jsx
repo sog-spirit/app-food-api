@@ -4,7 +4,7 @@ import '../../../styles/product-card.css'
 
 import { Link, useNavigate } from 'react-router-dom'
 import { CartContext, UserContext } from '../../../context'  
-import Cookies from 'js-cookie'
+import { HOST } from '../../../env/config'
 
 const ProductCard = (props) => {
   const { id, name, image, price } = props.item
@@ -37,7 +37,7 @@ const ProductCard = (props) => {
       <div className='product__img'>
         <Link to={`/foods/${id}`}>
           <img
-          src={'http://localhost:8000' + image}
+          src={HOST + image}
           alt='product-img'
           className='w-50'/>
         </Link>

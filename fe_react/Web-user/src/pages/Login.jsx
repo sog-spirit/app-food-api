@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context";
+import { HOST } from "../env/config";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ const Login = () => {
   async function login(e) {
     e.preventDefault();
     let item = { username: username, password: password };
-    let result = await fetch("http://localhost:8000/api/user/login", {
+    let result = await fetch(`${HOST}/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -24,12 +25,12 @@ const Login = () => {
       },
       body: JSON.stringify(item),
     });
-    result = await result.json();
-    if (result.detail == "Login successfully") {
-      Cookies.set('jwt', result.jwt)
+    dât = await result.json();
+    if (dât.detail == "Login successfully") {
+      Cookies.set('jwt', data.jwt)
       await fetch(`http://localhost:8000/api/user/view`, {
         headers: {
-          'Authorization': `jwt=${result.jwt}`
+          'Authorization': `jwt=${data.jwt}`
         },
         method: 'GET',
         credentials: 'include'

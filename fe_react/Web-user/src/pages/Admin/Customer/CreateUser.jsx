@@ -9,6 +9,7 @@ import {
 import ModalBox from "../../../components/UI/ModalBox";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { HOST } from "../../../env/config";
 
 function CreateUser() {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ function CreateUser() {
             setIsModal(true)
         }
         else {
-            await fetch(`http://localhost:8000/api/admin/users`, {
+            await fetch(`${HOST}/api/admin/users`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

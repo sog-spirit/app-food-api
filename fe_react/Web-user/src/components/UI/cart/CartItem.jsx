@@ -5,7 +5,7 @@ import '../../../styles/cart-item.css'
 
 import { useContext } from 'react'
 import { CartContext } from '../../../context'
-import { useNavigate } from 'react-router-dom'
+import {HOST} from '../../../env/config'
 
 const CartItem = ({ item }) => {
   let { id, name, price, image, quantity } = item
@@ -53,7 +53,7 @@ const CartItem = ({ item }) => {
     return (
       <ListGroupItem className='border-0 cart__item'>
         <div className='cart__item-info d-flex gap-2'>
-          <img src={'http://localhost:8000' + image} alt='product-img' />
+          <img src={HOST + image} alt='product-img' />
 
           <div className='cart__product-info w-100 d-flex align-items-center gap-4 justify-content-between'>
             <div>

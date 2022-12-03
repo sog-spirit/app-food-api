@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 import React, { createContext, useEffect, useState, useMemo, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {HOST} from "./env/config"
 
 export const CartContext = createContext()
 export const UserContext = createContext()
@@ -17,7 +18,7 @@ export const UserProvider = ({children}) => {
   var getUser = async () => {
     var cookie = Cookies.get('jwt')
     if (cookie) {
-      await fetch(`http://localhost:8000/api/user/view`, {
+      await fetch(`${HOST}/api/user/view`, {
         headers: {
           'Authorization': `jwt=${cookie}`
         },

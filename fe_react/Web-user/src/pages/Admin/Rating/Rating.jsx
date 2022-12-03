@@ -19,6 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { HOST } from "../../../env/config";
 
 const AdminRating = () => {
   //date time picker
@@ -31,7 +32,7 @@ const AdminRating = () => {
   }, [])
 
   const updateReview = async (id) => {
-    await fetch(`http://localhost:8000/api/admin/reviews/${id}`, {
+    await fetch(`${HOST}/api/admin/reviews/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ const AdminRating = () => {
   }
 
   const getReviews = async () => {
-    await fetch(`http://localhost:8000/api/admin/product/${id}/reviews`, {
+    await fetch(`${HOST}/api/admin/product/${id}/reviews`, {
       method: 'GET',
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`

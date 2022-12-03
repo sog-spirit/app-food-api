@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Helmet from '../../../components/Helmet/Helmet'
 import Slidebar from '../../../components/UI/slider/SlideBar'
+import { HOST } from '../../../env/config'
 
 function AdminOrderDetails() {
   const {id} = useParams()  
@@ -16,7 +17,7 @@ function AdminOrderDetails() {
   }, [])
 
   const getProductFromOrder = async() => {
-    await fetch(`http://localhost:8000/api/admin/orders/detail/${id}`, {
+    await fetch(`${HOST}/api/admin/orders/detail/${id}`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
@@ -80,7 +81,7 @@ const Tr = (props) => {
         <td>{name}</td>
         <td>
           <img
-            src={"http://localhost:8000" + image}
+            src={HOST + image}
             alt={name}
           />
         </td>

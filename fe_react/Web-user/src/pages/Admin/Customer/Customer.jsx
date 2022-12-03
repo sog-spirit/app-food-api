@@ -9,6 +9,7 @@ import {
 } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
+import { HOST } from "../../../env/config";
 
 const AdminCustomer = () => {
   //date time picker
@@ -25,7 +26,7 @@ const AdminCustomer = () => {
       getUsers()
     }
     else {
-      await fetch(`http://localhost:8000/api/admin/users`, {
+      await fetch(`${HOST}/api/admin/users`, {
         headers: {
           'Authorization': `jwt=${Cookies.get('jwt')}`
         },
@@ -45,7 +46,7 @@ const AdminCustomer = () => {
   }, [filter])
 
   const getUsers = async () => {
-    await fetch("http://localhost:8000/api/admin/users", {
+    await fetch(`${HOST}/api/admin/users`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },

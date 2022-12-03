@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 
 import Cookies from "js-cookie";
+import { HOST } from "../../../env/config";
 
 const AdminProduct = () => {
   const [searchTerm, setSearchTerm] = useState("")
@@ -28,7 +29,7 @@ const AdminProduct = () => {
       getProducts()
     }
     else {
-      await fetch("http://localhost:8000/api/admin/product", {
+      await fetch(`${HOST}/api/admin/product`, {
         headers: {
           'Authorization': `jwt=${Cookies.get('jwt')}`
         },
@@ -48,7 +49,7 @@ const AdminProduct = () => {
   }, [filter])
 
   let getProducts = async () => {
-    await fetch("http://localhost:8000/api/admin/product", {
+    await fetch(`${HOST}/api/admin/product`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
@@ -66,7 +67,7 @@ const AdminProduct = () => {
   };
 
   let getCategories = async () => {
-    await fetch("http://localhost:8000/api/admin/category", {
+    await fetch(`${HOST}/api/admin/category`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
@@ -95,7 +96,7 @@ const AdminProduct = () => {
   }
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:8000/api/admin/product/${id}`, {
+    await fetch(`${HOST}/api/admin/product/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
@@ -189,7 +190,7 @@ const Tr = (props) => {
       <td>{name}</td>
       <td>
         <img
-          src={"http://localhost:8000" + image}
+          src={HOST + image}
           alt={name}
         />
       </td>

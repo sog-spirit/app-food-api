@@ -8,13 +8,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { HOST } from "../env/config";
 
 function Detail() {
     const { id } = useParams();
     const [orderDetail, setOrderDetail] = useState([])
     const navigate = useNavigate()
     const getDetailOrder = async () => {
-      await fetch(`http://localhost:8000/api/order/${id}`, {
+      await fetch(`${HOST}/api/order/${id}`, {
         headers: {
             'Authorization': `jwt=${Cookies.get('jwt')}`
         },
@@ -24,12 +25,12 @@ function Detail() {
         .then((res) => res.json())
         .then((data) => {
           setOrderDetail(data)
+        })
         .catch((error) => {
           console.log(error);
           navigate('/error')
         })
-      })
-    }
+      }
     useEffect(() => {
       getDetailOrder()
     }, [])
@@ -77,7 +78,7 @@ const Tr = (props) => {
       <tr>
         <td className="text-center">{props.index + 1}</td>
         <td className="text-center cart__img-box">
-            <img src={"http://localhost:8000" + image} alt="" />
+            <img src={HOST + image} alt="" />
         </td>
         <td className="text-center">{name}</td>
         <td className="text-center">{price}</td>

@@ -14,6 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import ModalBox from "../../../components/UI/ModalBox";
+import { HOST } from "../../../env/config";
 
 const AddProduct = () => {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ const AddProduct = () => {
   }, [])
 
   let getCategories = async () => {
-    await fetch("http://localhost:8000/api/admin/category", {
+    await fetch(`${HOST}/api/admin/category`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
@@ -53,7 +54,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`http://localhost:8000/api/admin/product`, {
+    await fetch(`${HOST}/api/admin/product`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

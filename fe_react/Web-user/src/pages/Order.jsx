@@ -8,12 +8,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { HOST } from "../env/config";
 
 function Order() {
     const [order, setOrder] = useState([])
     const navigate = useNavigate()
     useEffect(async () => {
-      await fetch(`http://localhost:8000/api/order`, {
+      await fetch(`${HOST}/api/order`, {
         headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
         },

@@ -14,6 +14,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import ModalBox from "../../../components/UI/ModalBox";
+import { HOST } from "../../../env/config";
 
 function EditProduct() {
     const {id} = useParams()
@@ -31,7 +32,7 @@ function EditProduct() {
     };
 
     const getProductDetail = async () => {
-        await fetch(`http://localhost:8000/api/admin/product/${id}`, {
+        await fetch(`${HOST}/api/admin/product/${id}`, {
         headers: {
             'Authorization': `jwt=${Cookies.get('jwt')}`
         },
@@ -49,7 +50,7 @@ function EditProduct() {
     }
 
     let getCategories = async () => {
-        await fetch("http://localhost:8000/api/admin/category", {
+        await fetch(`${HOST}/api/admin/category`, {
         headers: {
             'Authorization': `jwt=${Cookies.get('jwt')}`
         },
@@ -73,7 +74,7 @@ function EditProduct() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch(`http://localhost:8000/api/admin/product/${id}`, {
+        await fetch(`${HOST}/api/admin/product/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

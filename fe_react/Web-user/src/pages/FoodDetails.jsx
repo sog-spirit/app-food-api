@@ -10,6 +10,7 @@ import "../styles/product-details.css";
 import ProductCard from "../components/UI/product-card/ProductCard";
 import { useContext } from "react";
 import { CartContext } from "../context";
+import { HOST } from "../env/config";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
@@ -29,7 +30,7 @@ const FoodDetails = () => {
   }, [])
 
   let getProducts = async () => {
-    let response = await fetch("http://localhost:8000/api/product");
+    let response = await fetch(`${HOST}/api/product`);
     let data = await response.json();
     setProducts(data);
   };
@@ -59,16 +60,16 @@ const FoodDetails = () => {
   const relatedProduct = products.filter((item) => product.category === item.category);
 
   const getProductDetail = async () => {
-    await fetch(`http://localhost:8000/api/product/${id}`)
+    await fetch(`${HOST}/api/product/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data)
-        setPreviewImg("http://localhost:8000" + data.image)
+        setPreviewImg(HOST + data.image)
       })
   }
 
   const getReview = async () => {
-    await fetch(`http://localhost:8000/api/product/${id}/review`)
+    await fetch(`${HOST}/api/product/${id}/review`)
       .then((res) => res.json())
       .then((data) => {
         setReview(data)

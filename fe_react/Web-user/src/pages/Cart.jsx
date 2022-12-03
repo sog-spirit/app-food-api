@@ -7,6 +7,7 @@ import { Container, Row, Col } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
+import { HOST } from "../env/config";
 
 const Cart = () => {
   const {carts, setCarts} = useContext(CartContext);
@@ -86,7 +87,7 @@ const Tr = (props) => {
   return (
     <tr>
       <td className="text-center cart__img-box">
-        <img src={"http://localhost:8000" + image} alt="" />
+        <img src={HOST + image} alt="" />
       </td>
       <td className="text-center">{name}</td>
       <td className="text-center">${price}</td>

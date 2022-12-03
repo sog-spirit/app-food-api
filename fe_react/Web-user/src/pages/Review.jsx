@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Col, Container, Row } from 'reactstrap'
 import Helmet from '../components/Helmet/Helmet'
 import CommonSection from '../components/UI/common-section/CommonSection'
+import { HOST } from '../env/config'
 
 function Review() {
     const { id } = useParams()
@@ -14,7 +15,7 @@ function Review() {
     })
     const submitHandler = async (e) => {
         e.preventDefault()
-        await fetch(`http://localhost:8000/api/review`, {
+        await fetch(`${HOST}/api/review`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

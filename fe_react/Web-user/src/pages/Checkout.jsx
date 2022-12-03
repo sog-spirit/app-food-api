@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { HOST } from "../env/config";
 
 const Checkout = () => {
   const [isError, setIsError] = useState(false)
@@ -38,7 +39,7 @@ const Checkout = () => {
       let newCart = carts.map((cart) => {
         return {...cart, "product": cart.id}
       })
-      await fetch(`http://localhost:8000/api/order`, {
+      await fetch(`${HOST}/api/order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

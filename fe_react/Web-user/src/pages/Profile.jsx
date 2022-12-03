@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../context";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { HOST } from "../env/config";
 
 function Profile() {
     const navigate = useNavigate()
@@ -24,7 +25,7 @@ function Profile() {
 
     const handleSubmit = async (e) => {
       e.preventDefault()
-      await fetch(`http://localhost:8000/api/user/update`, {
+      await fetch(`${HOST}/api/user/update`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ function Profile() {
     var getUser = async () => {
       var cookie = Cookies.get('jwt')
       if (cookie) {
-        await fetch(`http://localhost:8000/api/user/view`, {
+        await fetch(`${HOST}/api/user/view`, {
           headers: {
             'Authorization': `jwt=${cookie}`
           },

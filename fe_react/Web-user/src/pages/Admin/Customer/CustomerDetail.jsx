@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import ModalBox from "../../../components/UI/ModalBox";
 import Slidebar from "../../../components/UI/slider/SlideBar";
+import { HOST } from "../../../env/config";
 
 function CustomerDetail() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function CustomerDetail() {
   }, [])
 
   const getUserDetail = async () => {
-    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
+    await fetch(`${HOST}/api/admin/users/${id}`, {
       headers: {
         'Authorization': `jwt=${Cookies.get('jwt')}`
       },
@@ -48,7 +49,7 @@ function CustomerDetail() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
+    await fetch(`${HOST}/api/admin/users/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

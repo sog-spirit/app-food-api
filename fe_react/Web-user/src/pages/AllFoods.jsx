@@ -11,6 +11,7 @@ import ReactPaginate from "react-paginate";
 import "../styles/all-foods.css";
 import "../styles/pagination.css";
 import { useNavigate } from "react-router-dom";
+import { HOST } from "../env/config";
 
 const AllFoods = () => {
   const navigate = useNavigate()
@@ -54,7 +55,7 @@ const AllFoods = () => {
   }, [sortTerm])
   
   let getProducts = async () => {
-    await fetch("http://localhost:8000/api/product")
+    await fetch(`${HOST}/api/product`)
     .then((res) => res.json())
     .then((data) => {
       setProducts(data);

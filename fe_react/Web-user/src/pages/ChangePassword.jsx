@@ -5,6 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import ModalBox from "../components/UI/ModalBox";
+import { HOST } from "../env/config";
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function ChangePassword() {
     if (passwordInfo.newPassword !== passwordInfo.confirmPassword) {
       setIsModal(true);
     } else {
-      await fetch(`http://localhost:8000/api/user/update/password`, {
+      await fetch(`${HOST}/api/user/update/password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
