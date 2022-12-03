@@ -64,27 +64,12 @@ const AddProduct = () => {
         <SlideBar />
         <div className="main__content">
           <h1>Thêm sản phẩm</h1>
-          {/* <div className="select__actions">
-            <div className="select__actions--datetime d-flex flex-column">
-              <label class="mb-1">Thời gian</label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Basic example"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </div>
-          </div> */}
           {/* table list product */}
           {/* form add product */}
           <div className="apply-form-component">
             <form action="" className="simple_form new_product">
               <div className="row w-100">
-                <div class="col-md-4 description--label">
+                <div className="col-md-4 description--label">
                   <h3>Mô tả sản phẩm</h3>
                   <p>Những thông tin cơ bản sản phẩm</p>
                 </div>
@@ -97,7 +82,7 @@ const AddProduct = () => {
                       Tên sản phẩm <abbr title="required">*</abbr>
                     </label>
                     <input
-                      class="string required form-control"
+                      className="string required form-control"
                       required
                       type="text"
                       placeholder="Your full name"
@@ -136,7 +121,7 @@ const AddProduct = () => {
                           Giá sản phẩm <abbr title="required">*</abbr>
                         </label>
                         <input
-                          class="string required form-control"
+                          className="string required form-control"
                           required
                           type="number"
                           placeholder="Giá sản phẩm"
@@ -147,23 +132,6 @@ const AddProduct = () => {
                         />
                       </div>
                     </div>
-                    {/* <div className="col-6">
-                      <div className="form-group string required candidate_name">
-                        <label
-                          className="string required control-label"
-                          for="candidate_name"
-                        >
-                          Số lượng sản phẩm <abbr title="required">*</abbr>
-                        </label>
-                        <input
-                          class="string required form-control"
-                          required
-                          type="number"
-                          placeholder="Nhập số lượng sản phẩm"
-                          name="quantity"
-                        />
-                      </div>
-                    </div> */}
                   </div>
 
                   <div className="form-group file_preview optional product_photo">
@@ -173,12 +141,12 @@ const AddProduct = () => {
                     >
                       Hình ảnh
                     </label>
-                    <div class="file-preview">
-                      <div class="img-container">
-                        <div class="file-type"></div>
+                    <div className="file-preview">
+                      <div className="img-container">
+                        <div className="file-type"></div>
                       </div>
-                      <div class="footer"></div>
-                      <div class="btn-delete delete-btn ion-android-delete"></div>
+                      <div className="footer"></div>
+                      <div className="btn-delete delete-btn ion-android-delete"></div>
                     </div>
                     <button name="button" type="button">
                       Add file
@@ -191,7 +159,7 @@ const AddProduct = () => {
                 </div>
               </div>
               <div className="row w-100">
-                <div class="col-md-4 description--label">
+                <div className="col-md-4 description--label">
                   <h3>Thông tin sản phẩm</h3>
                   <p>Mô tả nguyên liệu sản phẩm</p>
                 </div>
@@ -205,7 +173,7 @@ const AddProduct = () => {
                     </label>
                     <textarea
                       rows="5"
-                      class="text optional form-control"
+                      className="text optional form-control"
                       name="description"
                       id="candidate_cover_letter"
                       style={{ height: "10rem" }}
@@ -218,7 +186,7 @@ const AddProduct = () => {
               </div>
               <div className="row w-100">
                 <div className="form-group form-submit">
-                  <button type="submit" class="btn select__action--add" onClick={e => handleSubmit(e)}>
+                  <button type="submit" className="btn select__action--add" onClick={e => handleSubmit(e)}>
                     Thêm sản phẩm
                   </button>
                 </div>

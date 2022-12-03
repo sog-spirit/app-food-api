@@ -72,7 +72,7 @@ const AdminRating = () => {
         <div className="main__content">
           <h1>Đánh giá</h1>
           <div className="d-list">
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -119,14 +119,14 @@ const Tr = (props) => {
   }
 
   return (
-    <tr class="d-item">
+    <tr className="d-item">
       <th scope="row">{props.index + 1}</th>
       <td>{slash(name)}</td>
       <td>{format_date(_created)}</td>
       <td>{rating}</td>
       <td>{content}</td>
       <td>{mapping_value(status)}</td>
-      {status == "PENDING" && <td class="d-item--icon d-item--edit" onClick={() => props.updateReview(id)}>
+      {status == "PENDING" && <td className="d-item--icon d-item--edit" onClick={() => props.updateReview(id)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"

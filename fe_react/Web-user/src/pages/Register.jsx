@@ -32,23 +32,23 @@ const Register = () => {
               <form className="form" onSubmit={submitHandler}>
                 <div className="form-group text-left">
                   <label>FullName</label>
-                  <input type="text" class="form-control" required />
+                  <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Email</label>
-                  <input type="email" class="form-control" required />
+                  <input type="email" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Username</label>
-                  <input type="text" class="form-control" required />
+                  <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Phone Number</label>
-                  <input type="text" class="form-control" required />
+                  <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Address</label>
-                  <input type="text" class="form-control" required />
+                  <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Date of Birth</label>
@@ -77,11 +77,11 @@ const Register = () => {
                 </div>
                 <div className="form-group text-left">
                   <label>Password</label>
-                  <input type="password" class="form-control" required />
+                  <input type="password" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
                   <label>Confirm Password</label>
-                  <input type="password" class="form-control" required />
+                  <input type="password" className="form-control" required />
                 </div>
 
                 <button type="submit" className="addTOCart__btn">

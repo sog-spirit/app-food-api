@@ -1,22 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 
 import {
-  Form,
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel,
+  Form
 } from "react-bootstrap";
-
-//date time picker
-import TextField from "@mui/material/TextField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -79,8 +69,8 @@ const AdminCustomer = () => {
         <div className="main__content">
           <h1>Tài Khoản</h1>
           <div className="select__actions">
-            <Link to="/admin/addUser" class="d-flex">
-              <button type="button" class="btn select__action--add">
+            <Link to="/admin/addUser" className="d-flex">
+              <button type="button" className="btn select__action--add">
                 Tạo tài khoản
               </button>
             </Link>
@@ -101,7 +91,7 @@ const AdminCustomer = () => {
             </div>
           </div>
           <div className="d-list">
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -144,12 +134,12 @@ const Tr = (props) => {
   }
   const {id, name, date_joined, role} = props.item
   return (
-    <tr class="d-item">
+    <tr className="d-item">
       <th scope="row">{props.index + 1}</th>
       <td>{slash(name)}</td>
       <td>{format_date(date_joined)}</td>
-      <td class="">{mapping_value(role)}</td>
-      <Link to={`/admin/users/${id}`} class="d-item--icon d-item--edit">
+      <td className="">{mapping_value(role)}</td>
+      <Link to={`/admin/users/${id}`} className="d-item--icon d-item--edit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"

@@ -4,7 +4,7 @@ import Slidebar from "../UI/slider/SlideBar";
 
 const DashBoard = () => {
   return (
-    <div class="admin__section d-flex">
+    <div className="admin__section d-flex">
       <Slidebar />
       <Routes />
     </div>

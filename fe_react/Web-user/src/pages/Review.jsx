@@ -50,7 +50,7 @@ function Review() {
               >
                 <div className="form-group text-left">
                   <label>Rating</label>
-                  <input name="rating" type="number" class="form-control" min={1} max={5} required onChange={(e) => {
+                  <input name="rating" type="number" className="form-control" min={1} max={5} required onChange={(e) => {
                     handleChange(e)
                 }}/>
                 </div>

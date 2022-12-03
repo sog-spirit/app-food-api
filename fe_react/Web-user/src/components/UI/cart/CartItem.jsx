@@ -3,7 +3,6 @@ import { ListGroupItem } from 'reactstrap'
 
 import '../../../styles/cart-item.css'
 
-import { useDispatch } from 'react-redux'
 import { useState, useContext } from 'react'
 import { CartContext, UserContext } from '../../../context'
 import Cookies from 'js-cookie'
@@ -16,7 +15,6 @@ const CartItem = ({ item }) => {
   const { user, setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
-  const dispatch = useDispatch()
   var getCarts = async () => {
     await fetch(`http://localhost:8000/api/cart`, {
       headers: {
@@ -120,7 +118,7 @@ const CartItem = ({ item }) => {
       setCarts(newCart)
     }
   }
-  if (currentQuantity == 0) {
+  if (currentQuantity === 0) {
     return <></>
   } else
     return (
@@ -136,17 +134,17 @@ const CartItem = ({ item }) => {
               </p>
               <div className=' d-flex align-items-center justify-content-between increase__decrease-btn'>
                 <span className='increase__btn' onClick={() => incrementItem()}>
-                  <i class='ri-add-line'></i>
+                  <i className='ri-add-line'></i>
                 </span>
                 <span className='quantity'>{currentQuantity}</span>
                 <span className='decrease__btn' onClick={() => decreaseItem()}>
-                  <i class='ri-subtract-line'></i>
+                  <i className='ri-subtract-line'></i>
                 </span>
               </div>
             </div>
 
             <span className='delete__btn' onClick={() => deleteItem()}>
-              <i class='ri-close-line'></i>
+              <i className='ri-close-line'></i>
             </span>
           </div>
         </div>

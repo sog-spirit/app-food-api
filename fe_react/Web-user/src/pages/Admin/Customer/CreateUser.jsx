@@ -1,14 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 import Slidebar from "../../../components/UI/slider/SlideBar";
 import {
-    Form,
-    Button,
-    FormGroup,
-    FormControl,
-    ControlLabel,
+    Form
   } from "react-bootstrap";
 import ModalBox from "../../../components/UI/ModalBox";
 import Cookies from "js-cookie";
@@ -56,27 +52,12 @@ function CreateUser() {
         <Slidebar />
         <div className="main__content">
             <h1>Tài khoản</h1>
-            {/* <div className="select__actions">
-            <div className="select__actions--datetime d-flex flex-column">
-                <label class="mb-1">Thời gian</label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    label="Basic example"
-                    value={value}
-                    onChange={(newValue) => {
-                    setValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-                </LocalizationProvider>
-            </div>
-            </div> */}
             {/* table list product */}
             {/* form add product */}
             <div className="apply-form-component">
             <form action="" className="simple_form new_product">
                 <div className="row w-100">
-                <div class="col-md-2 description--label">
+                <div className="col-md-2 description--label">
                     <h3>Thông tin</h3>
                 </div>
                 <div className="col-md-6 description--info">
@@ -88,7 +69,7 @@ function CreateUser() {
                         Tên người dùng <abbr title="required">*</abbr>
                     </label>
                     <input
-                        class="string required form-control"
+                        className="string required form-control"
                         required
                         type="text"
                         name="name"
@@ -105,7 +86,7 @@ function CreateUser() {
                         Username <abbr title="required">*</abbr>
                     </label>
                     <input
-                        class="string required form-control"
+                        className="string required form-control"
                         required
                         type="text"
                         name="username"
@@ -122,7 +103,7 @@ function CreateUser() {
                         Mật khẩu <abbr title="required">*</abbr>
                     </label>
                     <input
-                        class="string required form-control"
+                        className="string required form-control"
                         required
                         type="password"
                         name="password"
@@ -139,7 +120,7 @@ function CreateUser() {
                         Nhập lại mật khẩu <abbr title="required">*</abbr>
                     </label>
                     <input
-                        class="string required form-control"
+                        className="string required form-control"
                         required
                         type="password"
                         name="confirmPassword"
@@ -156,7 +137,7 @@ function CreateUser() {
                         Email <abbr title="required">*</abbr>
                     </label>
                     <input
-                        class="string required form-control"
+                        className="string required form-control"
                         required
                         type="email"
                         name="email"
@@ -196,7 +177,7 @@ function CreateUser() {
                                 Ngày sinh <abbr title="required">*</abbr>
                             </label>
                             <input
-                                class="string required form-control"
+                                className="string required form-control"
                                 required
                                 type="date"
                                 name="date_of_birth"
@@ -217,7 +198,7 @@ function CreateUser() {
                                 Địa chỉ <abbr title="required">*</abbr>
                             </label>
                             <input
-                                class="string required form-control"
+                                className="string required form-control"
                                 required
                                 type="text"
                                 name="address"
@@ -236,7 +217,7 @@ function CreateUser() {
                                 Số điện thoại <abbr title="required">*</abbr>
                             </label>
                             <input
-                                class="string required form-control"
+                                className="string required form-control"
                                 required
                                 type="text"
                                 name="phone"
@@ -251,7 +232,7 @@ function CreateUser() {
                 </div>
                 <div className="row w-100">
                     <div className="form-group form-submit">
-                        <button type="submit" class="btn select__action--add" onClick={e => handleSubmit(e)}>
+                        <button type="submit" className="btn select__action--add" onClick={e => handleSubmit(e)}>
                         Lưu
                         </button>
                     </div>

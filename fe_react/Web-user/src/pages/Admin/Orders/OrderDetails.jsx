@@ -40,7 +40,7 @@ function AdminOrderDetails() {
         <div className="main__content">
           <h1>Đơn hàng chi tiết</h1>
           <div className="d-list">
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -58,7 +58,7 @@ function AdminOrderDetails() {
               </tbody>
             </table>
           </div>
-          <Link to="/admin/orders" type="button" class="btn select__action--add">
+          <Link to="/admin/orders" type="button" className="btn select__action--add">
             Trở về
           </Link>
         </div>;
@@ -75,7 +75,7 @@ const Tr = (props) => {
     }
 
     return (
-      <tr class="d-item">
+      <tr className="d-item">
         <th scope="row">{props.index + 1}</th>
         <td>{name}</td>
         <td>
@@ -84,9 +84,9 @@ const Tr = (props) => {
             alt={name}
           />
         </td>
-        <td class="d-item--category">{quantity}</td>
-        <td class="d-item--price">{price}đ</td>
-        <td class="d-item--des">{slash(description)}</td>
+        <td className="d-item--category">{quantity}</td>
+        <td className="d-item--price">{price}đ</td>
+        <td className="d-item--des">{slash(description)}</td>
       </tr>
     )
   }
