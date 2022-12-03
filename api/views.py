@@ -214,30 +214,6 @@ class ProductsAPIView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
-    """
-    Required:
-    category
-    _creator (auto created with user id)
-    _updater (auto created with user id)
-    """
-    def post(self, request):
-        payload = user_permission_authentication(request)
-        data = request.data.copy()
-        data['_creator'] = payload['id']
-        data['_updater'] = payload['id']
-        serializer = ProductSerializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "create new product",
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class SingleProductAPIView(APIView):
     def get(self, request, id):
         product = Product.objects.get(id=id)
@@ -248,88 +224,11 @@ class SingleProductAPIView(APIView):
 
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id):
-        payload = user_permission_authentication(request)
-        data = request.data.copy()
-        data['_updater'] = payload['id']
-        product = Product.objects.get(id=id)
-        if product._deleted is not None:
-            return Response({
-                'detail': 'Product is already deleted'
-            },
-            status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = ProductSerializer(instance=product, data=data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "update product",
-            )
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, id):
-        payload = user_permission_authentication(request)
-        product = Product.objects.get(id=id)
-        if product._deleted is not None:
-            return Response({
-                'detail': 'Product is already deleted'
-            },
-            status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = ProductSerializer(
-            instance=product,
-            data={
-                "_deleted": datetime.now(),
-                '_updater': payload['id']
-            },
-            partial=True
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "delete product",
-            )
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class CategoriesAPIView(APIView):
     def get(self, request):
         categories = Category.objects.all().filter(_deleted=None)
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
-    
-    """
-    Required fields:
-    name
-    _creator (auto created with user id)
-    _updater (auto created with user id)
-    """
-    def post(self, request):
-        payload = user_permission_authentication(request)
-        data = request.data.copy()
-        data['_creator'] = payload['id']
-        data['_updater'] = payload['id']
-        serializer = CategorySerializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "create new category",
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SingleCategoryAPIView(APIView):
     def get(self, request, id):
@@ -341,57 +240,6 @@ class SingleCategoryAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         
         return Response(None, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, id):
-        payload = user_permission_authentication(request)
-        data = request.data
-        data['_updater'] = payload['id']
-        category = Category.objects.get(id=id)
-        if category._deleted is not None:
-            return Response({
-                'detail': 'Category is already deleted'
-            },
-            status=status.HTTP_400_BAD_REQUEST)
-        serializer = CategorySerializer(instance=category, data=data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "update category",
-            )
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, id):
-        payload = user_permission_authentication(request)
-        category = Category.objects.get(id=id)
-        if category._deleted is not None:
-            return Response({
-                'detail': 'Category is already deleted'
-            },
-            status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = CategorySerializer(
-            instance=category,
-            data={
-                '_deleted': datetime.now(),
-                '_updater': payload['id']
-            },
-            partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.filter(id=payload['id']).first()
-            History.objects.create(
-                _creator = user,
-                message = "delete category",
-            )
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetProductFromCategory(APIView):
     def get(self, request, category_id):
@@ -937,3 +785,198 @@ class AdminUserAPIView(APIView):
                 {'detail': 'User not found'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+class AdminProductsAPIView(APIView):
+    def get(self, request):
+        payload = user_permission_authentication(request)
+        products = Product.objects.all().filter(_deleted=None)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+    """
+    Required:
+    category
+    _creator (auto created with user id)
+    _updater (auto created with user id)
+    """
+    def post(self, request):
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
+        serializer = ProductSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "create new product",
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminSingleProductAPIView(APIView):
+    def get(self, request, id):
+        payload = user_permission_authentication(request)
+        product = Product.objects.get(id=id)
+        serializer = ProductSerializer(product, many=False)
+
+        if product._deleted == None:
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_updater'] = payload['id']
+        product = Product.objects.get(id=id)
+        if product._deleted is not None:
+            return Response({
+                'detail': 'Product is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = ProductSerializer(instance=product, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "update product",
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        payload = user_permission_authentication(request)
+        product = Product.objects.get(id=id)
+        if product._deleted is not None:
+            return Response({
+                'detail': 'Product is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = ProductSerializer(
+            instance=product,
+            data={
+                "_deleted": datetime.now(),
+                '_updater': payload['id']
+            },
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "delete product",
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminCategoriesAPIView(APIView):
+    def get(self, request):
+        payload = user_permission_authentication(request)
+        categories = Category.objects.all().filter(_deleted=None)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+    
+    """
+    Required fields:
+    name
+    _creator (auto created with user id)
+    _updater (auto created with user id)
+    """
+    def post(self, request):
+        payload = user_permission_authentication(request)
+        data = request.data.copy()
+        data['_creator'] = payload['id']
+        data['_updater'] = payload['id']
+        serializer = CategorySerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "create new category",
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminSingleCategoryAPIView(APIView):
+    def get(self, request, id):
+        payload = user_permission_authentication(request)
+        category = Category.objects.get(id=id)
+        serializer = CategorySerializer(category, many=False)
+
+        if category._deleted == None:
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):
+        payload = user_permission_authentication(request)
+        data = request.data
+        data['_updater'] = payload['id']
+        category = Category.objects.get(id=id)
+        if category._deleted is not None:
+            return Response({
+                'detail': 'Category is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        serializer = CategorySerializer(instance=category, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "update category",
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        payload = user_permission_authentication(request)
+        category = Category.objects.get(id=id)
+        if category._deleted is not None:
+            return Response({
+                'detail': 'Category is already deleted'
+            },
+            status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = CategorySerializer(
+            instance=category,
+            data={
+                '_deleted': datetime.now(),
+                '_updater': payload['id']
+            },
+            partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.filter(id=payload['id']).first()
+            History.objects.create(
+                _creator = user,
+                message = "delete category",
+            )
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminGetProductFromCategory(APIView):
+    def get(self, request, category_id):
+        payload = user_permission_authentication(request)
+        products = Product.objects.filter(category=category_id, _deleted=None)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
