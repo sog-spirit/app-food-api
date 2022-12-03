@@ -1,84 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import Helmet from "../components/Helmet/Helmet.js";
-import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 import bigBanner from "../assets/images/bigBanner.png";
 import "../styles/hero-section.css";
 
-import { Link } from "react-router-dom";
-
 import "../styles/home.css";
-
-import featureImg01 from "../assets/images/service-01.png";
-import featureImg02 from "../assets/images/service-02.png";
-import featureImg03 from "../assets/images/service-03.png";
-
-import products from "../assets/fake-data/products.js";
-
-const featureData = [
-  {
-    title: "Quick Delivery",
-    imgUrl: featureImg01,
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, doloremque.",
-  },
-
-  {
-    title: "Super Dine In",
-    imgUrl: featureImg02,
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, doloremque.",
-  },
-  {
-    title: "Easy Pick Up",
-    imgUrl: featureImg03,
-    desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, doloremque.",
-  },
-];
 
 const Home = () => {
   const navigate = useNavigate()
-  const [category, setCategory] = useState("ALL");
-  const [allProducts, setAllProducts] = useState(products);
-
-  const [hotPizza, setHotPizza] = useState([]);
-
-  useEffect(() => {
-    const filteredPizza = products.filter((item) => item.category === "Pizza");
-    const slicePizza = filteredPizza.slice(0, 4);
-    setHotPizza(slicePizza);
-  }, []);
-
-  useEffect(() => {
-    if (category === "ALL") {
-      setAllProducts(products);
-    }
-
-    if (category === "BURGER") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "Burger"
-      );
-
-      setAllProducts(filteredProducts);
-    }
-
-    if (category === "PIZZA") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "Pizza"
-      );
-
-      setAllProducts(filteredProducts);
-    }
-
-    if (category === "BREAD") {
-      const filteredProducts = products.filter(
-        (item) => item.category === "Bread"
-      );
-
-      setAllProducts(filteredProducts);
-    }
-  }, [category]);
-
   return (
     <Helmet title="Home">
       <section>

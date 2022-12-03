@@ -136,6 +136,9 @@ const Checkout = () => {
             <Col lg="4" md="6">
               <div className="checkout__bill">
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
+                  Your balance: <span>${user.balance}</span>
+                </h6>
+                <h6 className="d-flex align-items-center justify-content-between mb-3">
                   Subtotal: <span>${totalAmount(carts)}</span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">

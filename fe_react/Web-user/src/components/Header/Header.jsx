@@ -111,6 +111,12 @@ const Header = () => {
                   {user.username}
                 </button>
                 <ul className="dropdown-menu">
+                  {user.is_superuser && 
+                    <li>
+                      <Link to="/admin" className="dropdown-item">
+                        Trang quản lý
+                      </Link>
+                    </li>}
                   <li>
                     <Link to="/profile" className="dropdown-item">
                       Thông tin cá nhân

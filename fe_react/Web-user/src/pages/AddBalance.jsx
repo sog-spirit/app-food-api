@@ -1,10 +1,12 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react'
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 import Helmet from '../components/Helmet/Helmet';
 import CommonSection from '../components/UI/common-section/CommonSection';
 import ModalBox from '../components/UI/ModalBox';
+import { UserContext } from '../context';
 
 function AddBalance() {
     const navigate = useNavigate()
@@ -13,29 +15,52 @@ function AddBalance() {
         amount: 0,
         current_password: ""
     })
+    const {user, setUser} = useContext(UserContext)
     const handleChange = (event) => {
         setBalanceForm({ ...balanceForm, [event.target.name]: event.target.value });
       };
     const submitHandler = async (e) => {
-        e.preventDefault()
-        console.log(balanceForm);
-        let result = await fetch(`http://localhost:8000/api/user/update/balance`, {
-          method: 'PATCH',
+      e.preventDefault()
+      console.log(balanceForm);
+      let result = await fetch(`http://localhost:8000/api/user/update/balance`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `jwt=${Cookies.get('jwt')}`
+        },
+        body: JSON.stringify(balanceForm),
+        credentials: 'include'
+      })
+      result = await result.json();
+      if (result.detail == "Balance added successfully") {
+        navigate('/home')
+        getUser()
+      }
+      else {
+        setIsModal(true);
+      }
+    }
+
+    var getUser = async () => {
+      var cookie = Cookies.get('jwt')
+      if (cookie) {
+        await fetch(`http://localhost:8000/api/user/view`, {
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `jwt=${Cookies.get('jwt')}`
+            'Authorization': `jwt=${cookie}`
           },
-          body: JSON.stringify(balanceForm),
+          method: 'GET',
           credentials: 'include'
         })
-        result = await result.json();
-        if (result.detail == "Balance added successfully") {
-          navigate('/home')
-        }
-        else {
-          setIsModal(true);
-        }
-    }
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data)
+        })
+        .catch((error) => {
+          console.log(error);
+          navigate('/error')
+        })
+    }}
+
     const closeModal = (e) => {
       setIsModal(false);
     };

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
@@ -10,8 +10,6 @@ import { UserContext } from "../context";
 
 const Login = () => {
   const navigate = useNavigate()
-  const loginNameRef = useRef();
-  const loginPasswordRef = useRef();
   const {user, setUser} = useContext(UserContext)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
