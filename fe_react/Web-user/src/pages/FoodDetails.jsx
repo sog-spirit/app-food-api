@@ -9,8 +9,7 @@ import "../styles/product-details.css";
 
 import ProductCard from "../components/UI/product-card/ProductCard";
 import { useContext } from "react";
-import { CartContext, UserContext } from "../context";
-import Cookies from "js-cookie";
+import { CartContext } from "../context";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
@@ -18,12 +17,10 @@ const FoodDetails = () => {
   const [previewImg, setPreviewImg] = useState("");
   
   const { carts, setCarts } = useContext(CartContext)
-  const { user, setUser } = useContext(UserContext)
   
   const [product, setProduct] = useState({})
   const [review, setReview] = useState([])
   const [products, setProducts] = useState([])
-  const navigate = useNavigate()
 
   useEffect(() => {
     getProductDetail()
@@ -31,88 +28,31 @@ const FoodDetails = () => {
     getProducts()
   }, [])
 
-  var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/cart`, {
-      headers: {
-        'Authorization': `jwt=${Cookies.get('jwt')}`
-      },
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCarts(data)
-      })
-      .catch((error) => {
-        console.log(error);
-        navigate('/error')
-      })
-  }
-
   let getProducts = async () => {
     let response = await fetch("http://localhost:8000/api/product");
     let data = await response.json();
     setProducts(data);
   };
 
-  // TODO: Not use this func anymore
-  // Use the code in block else
   const addToCart = async () => {
-    if (user.id !== undefined) {
-      let response = await fetch(`http://localhost:8000/api/cart/product/${id}`, {
-        headers: {
-          'Authorization': `jwt=${Cookies.get('jwt')}`
-        },
-        method: 'GET',
-        credentials: 'include'
-      })
-      let data = await response.json()
-      if (Object.keys(data).length === 0) {
-        await fetch(`http://localhost:8000/api/cart`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `jwt=${Cookies.get('jwt')}`
-          },
-          body: JSON.stringify({
-            product: id,
-            quantity: 1,
-          }),
-          credentials: 'include'
-        })
-      } else {
-        await fetch(`http://localhost:8000/api/cart/product/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `jwt=${Cookies.get('jwt')}`
-          },
-          body: JSON.stringify({
-            quantity: data.quantity + 1,
-          }),
-          credentials: 'include'
-        })
-      }
-      getCarts()
-    }
-    else {
-      const index = carts.findIndex((item) => {
-        return item.id === id;
-      });
-  
-      if (index !== -1) {
-        let newCart = [...carts];
-  
-        newCart[index] = {
-          ...newCart[index],
-          quantity: newCart[index].quantity + 1,
-        };
-  
-        setCarts(newCart)
-      } else {
-        let newCart = [...carts, {"id": id, "name": product.name, "image": product.image, "price": product.price, "quantity": 1}]
-        setCarts(newCart)
-      }
+    const index = carts.findIndex((item) => {
+      return item.id === id;
+    });
+
+    if (index !== -1) {
+      let newCart = [...carts];
+
+      newCart[index] = {
+        ...newCart[index],
+        quantity: newCart[index].quantity + 1,
+      };
+
+      setCarts(newCart)
+      sessionStorage.setItem("carts", JSON.stringify(newCart))
+    } else {
+      let newCart = [...carts, {"id": id, "name": product.name, "image": product.image, "price": product.price, "quantity": 1}]
+      setCarts(newCart)
+      sessionStorage.setItem("carts", JSON.stringify(newCart))
   }
 }
 

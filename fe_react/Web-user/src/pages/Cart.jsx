@@ -7,7 +7,6 @@ import { Container, Row, Col } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../context";
-import Cookies from "js-cookie";
 
 const Cart = () => {
   const {carts, setCarts} = useContext(CartContext);
@@ -73,50 +72,16 @@ const Cart = () => {
 const Tr = (props) => {
   const { id, name, image, price, quantity } = props.item;
   const {carts, setCarts} = useContext(CartContext);
-  const {user, setUser} = useContext(UserContext);
-  const navigate = useNavigate()
 
-  var getCarts = async () => {
-    await fetch(`http://localhost:8000/api/cart`, {
-      headers: {
-        'Authorization': `jwt=${Cookies.get('jwt')}`
-      },
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCarts(data)
-      })
-      .catch((error) => {
-        console.log(error);
-        navigate('/error')
-      })
-  }
-
-  // TODO: Not use this func anymore
-  // Use the code in block else
   const deleteItem = async () => {
-    console.log(user.id);
-    if (user.id !== undefined) {
-      await fetch(`http://localhost:8000/api/cart/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `jwt=${Cookies.get('jwt')}`
-        },
-        credentials: 'include'
-      })
-      getCarts()
-    }
-    else {
-      const index = carts.findIndex((item) => {
-        return item.id === id;
-      });
-      
-      let newCart = [...carts];
-      newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
-      setCarts(newCart)
-    }
+    const index = carts.findIndex((item) => {
+      return item.id === id;
+    });
+    
+    let newCart = [...carts];
+    newCart = newCart.filter((cart) => cart.id !== newCart[index].id);
+    setCarts(newCart)
+    sessionStorage.setItem("carts", JSON.stringify(newCart))
   };
   return (
     <tr>

@@ -64,6 +64,8 @@ const Header = () => {
 
   const logOut = () => {
     Cookies.remove('jwt')
+    setCarts([])
+    sessionStorage.removeItem('carts');
     setUser({})
   }
 

@@ -50,6 +50,7 @@ const Checkout = () => {
       }).then((response) => {
         if (response.status === 200) {
           setCarts([])
+          sessionStorage.removeItem('carts');
           navigate('/success')
         } else {
           navigate('/error')
