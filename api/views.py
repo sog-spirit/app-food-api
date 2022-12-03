@@ -304,14 +304,14 @@ class OrderAPIView(APIView):
                     data['_updater'] = payload['id']
                     data['order'] = order.id
 
-                    cart_item = Cart.objects.filter(
-                        product=product,
-                        _creator=user,
-                        _deleted=None
-                        ).first()
-                    cart_item._deleted = datetime.now()
-                    cart_item._updater = user
-                    cart_item.save()
+                    # cart_item = Cart.objects.filter(
+                    #     product=product,
+                    #     _creator=user,
+                    #     _deleted=None
+                    #     ).first()
+                    # cart_item._deleted = datetime.now()
+                    # cart_item._updater = user
+                    # cart_item.save()
 
                     serializer = OrderDetailSerializer(data=data)
 
