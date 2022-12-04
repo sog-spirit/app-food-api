@@ -12,7 +12,6 @@ import {
     ControlLabel,
   } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
 import ModalBox from "../../../components/UI/ModalBox";
 import { HOST } from "../../../env/config";
 
@@ -34,11 +33,7 @@ function EditProduct() {
 
     const getProductDetail = async () => {
         await fetch(`${HOST}/api/admin/product/${id}`, {
-        headers: {
-            'Authorization': `jwt=${Cookies.get('jwt')}`
-        },
-        method: 'GET',
-        credentials: 'include'
+            method: 'GET',
         })
         .then((res) => res.json())
         .then((data) => {
@@ -52,11 +47,7 @@ function EditProduct() {
 
     let getCategories = async () => {
         await fetch(`${HOST}/api/admin/category`, {
-        headers: {
-            'Authorization': `jwt=${Cookies.get('jwt')}`
-        },
         method: 'GET',
-        credentials: 'include'
         })
         .then((res) => res.json())
         .then((data) => {
@@ -90,14 +81,13 @@ function EditProduct() {
         }).catch((error) => {
             console.log(error);
         })
+        let token = sessionStorage.getItem('token')
         await fetch(`${HOST}/api/admin/product/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `jwt=${Cookies.get('jwt')}`
             },
-            credentials: 'include',
-            body: JSON.stringify({...product, "image": imageURL})
+            body: JSON.stringify({...product, "image": imageURL, token})
         }).then((response) => {
             console.log(response);
             if (response.status === 202) {

@@ -11,7 +11,6 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import ModalBox from "../../../components/UI/ModalBox";
 import { HOST } from "../../../env/config";
@@ -29,11 +28,7 @@ const AddProduct = () => {
 
   let getCategories = async () => {
     await fetch(`${HOST}/api/admin/category`, {
-      headers: {
-        'Authorization': `jwt=${Cookies.get('jwt')}`
-      },
       method: 'GET',
-      credentials: 'include'
     })
       .then((res) => res.json())
       .then((data) => {
@@ -70,14 +65,14 @@ const AddProduct = () => {
     }).catch((error) => {
         console.log(error);
     })
+    let token = sessionStorage.getItem('token')
     await fetch(`${HOST}/api/admin/product`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `jwt=${Cookies.get('jwt')}`
         },
         credentials: 'include',
-        body: JSON.stringify({...form, "image": imageURL})
+        body: JSON.stringify({...form, "image": imageURL, token})
     }).then((response) => {
         if (response.status === 201) {
             navigate('/admin/products')
