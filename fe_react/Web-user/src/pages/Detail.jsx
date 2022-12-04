@@ -78,7 +78,7 @@ const Tr = (props) => {
       <tr>
         <td className="text-center">{props.index + 1}</td>
         <td className="text-center cart__img-box">
-            <img src={HOST + image} alt="" />
+            <img src={image} alt="" />
         </td>
         <td className="text-center">{name}</td>
         <td className="text-center">{price}</td>

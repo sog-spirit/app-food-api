@@ -190,7 +190,7 @@ const Tr = (props) => {
       <td>{name}</td>
       <td>
         <img
-          src={HOST + image}
+          src={image}
           alt={name}
         />
       </td>
