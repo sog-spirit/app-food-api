@@ -63,8 +63,19 @@ class LoginView(APIView):
     password
     """
     def post(self, request):
-        username = request.data['username']
-        password = request.data['password']
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+
+        if username is None or password is None:
+            response = Response()
+            message = {}
+            if username is None:
+                message['username'] = 'This field is required'
+            if password is None:
+                message['password'] = 'This field is required'
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            response.data = message
+            return response
 
         user = User.objects.filter(username=username).first()
 
