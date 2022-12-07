@@ -18,6 +18,7 @@ import { HOST } from "../../../env/config";
 function CustomerDetail() {
   const navigate = useNavigate();
   const {id} = useParams()
+  const [adminUser, setAdminUser] = useState({})
   const [user, setUser] = useState({})
   const [isModal, setIsModal] = useState(false);
   const handleChange = async (event) => {
@@ -25,6 +26,7 @@ function CustomerDetail() {
   };
 
   useEffect(() => {
+    getUser()
     getUserDetail()
   }, [])
 
@@ -59,6 +61,30 @@ function CustomerDetail() {
             setIsModal(true)
         }
     })
+  }
+
+  var getUser = async () => {
+    let id = sessionStorage.getItem('user')
+    if (id) {
+      await fetch(`${HOST}/api/user/${id}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setAdminUser(data)
+        console.log(data);
+        if (data.is_superuser !== true) {
+          navigate('/error')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
+    }
+    else {
+      navigate('/error')
+    }
   }
 
   const closeModal = (e) => {

@@ -4,18 +4,13 @@ import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 
-import {
-    Form,
-    Button,
-    FormGroup,
-    FormControl,
-    ControlLabel,
-  } from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ModalBox from "../../../components/UI/ModalBox";
 import { HOST } from "../../../env/config";
 
 function EditProduct() {
+    const [user, setUser] = useState({})
     const {id} = useParams()
     const navigate = useNavigate()
     const [isModal, setIsModal] = useState(false);
@@ -45,6 +40,30 @@ function EditProduct() {
           })
     }
 
+    var getUser = async () => {
+        let id = sessionStorage.getItem('user')
+        if (id) {
+          await fetch(`${HOST}/api/user/${id}`, {
+            method: 'GET',
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            setUser(data)
+            console.log(data);
+            if (data.is_superuser !== true) {
+              navigate('/error')
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            navigate('/error')
+          })
+        }
+        else {
+          navigate('/error')
+        }
+      }
+
     let getCategories = async () => {
         await fetch(`${HOST}/api/admin/category`, {
         method: 'GET',
@@ -60,6 +79,7 @@ function EditProduct() {
       };
 
     useEffect(() => {
+        getUser()
         getProductDetail()
         getCategories()
     }, [])

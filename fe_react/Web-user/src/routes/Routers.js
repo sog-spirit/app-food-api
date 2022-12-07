@@ -51,9 +51,9 @@ const Routers = () => {
       <Route path="/add-balance" element={<AddBalance />} />
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/admin" element={<Admin />} />
 
       {/* admin */}
+      <Route path="/admin" element={<Admin />} />
       <Route path="/admin/product/:id" element={<EditProduct />} />
       <Route path="/admin/products" element={<Products />} />
       <Route path="/admin/addProduct" element={<AddProduct />} />

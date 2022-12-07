@@ -22,7 +22,6 @@ function AddBalance() {
     const submitHandler = async (e) => {
       e.preventDefault()
       let token = sessionStorage.getItem("token")
-      console.log(token);
       let result = await fetch(`${HOST}/api/user/update/balance`, {
         method: 'PATCH',
         headers: {

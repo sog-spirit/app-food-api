@@ -10,8 +10,11 @@ import {
   Form
 } from "react-bootstrap";
 import { HOST } from "../../../env/config";
+import { useContext } from "react";
+import { UserContext } from "../../../context";
 
 const AdminProduct = () => {
+  const [user, setUser] = useState({})
   const [searchTerm, setSearchTerm] = useState("")
   const [products, setProducts] = useState([])
   const [filter, setFilter] = useState("default")
@@ -19,6 +22,7 @@ const AdminProduct = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    getUser()
     getProducts()
     getCategories()
   }, [])
@@ -42,6 +46,30 @@ const AdminProduct = () => {
         });     
     }
   }, [filter])
+
+  var getUser = async () => {
+    let id = sessionStorage.getItem('user')
+    if (id) {
+      await fetch(`${HOST}/api/user/${id}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data)
+        console.log(data);
+        if (data.is_superuser !== true) {
+          navigate('/error')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
+    }
+    else {
+      navigate('/error')
+    }
+  }
 
   let getProducts = async () => {
     await fetch(`${HOST}/api/admin/product`, {

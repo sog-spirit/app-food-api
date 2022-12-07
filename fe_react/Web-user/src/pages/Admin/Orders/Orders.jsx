@@ -10,11 +10,13 @@ import { HOST } from "../../../env/config";
 import { toPrice } from "../../../utils/helper";
 
 const AdminOrder = () => {
+  const [user, setUser] = useState({})
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState("default")
   const navigate = useNavigate()
 
   useEffect(() => {
+    getUser()
     getOrders()
   }, [])
 
@@ -46,6 +48,30 @@ const AdminOrder = () => {
       return -1;
     }
     return 0;
+  }
+
+  var getUser = async () => {
+    let id = sessionStorage.getItem('user')
+    if (id) {
+      await fetch(`${HOST}/api/user/${id}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data)
+        console.log(data);
+        if (data.is_superuser !== true) {
+          navigate('/error')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
+    }
+    else {
+      navigate('/error')
+    }
   }
 
   const getOrders = async () => {

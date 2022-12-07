@@ -3,32 +3,43 @@ import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
-
-import {
-  Form,
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-} from "react-bootstrap";
-
-//date time picker
-import TextField from "@mui/material/TextField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate, useParams } from "react-router-dom";
 import { HOST } from "../../../env/config";
 
 const AdminRating = () => {
-  //date time picker
+  const [user, setUser] = useState({})
   const {id} = useParams()
   const [reviews, setReviews] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
+    getUser()
     getReviews()
   }, [])
+
+  var getUser = async () => {
+    let id = sessionStorage.getItem('user')
+    if (id) {
+      await fetch(`${HOST}/api/user/${id}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data)
+        console.log(data);
+        if (data.is_superuser !== true) {
+          navigate('/error')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
+    }
+    else {
+      navigate('/error')
+    }
+  }
 
   const updateReview = async (id) => {
     let token = sessionStorage.getItem('token')

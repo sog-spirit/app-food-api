@@ -8,11 +8,13 @@ import { HOST } from '../../../env/config'
 import { toPrice } from '../../../utils/helper'
 
 function AdminOrderDetails() {
+  const [user, setUser] = useState({})
   const {id} = useParams()  
   const [products, setProducts] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
+    getUser()
     getProductFromOrder()
   }, [])
 
@@ -28,6 +30,30 @@ function AdminOrderDetails() {
         console.log(error);
         navigate('/error')
       })
+  }
+
+  var getUser = async () => {
+    let id = sessionStorage.getItem('user')
+    if (id) {
+      await fetch(`${HOST}/api/user/${id}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data)
+        console.log(data);
+        if (data.is_superuser !== true) {
+          navigate('/error')
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        navigate('/error')
+      })
+    }
+    else {
+      navigate('/error')
+    }
   }
 
   return (

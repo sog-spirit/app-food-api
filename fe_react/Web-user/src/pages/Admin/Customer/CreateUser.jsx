@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
@@ -12,11 +12,16 @@ import { HOST } from "../../../env/config";
 
 function CreateUser() {
     const navigate = useNavigate();
+    const [adminUser, setAdminUser] = useState({})
     const [user, setUser] = useState({})
     const [isModal, setIsModal] = useState(false);
     const handleChange = async (event) => {
         setUser({ ...user, [event.target.name]: event.target.value });
     };
+
+    useEffect(() => {
+        getUser()
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -44,6 +49,30 @@ function CreateUser() {
     const closeModal = (e) => {
         setIsModal(false);
     };
+
+    var getUser = async () => {
+        let id = sessionStorage.getItem('user')
+        if (id) {
+          await fetch(`${HOST}/api/user/${id}`, {
+            method: 'GET',
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            setAdminUser(data)
+            console.log(data);
+            if (data.is_superuser !== true) {
+              navigate('/error')
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            navigate('/error')
+          })
+        }
+        else {
+          navigate('/error')
+        }
+      }
 
     return (
     <Helmet title="AdminPage">
