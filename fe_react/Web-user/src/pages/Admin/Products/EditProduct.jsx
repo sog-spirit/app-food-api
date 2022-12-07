@@ -125,7 +125,7 @@ function EditProduct() {
                             className="string required form-control"
                             required
                             type="text"
-                            placeholder="Your full name"
+                            placeholder="Tên sản phẩm"
                             name="name"
                             value={product.name}
                             onChange={(e) => {

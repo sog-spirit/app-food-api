@@ -14,15 +14,15 @@ import { useContext } from "react";
 
 const nav__links = [
   {
-    display: "Home",
+    display: "Trang chủ",
     path: "/home",
   },
   {
-    display: "Foods",
+    display: "Ăn uống",
     path: "/foods",
   },
   {
-    display: "Cart",
+    display: "Giỏ hàng",
     path: "/cart",
   }
 ];

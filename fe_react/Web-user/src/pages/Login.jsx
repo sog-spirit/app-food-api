@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <Helmet title="Login">
-      <CommonSection title="Login" />
+      <CommonSection title="Đăng nhập" />
       <section>
         <Container>
           <Row>
@@ -60,7 +60,7 @@ const Login = () => {
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Username"
+                    placeholder="Tên đăng nhập"
                     required
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -70,7 +70,7 @@ const Login = () => {
                 <div className="form__group">
                   <input
                     type="password"
-                    placeholder="Password"
+                    placeholder="Mật khẩu"
                     required
                     onChange={(e) => {
                       setPassword(e.target.value);
@@ -82,11 +82,11 @@ const Login = () => {
                   type="submit"
                   className="addTOCart__btn"
                 >
-                  Login
+                  Đăng nhập
                 </button>
               </form>
               <Link to="/register">
-                Don't have an account? Create an account
+                Bạn chưa có tài khoản ? Tạo tài khoản
               </Link>
             </Col>
           </Row>

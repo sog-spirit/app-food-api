@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { HOST } from "../env/config";
+import { toPrice } from "../utils/helper";
 
 function Order() {
     const [order, setOrder] = useState([])
@@ -29,7 +30,7 @@ function Order() {
 
   return (
     <Helmet title="Order">
-      <CommonSection title="Your Order" />
+      <CommonSection title="Đơn hàng của bạn" />
       <section>
         <Container>
           <Row>
@@ -80,7 +81,7 @@ const Tr = (props) => {
       <tr>
         <td className="text-center">{props.index + 1}</td>
         <td className="text-center">{format_date(_created)}</td>
-        <td className="text-center">${price}</td>
+        <td className="text-center">{toPrice(price)} đ</td>
         <td className="text-center">{mapping_value(order_status)}</td>
         <td className="text-center">{address}</td>
         <td className="text-center">{note}</td>

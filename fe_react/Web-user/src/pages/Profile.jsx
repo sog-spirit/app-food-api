@@ -58,15 +58,14 @@ function Profile() {
 
     return (
         <Helmet title="Profile">
-          <CommonSection title="Profile" />
+          <CommonSection title="Thông tin" />
           <section>
             <Container>
               <Row>
                 <Col lg="6" md="6">
-                  <h6 className="mb-4">Profile</h6>
                   <form className="checkout__form" onSubmit={(e) => handleSubmit(e)}>
                     <div className="form__group">
-                      <label for="name">Name</label>
+                      <label for="name">Tên</label>
                       <input
                         type="text"
                         name="name"
@@ -79,7 +78,7 @@ function Profile() {
                       />
                     </div>
                     <div className="form__group">
-                      <label for="phone">Phone</label>
+                      <label for="phone">Số điện thoại</label>
                       <input
                         type="number"
                         name="phone"
@@ -106,7 +105,7 @@ function Profile() {
                       />
                     </div>
                     <div className="form__group">
-                      <label for="address">Address</label>
+                      <label for="address">Địa chỉ</label>
                       <input
                         type="text"
                         name="address"
@@ -119,7 +118,7 @@ function Profile() {
                       />
                     </div>
                     <div className="form__group">
-                      <label for="date_of_birth">Date of Birth</label>
+                      <label for="date_of_birth">Ngày sinh</label>
                       <input
                         type="date"
                         name="date_of_birth"
@@ -136,7 +135,7 @@ function Profile() {
                       className="addTOCart__btn"
                       onClick={(e) => handleSubmit(e)}
                     >
-                      Save changes
+                      Lưu
                     </button>
                   </form>
                 </Col>

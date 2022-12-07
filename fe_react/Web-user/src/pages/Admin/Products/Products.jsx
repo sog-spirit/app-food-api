@@ -4,6 +4,7 @@ import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 import { Link, useNavigate } from 'react-router-dom';
+import { toPrice } from "../../../utils/helper";
 
 import {
   Form
@@ -182,7 +183,7 @@ const Tr = (props) => {
         />
       </td>
       <td className="d-item--category">{category_name}</td>
-      <td className="d-item--price">{price}</td>
+      <td className="d-item--price">{toPrice(price)} đ</td>
       <td className="d-item--des">{slash(description)}</td>
       <Link to={`/admin/product/${id}`} className="d-item--icon d-item--edit">
         <svg

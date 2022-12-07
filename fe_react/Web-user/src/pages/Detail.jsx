@@ -8,6 +8,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { HOST } from "../env/config";
+import { toPrice } from "../utils/helper";
 
 function Detail() {
     const { id } = useParams();
@@ -32,7 +33,7 @@ function Detail() {
     }, [])
   return (
     <Helmet title="Order">
-      <CommonSection title="Your Order" />
+      <CommonSection title="Đơn hàng của bạn" />
       <section>
         <Container>
           <Row>
@@ -77,9 +78,9 @@ const Tr = (props) => {
             <img src={image} alt="" />
         </td>
         <td className="text-center">{name}</td>
-        <td className="text-center">{price}</td>
+        <td className="text-center">{toPrice(price)} đ</td>
         <td className="text-center">{quantity}</td>
-        <td className="text-center">{price * quantity}</td>
+        <td className="text-center">{toPrice(price * quantity)} đ</td>
       </tr>
     );
   };

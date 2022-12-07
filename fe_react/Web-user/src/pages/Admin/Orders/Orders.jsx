@@ -4,21 +4,10 @@ import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 
-import {
-  Form,
-  Button,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-} from "react-bootstrap";
-
-//date time picker
-import TextField from "@mui/material/TextField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { HOST } from "../../../env/config";
+import { toPrice } from "../../../utils/helper";
 
 const AdminOrder = () => {
   const [orders, setOrders] = useState([])
@@ -164,7 +153,7 @@ const Tr = (props) => {
       <th scope="row">{props.index + 1}</th>
       <td>{slash(name)}</td>
       <td>{format_date(_created)}</td>
-      <td className="d-item--price">{price}đ</td>
+      <td className="d-item--price">{toPrice(price)} đ</td>
       <td className="d-item--category">{mapping_value(order_status)}</td>
       <td className="d-item--des">{slash(address)}</td>
       <td className="d-item--des">{slash(description)}</td>

@@ -110,7 +110,7 @@ const FoodDetails = () => {
                   <span>{product.category_name}</span>
                 </p>
                 <button onClick={() => addToCart()} className="addTOCart__btn">
-                  Add to Cart
+                  Thêm
                 </button>
               </div>
             </Col>

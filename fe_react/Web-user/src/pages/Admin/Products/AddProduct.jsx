@@ -109,7 +109,7 @@ const AddProduct = () => {
                       className="string required form-control"
                       required
                       type="text"
-                      placeholder="Your full name"
+                      placeholder="Tên sản phẩm"
                       name="name"
                       onChange={(e) => {
                         handleChange(e)

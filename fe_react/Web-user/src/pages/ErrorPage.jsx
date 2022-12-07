@@ -7,7 +7,7 @@ import CommonSection from '../components/UI/common-section/CommonSection'
 function ErrorPage() {
     return (
         <Helmet title="Đã xảy ra lỗi">
-        <CommonSection title="Đã xảy ra lỗi" />
+        <CommonSection title="Lỗi !!" />
         <section>
           <Container>
             <h1>Đã xảy ra lỗi !!</h1>

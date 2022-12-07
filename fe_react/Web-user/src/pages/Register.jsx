@@ -20,14 +20,18 @@ const Register = () => {
 
   return (
     <Helmet title="Signup">
-      <CommonSection title="Signup" />
+      <CommonSection title="Tạo tài khoản" />
       <section>
         <Container>
           <Row>
             <Col lg="6" md="6" sm="12" className="m-auto text-center">
               <form className="form" onSubmit={submitHandler}>
                 <div className="form-group text-left">
-                  <label>FullName</label>
+                  <label>Họ và tên</label>
+                  <input type="text" className="form-control" required />
+                </div>
+                <div className="form-group text-left">
+                  <label>Tên đăng nhập</label>
                   <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
@@ -35,19 +39,15 @@ const Register = () => {
                   <input type="email" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
-                  <label>Username</label>
+                  <label>Số điện thoại</label>
                   <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
-                  <label>Phone Number</label>
+                  <label>Địa chỉ</label>
                   <input type="text" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
-                  <label>Address</label>
-                  <input type="text" className="form-control" required />
-                </div>
-                <div className="form-group text-left">
-                  <label>Date of Birth</label>
+                  <label>Ngày sinh</label>
                   <LocalizationProvider
                     dateAdapter={AdapterDayjs}
                     style={{ width: "fit-content" }}
@@ -63,7 +63,7 @@ const Register = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="form-group text-left">
-                  <label>Image</label>
+                  <label>Hình ảnh</label>
                   <input
                     type="file"
                     accept="image/jpeg, image/png, image/jpg"
@@ -72,19 +72,19 @@ const Register = () => {
                   <div id="display-image"></div>
                 </div>
                 <div className="form-group text-left">
-                  <label>Password</label>
+                  <label>Mật khẩu</label>
                   <input type="password" className="form-control" required />
                 </div>
                 <div className="form-group text-left">
-                  <label>Confirm Password</label>
+                  <label>Nhập lại mật khẩu</label>
                   <input type="password" className="form-control" required />
                 </div>
 
                 <button type="submit" className="addTOCart__btn">
-                  Sign Up
+                  Đăng kí
                 </button>
               </form>
-              <Link to="/login">Already have an account? Login</Link>
+              <Link to="/login">Bạn đã có tài khoản ? Đăng nhập</Link>
             </Col>
           </Row>
         </Container>
