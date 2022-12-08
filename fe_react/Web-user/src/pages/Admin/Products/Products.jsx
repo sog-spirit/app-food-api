@@ -10,8 +10,6 @@ import {
   Form
 } from "react-bootstrap";
 import { HOST } from "../../../env/config";
-import { useContext } from "react";
-import { UserContext } from "../../../context";
 
 const AdminProduct = () => {
   const [user, setUser] = useState({})
