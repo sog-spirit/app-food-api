@@ -37,6 +37,7 @@ class RegisterView(APIView):
         username = request.data.get('username', None)
         password = request.data.get('password', None)
         phone = request.data.get('phone', None)
+        image = request.data.get('image', None)
         if (
             email is None or
             name is None or
@@ -44,7 +45,8 @@ class RegisterView(APIView):
             address is None or
             username is None or
             password is None or
-            phone is None
+            phone is None or
+            image is None
         ):
             response = Response()
             message = {}
@@ -62,6 +64,8 @@ class RegisterView(APIView):
                 message['password'] = 'This field is required'
             if phone is None:
                 message['phone'] = 'This field is required'
+            if image is None:
+                message['image'] = 'This field is required'
             response.data = message
             response.status_code = status.HTTP_400_BAD_REQUEST
             return response
@@ -73,7 +77,8 @@ class RegisterView(APIView):
             phone=phone,
             date_of_birth=date_of_birth,
             name=name,
-            address=address
+            address=address,
+            image=image
         )
         History.objects.create(
             _creator = user,
