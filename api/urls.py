@@ -34,6 +34,7 @@ from .views import (
     AdminEditReviewsAPIView,
     AdminUsersAPIView,
     AdminUserAPIView,
+    AdminGetUserHistory
 )
 
 urlpatterns = [
@@ -71,4 +72,5 @@ urlpatterns = [
     path('admin/reviews/<int:review_id>', AdminEditReviewsAPIView.as_view()),
     path('admin/users', AdminUsersAPIView.as_view()),
     path('admin/users/<int:user_id>', AdminUserAPIView.as_view()),
+    path('admin/users/<int:user_id>/history', AdminGetUserHistory.as_view()),
 ]

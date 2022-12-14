@@ -13,6 +13,7 @@ from .serializers import (
     ReviewSerializer,
     AdminUserSerializer,
     FavoriteProductSerializer,
+    HistorySerailizer
 )
 from django.db import IntegrityError, transaction
 from .models import (
@@ -1085,4 +1086,10 @@ class AdminGetProductFromCategory(APIView):
     def get(self, request, category_id):
         products = Product.objects.filter(category=category_id, _deleted=None)
         serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+class AdminGetUserHistory(APIView):
+    def get(self, request, user_id):
+        histories = History.objects.filter(_creator=user_id)
+        serializer = HistorySerailizer(histories, many=True)
         return Response(serializer.data)
