@@ -31,6 +31,7 @@ import CreateUser from "../pages/Admin/Customer/CreateUser";
 import Admin from "../pages/Admin/Admin";
 import EditProduct from "../pages/Admin/Products/EditProduct";
 import EditCategory from "../pages/Admin/Category/EditCategory";
+import History from "../pages/Admin/History/History";
 
 const Routers = () => {
   return (
@@ -67,6 +68,7 @@ const Routers = () => {
       <Route path="/admin/users" element={<AdminCustomer />} />
       <Route path="/admin/addUser" element={<CreateUser />} />
       <Route path="/admin/users/:id" element={<CustomerDetail />} />
+      <Route path="/admin/users/:id/history" element={<History />} />
     </Routes>
   );
 };
