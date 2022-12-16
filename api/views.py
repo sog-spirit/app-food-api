@@ -312,9 +312,20 @@ class OrderAPIView(APIView):
         address = request.data.get('address', None)
         note = request.data.get('note', None)
         shipping_cost = request.data.get('shippingCost', 0)
+        order_products = request.data.get('prodcuts', None)
         if address is None:
             return Response(
                 {'detail': 'Address is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if order_products is None:
+            return Response(
+                {'detail': 'products is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if len(order_products) == 0:
+            return Response(
+                {'detail': 'products is required'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         price = 0.0
