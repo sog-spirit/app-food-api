@@ -11,6 +11,7 @@ import ProductCard from "../components/UI/product-card/ProductCard";
 import { useContext } from "react";
 import { CartContext } from "../context";
 import { HOST } from "../env/config";
+import '../../src/styles/review.css'
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
@@ -164,10 +165,20 @@ const Tr = (props) => {
   const {rating, name, email, content} = props.item
   return (
     <div className="review">
-      <p className="user__name mb-0">{name}</p>
-      <p className="user__email">{email}</p>
+      <div className="user-info">
+        
+      <img src="http://res.cloudinary.com/dmlfhpnyo/image/upload/v1670133314/be5uu9siv4dppwcvodbl.png" alt="" />
+      {/* <p className="user__name mb-0">{name}</p> */}
+      <p className="user__name mb-0">dunei12</p>
+      </div>
+      
+      {/* <p className="user__email">{email}</p>
       <p className="feedback__text">{rating}</p>
-      <p className="feedback__text">{content}</p>
+      <p className="feedback__text">{content}</p> */}
+      <div className="user-review">
+        <div className="score"><p>Điểm : <span>5</span></p></div>
+        <div className="comment"><p>Nhận xét : <span>Thức ăn bị nguội</span></p></div>
+      </div>
     </div>
   )
 }

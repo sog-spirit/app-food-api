@@ -115,7 +115,6 @@ const AddProduct = () => {
               <div className="row w-100">
                 <div className="col-md-4 description--label">
                   <h3>Mô tả sản phẩm</h3>
-                  <p>Những thông tin cơ bản sản phẩm</p>
                 </div>
                 <div className="col-md-8 description--info">
                   <div className="form-group string required candidate_name">
@@ -198,7 +197,6 @@ const AddProduct = () => {
               <div className="row w-100">
                 <div className="col-md-4 description--label">
                   <h3>Thông tin sản phẩm</h3>
-                  <p>Mô tả nguyên liệu sản phẩm</p>
                 </div>
                 <div className="col-md-8 description--info">
                   <div className="form-group string required candidate_name">

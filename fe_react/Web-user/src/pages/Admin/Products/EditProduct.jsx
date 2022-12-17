@@ -131,7 +131,6 @@ function EditProduct() {
                     <div className="row w-100">
                     <div className="col-md-4 description--label">
                         <h3>Mô tả sản phẩm</h3>
-                        <p>Những thông tin cơ bản sản phẩm</p>
                     </div>
                     <div className="col-md-8 description--info">
                         <div className="form-group string required candidate_name">
@@ -197,7 +196,8 @@ function EditProduct() {
                         </div>
                         </div>
 
-                        <div className="form-group file_preview optional product_photo">
+                        <div className="form-group file_preview optional product_photo" style={{ display: 'flex'}} >
+                        <div className="form-photo">
                         <label
                             className="file_preview optional control-label"
                             for="photo-file"
@@ -212,12 +212,15 @@ function EditProduct() {
                             We accept PNG, JPG, and JPEG files
                         </span>
                         </div>
+                        <div className="image-photo" style={{ margin: '10px 0 0 0'}} >
+                            <img src="https://dochienxienque.com/wp-content/uploads/2021/02/Dui-Ga-Chien-Xu.jpg" style={{ width: '150px'}}  alt="" />
+                        </div>
+                        </div>
                     </div>
                     </div>
                     <div className="row w-100">
                     <div className="col-md-4 description--label">
                         <h3>Thông tin sản phẩm</h3>
-                        <p>Mô tả nguyên liệu sản phẩm</p>
                     </div>
                     <div className="col-md-8 description--info">
                         <div className="form-group string required candidate_name">
