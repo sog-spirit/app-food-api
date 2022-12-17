@@ -9,10 +9,22 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { HOST } from '../env/config'
 import { toPrice } from '../utils/helper'
+import ReactPaginate from 'react-paginate'
 
 function Order() {
   const [order, setOrder] = useState([])
   const navigate = useNavigate()
+  const [pageNumber, setPageNumber] = useState(0)
+
+  const numbersPerPage = 10
+  const visitedPage = pageNumber * numbersPerPage
+  const displayPage = order.slice(visitedPage, visitedPage + numbersPerPage)
+
+  const pageCount = Math.ceil(order.length / numbersPerPage)
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected)
+  }
   useEffect(async () => {
     let user_id = sessionStorage.getItem('user')
     await fetch(`${HOST}/api/user/${user_id}/order`, {
@@ -49,11 +61,25 @@ function Order() {
                   </tr>
                 </thead>
                 <tbody>
-                  {order.map((item, index) => (
-                    <Tr item={item} key={item.id} index={index}></Tr>
+                  {displayPage.map((item, index) => (
+                    <Tr
+                      item={item}
+                      key={item.id}
+                      index={index}
+                      visitedPage={visitedPage}
+                    ></Tr>
                   ))}
                 </tbody>
               </table>
+              <div>
+              <ReactPaginate
+                pageCount={pageCount}
+                onPageChange={changePage}
+                previousLabel={"Trước"}
+                nextLabel={"Sau"}
+                containerClassName=" paginationBttns "
+              />
+            </div>
             </Col>
           </Row>
         </Container>
@@ -83,7 +109,7 @@ const Tr = (props) => {
 
   return (
     <tr>
-      <td className='text-center'>{props.index + 1}</td>
+      <td className='text-center'>{(props.index + 1) + props.visitedPage}</td>
       <td className='text-center'>{format_date(_created)}</td>
       <td className='text-center'>{toPrice(price)} đ</td>
       <td className='text-center'>{mapping_value(order_status)}</td>

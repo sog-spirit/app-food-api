@@ -8,12 +8,27 @@ import { Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { HOST } from '../../../env/config'
 import { toPrice } from '../../../utils/helper'
+import ReactPaginate from "react-paginate";
 
 const AdminOrder = () => {
   const [user, setUser] = useState({})
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('default')
   const navigate = useNavigate()
+  const [pageNumber, setPageNumber] = useState(0);
+    
+  const numbersPerPage = 10;
+  const visitedPage = pageNumber * numbersPerPage;
+  const displayPage = orders.slice(
+    visitedPage,
+    visitedPage + numbersPerPage
+  );
+
+  const pageCount = Math.ceil(orders.length / numbersPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
 
   useEffect(() => {
     getUser()
@@ -142,16 +157,26 @@ const AdminOrder = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((item, index) => (
+                {displayPage.map((item, index) => (
                   <Tr
                     item={item}
                     key={item.id}
                     index={index}
                     completeOrder={completeOrder}
+                    visitedPage={visitedPage}
                   />
                 ))}
               </tbody>
             </table>
+            <div>
+              <ReactPaginate
+                pageCount={pageCount}
+                onPageChange={changePage}
+                previousLabel={"Trước"}
+                nextLabel={"Sau"}
+                containerClassName=" paginationBttns "
+              />
+            </div>
           </div>
         </div>
         ;
@@ -175,11 +200,11 @@ const Tr = (props) => {
   const slash = (value) => {
     return value ? value : '-'
   }
-  const { id, name, _created, price, order_status, address, description } =
+  const { id, name, _created, price, order_status, address } =
     props.item
   return (
     <tr className='d-item'>
-      <th scope='row'>{props.index + 1}</th>
+      <th scope='row'>{(props.index + 1) + props.visitedPage}</th>
       <td>{slash(name)}</td>
       <td>{format_date(_created)}</td>
       <td className='d-item--price'>{toPrice(price)} đ</td>

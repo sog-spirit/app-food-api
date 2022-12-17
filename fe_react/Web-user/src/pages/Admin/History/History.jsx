@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
+import ReactPaginate from "react-paginate";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
 
@@ -12,6 +13,20 @@ function History() {
     const navigate = useNavigate()
     const [histories, setHistories] = useState([])
     const [user, setUser] = useState({})
+    const [pageNumber, setPageNumber] = useState(0);
+    
+    const historyPerPage = 10;
+    const visitedPage = pageNumber * historyPerPage;
+    const displayPage = histories.slice(
+      visitedPage,
+      visitedPage + historyPerPage
+    );
+
+    const pageCount = Math.ceil(histories.length / historyPerPage);
+
+    const changePage = ({ selected }) => {
+      setPageNumber(selected);
+    };
 
     useEffect(() => {
         getUser()
@@ -71,12 +86,21 @@ function History() {
                 </tr>
               </thead>
               <tbody>
-              {histories.map((item, index) => (
-                <Tr item={item} key={item.id} index={index}/>
+              {displayPage.map((item, index) => (
+                <Tr item={item} key={item.id} index={index} visitedPage={visitedPage}/>
               ))}
               </tbody>
             </table>
           </div>
+          <div>
+              <ReactPaginate
+                pageCount={pageCount}
+                onPageChange={changePage}
+                previousLabel={"Trước"}
+                nextLabel={"Sau"}
+                containerClassName=" paginationBttns "
+              />
+            </div>
           <div className="row w-100">
             <div className="form-group form-submit">
                 <Link to={"/admin"} type="button" className="btn select__action--add" >
@@ -101,7 +125,7 @@ const Tr = (props) => {
     const {id, _created, message} = props.item
     return (
       <tr className="d-item">
-        <th scope="row">{props.index + 1}</th>
+        <th scope="row">{(props.index + 1) + props.visitedPage}</th>
         <td>{slash(message)}</td>
         <td>{format_date(_created)}</td>  
       </tr>

@@ -245,7 +245,7 @@ const Register = () => {
                     </div>
                 </div>
                 <ModalBox show={isModal} handleClose={(e) => closeModal(e)}>
-                    <h2>Đã xảy ra lỗi</h2>
+                    Đã xảy ra lỗi
                 </ModalBox>
             </form>
             </div>

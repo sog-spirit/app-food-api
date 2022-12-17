@@ -8,6 +8,7 @@ import { toPrice } from '../../../utils/helper'
 
 import { Form } from 'react-bootstrap'
 import { HOST } from '../../../env/config'
+import ReactPaginate from "react-paginate";
 
 const AdminProduct = () => {
   const [user, setUser] = useState({})
@@ -16,6 +17,20 @@ const AdminProduct = () => {
   const [filter, setFilter] = useState('default')
   const [categories, setCategories] = useState([])
   const navigate = useNavigate()
+  const [pageNumber, setPageNumber] = useState(0);
+    
+  const numbersPerPage = 10;
+  const visitedPage = pageNumber * numbersPerPage;
+  const displayPage = products.slice(
+    visitedPage,
+    visitedPage + numbersPerPage
+  );
+
+  const pageCount = Math.ceil(products.length / numbersPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
 
   useEffect(() => {
     getUser()
@@ -189,16 +204,26 @@ const AdminProduct = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((item, index) => (
+                {displayPage.map((item, index) => (
                   <Tr
                     item={item}
                     key={item.id}
                     index={index}
                     handleDelete={handleDelete}
+                    visitedPage={visitedPage}
                   />
                 ))}
               </tbody>
             </table>
+            <div>
+              <ReactPaginate
+                pageCount={pageCount}
+                onPageChange={changePage}
+                previousLabel={"Trước"}
+                nextLabel={"Sau"}
+                containerClassName=" paginationBttns "
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -213,7 +238,7 @@ const Tr = (props) => {
   }
   return (
     <tr className='d-item'>
-      <th scope='row'>{props.index + 1}</th>
+      <th scope='row'>{(props.index + 1) + props.visitedPage}</th>
       <td>{name}</td>
       <td>
         <img src={image} alt={name} />
