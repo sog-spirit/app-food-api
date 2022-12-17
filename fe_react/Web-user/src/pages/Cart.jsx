@@ -92,7 +92,7 @@ const Tr = (props) => {
       <td className="text-center">{toPrice(price)} đ</td>
       <td className="text-center">{quantity}</td>
       <td className="text-center cart__item-del">
-        <i className="ri-delete-bin-line" onClick={deleteItem}></i>
+        <i className="ri-delete-bin-line" style={{color: 'red'}} onClick={deleteItem}></i>
       </td>
     </tr>
   );

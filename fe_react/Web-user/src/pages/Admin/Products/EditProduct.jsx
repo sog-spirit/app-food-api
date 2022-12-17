@@ -213,7 +213,7 @@ function EditProduct() {
                         </span>
                         </div>
                         <div className="image-photo" style={{ margin: '10px 0 0 0'}} >
-                            <img src="https://dochienxienque.com/wp-content/uploads/2021/02/Dui-Ga-Chien-Xu.jpg" style={{ width: '150px'}}  alt="" />
+                            <img src={product.image} style={{ width: '150px'}}  alt="" />
                         </div>
                         </div>
                     </div>

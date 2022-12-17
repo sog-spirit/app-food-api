@@ -140,7 +140,7 @@ const Header = () => {
               </div>
               {/* image user */}
               <div className="user__image" style={{ marginLeft: '10px' }} >
-                <img src="https://dochienxienque.com/wp-content/uploads/2021/02/Dui-Ga-Chien-Xu.jpg" style={{ width: '50px', height: '50px', objectFit: 'conver' }} alt="" />
+                <img src={user.image} style={{ width: '50px', height: '50px', objectFit: 'conver' }} alt="" />
               </div>
             </span>) : (<span className="user">
               <Link to="/login">

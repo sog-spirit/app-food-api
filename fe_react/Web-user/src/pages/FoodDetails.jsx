@@ -14,7 +14,7 @@ import { HOST } from "../env/config";
 import '../../src/styles/review.css'
 
 const FoodDetails = () => {
-  const [tab, setTab] = useState("desc");
+  const [tab, setTab] = useState("rev");
   const { id } = useParams();
   const [previewImg, setPreviewImg] = useState("");
   
@@ -105,7 +105,7 @@ const FoodDetails = () => {
                 <h2 className="product__title mb-3">{product.name}</h2>
                 <p className="product__price">
                   {" "}
-                  Price: <span>${product.price}</span>
+                  Giá: <span>{product.price} đ</span>
                 </p>
                 <p className="category mb-5">
                   <span>{product.category_name}</span>
@@ -118,12 +118,6 @@ const FoodDetails = () => {
 
             <Col lg="12">
               <div className="tabs d-flex align-items-center gap-5 py-3">
-                <h6
-                  className={` ${tab === "desc" ? "tab__active" : ""}`}
-                  onClick={() => setTab("desc")}
-                >
-                  Description
-                </h6>
                 <h6
                   className={` ${tab === "rev" ? "tab__active" : ""}`}
                   onClick={() => setTab("rev")}
@@ -162,22 +156,22 @@ const FoodDetails = () => {
 };
 
 const Tr = (props) => {
-  const {rating, name, email, content} = props.item
+  const {image, rating, name, email, content} = props.item
   return (
     <div className="review">
       <div className="user-info">
         
-      <img src="http://res.cloudinary.com/dmlfhpnyo/image/upload/v1670133314/be5uu9siv4dppwcvodbl.png" alt="" />
+      <img src={image} alt="" />
       {/* <p className="user__name mb-0">{name}</p> */}
-      <p className="user__name mb-0">dunei12</p>
+      <p className="user__name mb-0">{email}</p>
       </div>
       
       {/* <p className="user__email">{email}</p>
       <p className="feedback__text">{rating}</p>
       <p className="feedback__text">{content}</p> */}
       <div className="user-review">
-        <div className="score"><p>Điểm : <span>5</span></p></div>
-        <div className="comment"><p>Nhận xét : <span>Thức ăn bị nguội</span></p></div>
+        <div className="score"><p>Điểm : <span>{rating}</span></p></div>
+        <div className="comment"><p>Nhận xét : <span>{content}</span></p></div>
       </div>
     </div>
   )

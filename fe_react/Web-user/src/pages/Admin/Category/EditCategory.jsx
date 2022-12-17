@@ -144,6 +144,9 @@ const EditCategory = () => {
                     <span className="help-block">
                       We accept PNG, JPG, and JPEG files
                     </span>
+                    <div className="image-photo" style={{ margin: '10px 0 0 0'}} >
+                        <img src={category.image} style={{ width: '150px'}}  alt="" />
+                    </div>
                   </div>
                 </div>
               </div>
