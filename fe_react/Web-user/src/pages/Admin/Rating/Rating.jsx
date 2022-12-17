@@ -39,7 +39,7 @@ const AdminRating = () => {
         .then((data) => {
           setUser(data)
           console.log(data)
-          if (data.is_superuser !== true) {
+          if (data.is_superuser !== true && data.is_staff !== true) {
             navigate('/error')
           }
         })

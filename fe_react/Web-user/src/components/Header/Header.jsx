@@ -100,7 +100,7 @@ const Header = () => {
                   {user.username}
                 </button>
                 <ul className="dropdown-menu" style={{ marginTop: 'auto'}} >
-                  {user.is_superuser &&
+                  {(user.is_superuser || user.is_staff) &&
                     <li>
                       <Link to="/admin" className="dropdown-item">
                         Trang quản lý

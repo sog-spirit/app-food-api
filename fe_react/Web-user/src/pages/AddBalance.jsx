@@ -10,7 +10,7 @@ import { HOST } from '../env/config';
 
 function AddBalance() {
     const navigate = useNavigate()
-    const [isModal, setIsModal] = useState(true)
+    const [isModal, setIsModal] = useState(false)
     const [balanceForm, setBalanceForm] = useState({
         amount: 0,
         current_password: ""
