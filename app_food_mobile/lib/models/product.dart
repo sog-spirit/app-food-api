@@ -11,6 +11,8 @@ String productToJson(List<Product> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
+  var value;
+
   Product({
     required this.id,
     required this.created,

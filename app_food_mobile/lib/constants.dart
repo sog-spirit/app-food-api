@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
-const baseApi = "http://192.168.1.135:8000/";
+// const baseApi = "http://192.168.31.142:8000/";s
+const baseApi = "https://web-production-746d.up.railway.app/";
 
-const kPrimaryColor = Color(0xFFFF7643);
-const ksecondaryColor = Color(0xFFB5BFD0);
-const kTextGreyColor = Color(0xFF50505D);
+const kPrimaryColor = Color(0xFFD10A1F);
+const ksecondaryColor = Color(0xFF676C72);
+const kLightSecondaryColor = Color(0xBABAC5);
+const kHoverSecondaryColor = Color(0xFFC3C6CC);
+const kDivideColor = Color(0xFFECEEF1);
+const kGreyIconColor = Color(0xFF737373);
+
+const kGreyBackgroundColor = Color(0xFFEEEEEE);
+
+const kBlackColor = Colors.black;
+const kLightBlackColor = Color(0xFF3C4347);
+const kWhiteColor = Colors.white;
+const kTextGreyColor = Color(0xFF797982);
 const kTextLightColor = Color(0xFF6A727D);
-const double defaultPadding = 16.0;
 
 const kPrimaryColor2 = Color(0xFFFF7643);
 const kPrimaryLightColor = Color(0xFFFFECDF);
@@ -19,11 +29,13 @@ const kDarkPrimaryColor = Color.fromARGB(255, 222, 222, 222);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 
-final headingStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  height: 1.5,
-);
+const double defaultPadding = 16.0;
+const double defaultBorderRadius = 6.0;
+const double defaultSizeboxHeight = 15.0;
+const double defaulMargin = 16.0;
+
+final headingLagerStyle = TextStyle(
+    height: 1.2, fontSize: 22, fontWeight: FontWeight.w500, color: kBlackColor);
 
 const defaultDuration = Duration(milliseconds: 250);
 

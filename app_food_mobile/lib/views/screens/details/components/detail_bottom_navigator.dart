@@ -1,5 +1,6 @@
 import 'package:app_food_mobile/models/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../components/default_button.dart';
@@ -36,18 +37,48 @@ class _DetailBottomNavigatorState extends State<DetailBottomNavigator> {
         ],
       ),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Container(
-          child: Row(children: [
-            GestureDetector(
+        Row(children: [
+          GestureDetector(
+            onTap: () {
+              if (count > 1) {
+                setState(() {
+                  count--;
+                });
+              } else
+                // ignore: curly_braces_in_flow_control_structures
+                setState(() {
+                  count = 1;
+                });
+            },
+            child: Container(
+              padding: EdgeInsets.all(8),
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.2),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: SvgPicture.asset(
+                "assets/icons/minus.svg",
+                height: 20,
+                width: 20,
+                fit: BoxFit.fill,
+                color: kPrimaryColor,
+              ),
+            ),
+          ),
+          SizedBox(width: 15),
+          Text(
+            count.toString(),
+            style: TextStyle(
+                color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 15),
+          GestureDetector(
+            child: GestureDetector(
               onTap: () {
-                if (count > 1) {
-                  setState(() {
-                    count--;
-                  });
-                } else
-                  setState(() {
-                    count = 1;
-                  });
+                setState(() {
+                  count++;
+                });
               },
               child: Container(
                 padding: EdgeInsets.all(8),
@@ -57,7 +88,7 @@ class _DetailBottomNavigatorState extends State<DetailBottomNavigator> {
                     color: Colors.grey.withOpacity(0.2),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: SvgPicture.asset(
-                  "assets/icons/minus.svg",
+                  "assets/icons/plus.svg",
                   height: 20,
                   width: 20,
                   fit: BoxFit.fill,
@@ -65,45 +96,13 @@ class _DetailBottomNavigatorState extends State<DetailBottomNavigator> {
                 ),
               ),
             ),
-            SizedBox(width: 15),
-            Text(
-              count.toString(),
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(width: 15),
-            GestureDetector(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    count++;
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: SvgPicture.asset(
-                    "assets/icons/plus.svg",
-                    height: 20,
-                    width: 20,
-                    fit: BoxFit.fill,
-                    color: kPrimaryColor,
-                  ),
-                ),
-              ),
-            ),
-          ]),
-        ),
+          ),
+        ]),
         Consumer<CartViewModel>(
           builder: ((context, provider, child) => TextButton(
                 onPressed: () async {
-                  await provider.updateCart(1, widget.product.id, count);
+                  // await provider.updateCart(1, widget.product.id, count);
+                  await provider.updateCart(widget.product, count, true);
                 },
                 child: Container(
                   height: 90,
@@ -120,28 +119,28 @@ class _DetailBottomNavigatorState extends State<DetailBottomNavigator> {
                         Text(
                           "Thêm",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.apply(color: kWhiteColor),
                         ),
-                        SizedBox(width: 15),
                         Container(
                           width: 3,
                           height: 3,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: defaultPadding / 2),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(width: 5),
                         Text(
-                          widget.product.price.toString(),
+                          (widget.product.price.toInt() * count).toVND(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.apply(color: kWhiteColor),
                         ),
                       ]),
                 ),

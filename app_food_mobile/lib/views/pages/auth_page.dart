@@ -2,8 +2,8 @@
 // ignore: unused_import
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import '../auth/login/login_page.dart';
-import '../auth/register/register_page.dart';
+import '../auth/login_page.dart';
+import '../auth/register_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -23,9 +23,10 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     if (showLoginScreen) {
-      return LoginScreen(showRegisterPage: toggleScreen);
+      return LoginScreen();
     } else {
-      return RegisterScreen(showLoginPage: toggleScreen);
+      // return RegisterScreen(showLoginPage: toggleScreen);
+      return RegisterScreen();
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 // import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:tiengviet/tiengviet.dart';
 
@@ -6,8 +7,8 @@ import '../../../../constants.dart';
 
 class TitlePriceRating extends StatelessWidget {
   final String name;
-  final double rating;
-  final double numOfReviews, price;
+  final double rating, price;
+  final int numOfReviews;
   // final RatingChangeCallback onRatingChanged;
 
   const TitlePriceRating({
@@ -25,29 +26,32 @@ class TitlePriceRating extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Row(
-              children: [
-                // SmoothStarRating(
-                //   borderColor: kPrimaryColor,
-                //   rating: rating,
-                // ),
-                SizedBox(width: 10),
-                Text("${numOfReviews} reviews")
-              ],
-            )
-          ],
+            child: Container(
+          color: Colors.red,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              Row(
+                children: [
+                  // SmoothStarRating(
+                  //   borderColor: kPrimaryColor,
+                  //   rating: rating,
+                  // ),
+                  SizedBox(width: 10),
+                  Text("${numOfReviews} reviews")
+                ],
+              )
+            ],
+          ),
         )),
         Container(
           child: Text(
-            price.toString(),
+            price.toInt().toVND().toString(),
             style: TextStyle(
                 color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
           ),

@@ -8,4 +8,5 @@ class ProductViewModel {
   String? get title {
     return product.description;
   }
+
 }

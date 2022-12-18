@@ -56,7 +56,7 @@ class IconBtnWithCounter extends StatelessWidget {
             width: 5,
             height: 5,
             fit: BoxFit.scaleDown,
-            color: (color != null) ? color : null,
+            color: (color != null) ? kWhiteColor : kWhiteColor,
           ),
         ),
       ]),

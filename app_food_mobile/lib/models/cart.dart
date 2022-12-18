@@ -12,56 +12,36 @@ String cartToJson(List<Cart> data) =>
 
 class Cart {
   Cart({
-    required this.id,
+    required this.productId,
+    required this.created,
     required this.name,
     required this.image,
-    required this.created,
-    required this.updated,
-    required this.deleted,
     required this.quantity,
-    required this.creator,
-    required this.updater,
-    required this.product,
     required this.price,
   });
 
-  int id;
+  int productId;
+  DateTime created;
   String name;
   String image;
-  DateTime created;
-  DateTime updated;
-  dynamic deleted;
   int quantity;
-  int creator;
-  int updater;
-  int product;
-  int price;
+  double price;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        id: json["id"],
+        productId: json["productId"],
+        created: DateTime.parse(json["_created"]),
         name: json["name"],
         image: json["image"],
-        created: DateTime.parse(json["_created"]),
-        updated: DateTime.parse(json["_updated"]),
-        deleted: json["_deleted"],
         quantity: json["quantity"],
-        creator: json["_creator"],
-        updater: json["_updater"],
-        product: json["product"],
         price: json["price"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "productId": productId,
+        "_created": created.toIso8601String(),
         "name": name,
         "image": image,
-        "_created": created.toIso8601String(),
-        "_updated": updated.toIso8601String(),
-        "_deleted": deleted,
         "quantity": quantity,
-        "_creator": creator,
-        "_updater": updater,
-        "product": product,
         "price": price,
       };
 }

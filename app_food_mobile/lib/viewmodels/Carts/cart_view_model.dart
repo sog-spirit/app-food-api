@@ -1,27 +1,32 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, avoid_print
-
 import 'dart:convert';
 
+import 'package:app_food_mobile/repositories/cart_repositiory.dart';
+import 'package:app_food_mobile/viewmodels/Products/listProduct_view_models.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/cart.dart';
-import '../../services/cart_services.dart';
+import '../../models/product.dart';
+
+List<String> hjdf = ['hdhe', 'hhgfg'];
 
 class CartViewModel extends ChangeNotifier {
   List<Cart> _cartListModel = [];
   List<Cart> get cartListModel => _cartListModel;
+  late ListProductsViewModel listProductViewModel;
   int _totalProduct = 0;
   int _totalPrice = 0;
+  int _numProduct = 0;
   int get totalProduct => _totalProduct;
+  int get numProduct => _numProduct;
   int get totalPrice => _totalPrice;
-
+  late SharedPreferences prefs;
   CartViewModel() {
-    fetchAndSetCart(1);
+    fetchAndSetCart();
   }
 
   setCartListModel(List<Cart> cartListModel) async {
     _cartListModel = cartListModel;
-    print('set carts');
     notifyListeners();
   }
 
@@ -36,30 +41,38 @@ class CartViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  fetchAndSetCart(int id) async {
+  fetchAndSetCart() async {
     try {
-      List<Cart> carts = (await CartServices().getCarts(id));
-      _cartListModel = carts;
-      _totalProduct = getTotalProductInCart();
-      _totalPrice = getTotalPrice();
+      List<Cart> carts = (await CartRepository().getCarts());
+      if (carts.isEmpty) {
+        _cartListModel = [];
+        _totalProduct = 0;
+        _totalPrice = 0;
+        _numProduct = 0;
+      } else {
+        _cartListModel = carts;
+        _totalProduct = getTotalProductInCart();
+        _totalPrice = getTotalPrice();
+        _numProduct = carts.length;
+      }
       notifyListeners();
     } catch (err) {
       print('error in fetch cart: ${err}');
     }
   }
 
-  Future<bool> checkProductInCart(int userId, int productId) async {
-    bool isProductInCart =
-        await CartServices().checkProductInCart(userId, productId);
-    print('duyen');
-    print(isProductInCart);
-    return isProductInCart;
-  }
+  // Future<bool> checkProductInCart(int userId, int productId) async {
+  //   bool isProductInCart =
+  //       await CartRepository().checkProductInCart(userId, productId);
+  //   print('duyen');
+  //   return isProductInCart;
+  // }
 
   //total product in cart
   int getTotalProductInCart() {
     int total = 0;
-    var t = 0;
+    print(
+        'total product in cart : $cartListModel ---- ${cartListModel.length}');
     if (cartListModel != []) {
       try {
         var test = cartListModel.map<int>((item) => item.quantity).toList();
@@ -70,7 +83,7 @@ class CartViewModel extends ChangeNotifier {
         return 0;
       }
     }
-    return 0;
+    return 2;
   }
 
   //total price in cart
@@ -78,7 +91,7 @@ class CartViewModel extends ChangeNotifier {
     int total = 0;
     if (cartListModel != []) {
       total = cartListModel
-          .map<int>((item) => item.quantity * item.price)
+          .map<int>((cart) => cart.quantity * cart.price.toInt())
           .reduce((value1, value2) => value1 + value2);
       return total;
     } else {
@@ -86,40 +99,39 @@ class CartViewModel extends ChangeNotifier {
     }
   }
 
-  updateCart(int userId, int productId, int quantity) async {
-    bool statusProduct =
-        await CartServices().checkProductInCart(userId, productId);
+  updateCart(Product product, int quantity, bool isAdd) async {
+    bool statusProduct = await CartRepository().checkProductInCart(product.id);
+    print(statusProduct);
     if (statusProduct) {
-      // da ton tai
-      print('cap nhat so luong moi');
-      Cart cartExisted = this.getCartIdByProduct(productId);
-      await this
-          .editCarts(userId, cartExisted.id, quantity + cartExisted.quantity);
+      editCarts(product, quantity, isAdd);
     } else {
-      print('them moi');
-      await this.addCarts(userId, productId, quantity);
+      await addCarts(product, quantity);
     }
   }
 
-  addCarts(int userId, int productId, int quantity) async {
-    await CartServices().addCarts(userId, productId, quantity);
-    await fetchAndSetCart(1);
+  addCarts(Product product, int quantity) async {
+    await CartRepository().addCarts(product, quantity);
+    await fetchAndSetCart();
   }
 
-  editCarts(int userId, int cartId, int quantity) async {
-    await CartServices().updateCarts(userId, cartId, quantity);
-    await fetchAndSetCart(1);
+  editCarts(Product product, int quantity, bool isAdd) async {
+    await CartRepository().updateCarts(product, quantity, isAdd);
+    await fetchAndSetCart();
   }
 
-  void deleteCarts(int userId, int productId) async {
-    await CartServices().deleteCarts(userId, productId);
-    await fetchAndSetCart(1);
+  deleteProductInCart(int productId) async {
+    print('cart view modelllll');
+    await CartRepository().deleteProductInCart(productId);
+    await fetchAndSetCart();
   }
 
-  // get cartId by productId
+  deleteAllCarts() async {
+    await CartRepository().deleteAllCarts();
+    await fetchAndSetCart();
+  }
+
   Cart getCartIdByProduct(int productId) {
-    Cart cart = [...cartListModel.where((e) => e.product == productId)][0];
+    Cart cart = [...cartListModel.where((e) => e.productId == productId)][0];
     return cart;
   }
 }
-                                                                                    

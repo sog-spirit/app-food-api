@@ -1,17 +1,15 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 AppBar CartAppBar() {
-    return AppBar(
-          title: Column(
+  return AppBar(
+      backgroundColor: Colors.red,
+      title: Column(
         children: const [
           Text(
-            "Your Cart",
-            style: TextStyle(color: Colors.black),
+            "Cart",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w900, fontSize: 16),
           ),
-          Text(
-            "4 items",
-            style: TextStyle(fontWeight: FontWeight.normal),
-          )
         ],
       ));
-  }
+}

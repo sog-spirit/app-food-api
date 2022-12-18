@@ -1,32 +1,32 @@
 import 'package:app_food_mobile/components/register_form.dart';
-import 'package:app_food_mobile/views/auth/register/register_information.dart';
+import 'package:app_food_mobile/views/auth/register_information.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import '../../../components/login_form.dart';
-import '../../../components/social_card.dart';
-import '../../../constants.dart';
+import '../../components/login_form.dart';
+import '../../components/social_card.dart';
+import '../../constants.dart';
+import 'login_page.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final VoidCallback showLoginPage;
-  const RegisterScreen({super.key, required this.showLoginPage});
+  // final VoidCallback showLoginPage;
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _passwordConfirmController = TextEditingController();
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -57,25 +57,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: MediaQuery.of(context).size.width * 0.04,
               ),
               Text(
-                "Register Account",
+                "Đăng ký tài khoản",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(height: 10),
               Text(
-                "Complete your details information or countinue \n with your social media",
+                "Hoàn thành thông tin chi tiết của bạn",
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline4,
               ),
               SizedBox(height: MediaQuery.of(context).size.width * 0.08),
               RegisterForm(
                 register: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RegisterInformationScreen()));
+                  // Navigator.pushNamed(context, '/sign-up/detail-info',
+                  //     arguments: [
+                  //       (_usernameController.text),
+                  //       (_passwordController.text)
+                  //     ]);
+                  PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+                    context,
+                    settings: RouteSettings(name: '/food-category'),
+                    screen: RegisterInformationScreen(
+                        password: _passwordConfirmController.text,
+                        username: _usernameController.text),
+                    withNavBar: true,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
                 },
-                emailController: _emailController,
+                usernameController: _usernameController,
                 passwordController: _passwordController,
                 passwordConfirmController: _passwordConfirmController,
               ),
@@ -107,7 +117,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      // Navigator.pushNamed(context, '/sign-in');
+                      PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+                        context,
+                        settings: RouteSettings(name: '/sign-in'),
+                        screen: LoginScreen(),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      );
+                    },
                     child: Text(
                       "Login",
                       style: TextStyle(fontSize: 16, color: kPrimaryColor),

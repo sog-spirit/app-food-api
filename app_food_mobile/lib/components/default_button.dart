@@ -8,18 +8,18 @@ class DefaultButton extends StatelessWidget {
   final Function() press;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return   SizedBox(
         width: double.infinity,
-        height: 60,
+        height: 45,
         child: TextButton(
           style: TextButton.styleFrom(
             backgroundColor: kPrimaryColor,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
           ),
           onPressed: press,
-          child: Text(
+        child: Text(
             text,
             style: TextStyle(fontSize: 18, color: Colors.white),
           ),
