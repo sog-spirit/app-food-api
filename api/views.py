@@ -29,7 +29,7 @@ from .models import (
     FavoriteProduct,
 )
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from .helper import user_authentication, user_permission_authentication
 
 class RegisterView(APIView):
@@ -313,7 +313,7 @@ class OrderAPIView(APIView):
         address = request.data.get('address', None)
         note = request.data.get('note', None)
         shipping_cost = request.data.get('shippingCost', 0)
-        order_products = request.data.get('prodcuts', None)
+        order_products = request.data.get('products', None)
         if address is None:
             return Response(
                 {'detail': 'Address is required'},
@@ -1127,5 +1127,27 @@ class AdminOverviewStats(APIView):
                 'order_in_progress': pending_order_count,
                 'doned_order_total': done_order_total_money['price__sum']
             },
+            status=status.HTTP_200_OK
+        )
+
+class AdminLast5DayTotalRevenue(APIView):
+    def get(self, request):
+        data = {}
+        MAX_DATE = 5
+        for i in range(0, MAX_DATE + 1):
+            data[str(date.today() - timedelta(i))] = 0
+
+        for key in data.keys():
+            temp = datetime.strptime(key, '%Y-%m-%d')
+            obj_list = Order.objects.filter(
+                _created__year=str(temp.year),
+                _created__month=str(temp.month),
+                _created__day=str(temp.day),
+                order_status='DONE'
+            ).aggregate(Sum('price'))
+            data[key] = obj_list['price__sum']
+
+        return Response(
+            data,
             status=status.HTTP_200_OK
         )
