@@ -16,6 +16,7 @@ from .serializers import (
     HistorySerailizer
 )
 from django.db import IntegrityError, transaction
+from django.db.models import Sum
 from .models import (
     User,
     Product,
@@ -1104,3 +1105,27 @@ class AdminGetUserHistory(APIView):
         histories = History.objects.filter(_creator=user_id)
         serializer = HistorySerailizer(histories, many=True)
         return Response(serializer.data)
+
+class AdminOverviewStats(APIView):
+    def get(self, request):
+        all_users_count = User.objects.all().count()
+        admin_count = User.objects.filter(is_superuser=True).count()
+        staff_count = User.objects.filter(is_staff=True, is_superuser=False).count()
+        user_count = User.objects.filter(is_staff=False, is_superuser=False).count()
+        order_count = Order.objects.all().count()
+        pending_order_count = Order.objects.filter(order_status='PENDING').count()
+        done_order_count = Order.objects.filter(order_status='DONE').count()
+        done_order_total_money = Order.objects.filter(order_status='DONE').aggregate(Sum('price'))
+        return Response(
+            {
+                'total_user': all_users_count,
+                'admin': admin_count,
+                'staff': staff_count,
+                'user': user_count,
+                'total_order': order_count,
+                'order_is_doned': done_order_count,
+                'order_in_progress': pending_order_count,
+                'doned_order_total': done_order_total_money['price__sum']
+            },
+            status=status.HTTP_200_OK
+        )
