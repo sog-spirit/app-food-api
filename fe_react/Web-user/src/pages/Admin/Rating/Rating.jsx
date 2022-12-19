@@ -8,7 +8,6 @@ import { HOST } from '../../../env/config'
 import ReactPaginate from 'react-paginate'
 
 const AdminRating = () => {
-  const [user, setUser] = useState({})
   const { id } = useParams()
   const [reviews, setReviews] = useState([])
   const navigate = useNavigate()
@@ -25,32 +24,15 @@ const AdminRating = () => {
   }
 
   useEffect(() => {
-    getUser()
-    getReviews()
-  }, [])
-
-  var getUser = async () => {
-    let id = sessionStorage.getItem('user')
-    if (id) {
-      await fetch(`${HOST}/api/user/${id}`, {
-        method: 'GET',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setUser(data)
-          console.log(data)
-          if (data.is_superuser !== true && data.is_staff !== true) {
-            navigate('/error')
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          navigate('/error')
-        })
-    } else {
+    const is_superuser = sessionStorage.getItem('is_superuser')
+    const is_staff = sessionStorage.getItem('is_staff')
+    if (is_superuser !== 'true' && is_staff !== 'true') {
       navigate('/error')
     }
-  }
+    else {
+      getReviews()
+    }
+  }, [])
 
   const updateReview = async (id) => {
     let token = sessionStorage.getItem('token')

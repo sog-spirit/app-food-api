@@ -3,14 +3,11 @@ import Helmet from "../../../components/Helmet/Helmet";
 import SlideBar from "../../../components/UI/slider/SlideBar";
 import "../../../styles/dashboard.scss";
 import "../../../styles/admin.scss";
-
-import { Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ModalBox from "../../../components/UI/ModalBox";
 import { HOST } from "../../../env/config";
 
 const EditCategory = () => {
-  const [user, setUser] = useState({})
   const [isModal, setIsModal] = useState(false);
   const {id} = useParams()
   const [image, setImage] = useState("")
@@ -20,8 +17,14 @@ const EditCategory = () => {
     setIsModal(false);
   };
   useEffect(() => {
-    getUser()
-    getCategory()
+    const is_superuser = sessionStorage.getItem('is_superuser')
+    const is_staff = sessionStorage.getItem('is_staff')
+    if (is_superuser !== 'true' && is_staff !== 'true') {
+      navigate('/error')
+    }
+    else {
+      getCategory()
+    }
   }, [])
   const handleChange = async (event) => {
     setCategory({ ...category, [event.target.name]: event.target.value });
@@ -38,29 +41,6 @@ const EditCategory = () => {
         console.log(error);
         navigate('/error')
       })
-  }
-  var getUser = async () => {
-    let id = sessionStorage.getItem('user')
-    if (id) {
-      await fetch(`${HOST}/api/user/${id}`, {
-        method: 'GET',
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data)
-        console.log(data);
-        if (data.is_superuser !== true && data.is_staff !== true) {
-          navigate('/error')
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        navigate('/error')
-      })
-    }
-    else {
-      navigate('/error')
-    }
   }
   const handleSubmit = async (e) => {
     e.preventDefault();

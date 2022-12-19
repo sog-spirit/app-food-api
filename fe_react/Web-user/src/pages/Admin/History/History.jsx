@@ -12,7 +12,6 @@ function History() {
     const {id} = useParams()
     const navigate = useNavigate()
     const [histories, setHistories] = useState([])
-    const [user, setUser] = useState({})
     const [pageNumber, setPageNumber] = useState(0);
     
     const historyPerPage = 10;
@@ -29,33 +28,15 @@ function History() {
     };
 
     useEffect(() => {
-        getUser()
+      const is_superuser = sessionStorage.getItem('is_superuser')
+      const is_staff = sessionStorage.getItem('is_staff')
+      if (is_superuser !== 'true' && is_staff !== 'true') {
+        navigate('/error')
+      }
+      else {
         getHistories()
+      }
     }, [])
-
-    var getUser = async () => {
-        let id = sessionStorage.getItem('user')
-        if (id) {
-            await fetch(`${HOST}/api/user/${id}`, {
-            method: 'GET',
-            })
-            .then((res) => res.json())
-            .then((data) => {
-            setUser(data)
-            console.log(data);
-            if (data.is_superuser !== true && data.is_staff !== true) {
-                navigate('/error')
-            }
-            })
-            .catch((error) => {
-            console.log(error);
-            navigate('/error')
-            })
-        }
-        else {
-            navigate('/error')
-        }
-    }
     
     var getHistories = async () => {
         await fetch(`${HOST}/api/admin/users/${id}/history`, {

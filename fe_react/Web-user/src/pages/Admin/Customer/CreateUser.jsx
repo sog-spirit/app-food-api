@@ -12,7 +12,6 @@ import { HOST } from "../../../env/config";
 
 function CreateUser() {
     const navigate = useNavigate();
-    const [adminUser, setAdminUser] = useState({})
     const [user, setUser] = useState({})
     const [isModal, setIsModal] = useState(false);
     const [image, setImage] = useState("") 
@@ -21,7 +20,11 @@ function CreateUser() {
     };
 
     useEffect(() => {
-        getUser()
+        const is_superuser = sessionStorage.getItem('is_superuser')
+        const is_staff = sessionStorage.getItem('is_staff')
+        if (is_superuser !== 'true' && is_staff !== 'true') {
+        navigate('/error')
+        }
     }, [])
 
     const handleSubmit = async (e) => {
@@ -65,31 +68,6 @@ function CreateUser() {
     const closeModal = (e) => {
         setIsModal(false);
     };
-
-    var getUser = async () => {
-        let id = sessionStorage.getItem('user')
-        if (id) {
-          await fetch(`${HOST}/api/user/${id}`, {
-            method: 'GET',
-          })
-          .then((res) => res.json())
-          .then((data) => {
-            setAdminUser(data)
-            console.log(data);
-            if (data.is_superuser !== true && data.is_staff !== true) {
-              navigate('/error')
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            navigate('/error')
-          })
-        }
-        else {
-          navigate('/error')
-        }
-      }
-
     return (
     <Helmet title="AdminPage">
         <div className="admin__section d-flex">

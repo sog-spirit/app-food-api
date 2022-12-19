@@ -10,7 +10,6 @@ import ModalBox from "../../../components/UI/ModalBox";
 import { HOST } from "../../../env/config";
 
 function EditProduct() {
-    const [user, setUser] = useState({})
     const {id} = useParams()
     const navigate = useNavigate()
     const [isModal, setIsModal] = useState(false);
@@ -39,31 +38,6 @@ function EditProduct() {
             navigate('/error')
           })
     }
-
-    var getUser = async () => {
-        let id = sessionStorage.getItem('user')
-        if (id) {
-          await fetch(`${HOST}/api/user/${id}`, {
-            method: 'GET',
-          })
-          .then((res) => res.json())
-          .then((data) => {
-            setUser(data)
-            console.log(data);
-            if (data.is_superuser !== true && data.is_staff !== true) {
-              navigate('/error')
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            navigate('/error')
-          })
-        }
-        else {
-          navigate('/error')
-        }
-      }
-
     let getCategories = async () => {
         await fetch(`${HOST}/api/admin/category`, {
         method: 'GET',
@@ -79,9 +53,16 @@ function EditProduct() {
       };
 
     useEffect(() => {
-        getUser()
-        getProductDetail()
-        getCategories()
+        const is_superuser = sessionStorage.getItem('is_superuser')
+        const is_staff = sessionStorage.getItem('is_staff')
+        if (is_superuser !== 'true' && is_staff !== 'true') {
+            navigate('/error')
+        }
+        else {
+            getProductDetail()
+            getCategories()
+        }
+        
     }, [])
 
     const handleSubmit = async (e) => {

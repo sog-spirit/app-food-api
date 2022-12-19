@@ -11,7 +11,6 @@ import { HOST } from '../../../env/config'
 
 const AdminCustomer = () => {
   //date time picker
-  const [user, setUser] = useState({})
   const [users, setUsers] = useState([])
   const [filter, setFilter] = useState('default')
   const navigate = useNavigate()
@@ -28,8 +27,14 @@ const AdminCustomer = () => {
   }
 
   useEffect(() => {
-    currentUser()
-    getUsers()
+    const is_superuser = sessionStorage.getItem('is_superuser')
+    const is_staff = sessionStorage.getItem('is_staff')
+    if (is_superuser !== 'true' && is_staff !== 'true') {
+      navigate('/error')
+    }
+    else {
+      getUsers()
+    }
   }, [])
 
   useEffect(async () => {
@@ -63,29 +68,6 @@ const AdminCustomer = () => {
         console.log(error)
         navigate('/error')
       })
-  }
-
-  var currentUser = async () => {
-    let id = sessionStorage.getItem('user')
-    if (id) {
-      await fetch(`${HOST}/api/user/${id}`, {
-        method: 'GET',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setUser(data)
-          console.log(data)
-          if (data.is_superuser !== true && data.is_staff !== true) {
-            navigate('/error')
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          navigate('/error')
-        })
-    } else {
-      navigate('/error')
-    }
   }
 
   return (

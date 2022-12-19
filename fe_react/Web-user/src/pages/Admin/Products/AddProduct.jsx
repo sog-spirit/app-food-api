@@ -11,40 +11,21 @@ import { HOST } from "../../../env/config";
 
 const AddProduct = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState({})
   const [isModal, setIsModal] = useState(false);
   const [form, setForm] = useState({})
   const [categories, setCategories] = useState([])
   const [image, setImage] = useState("") 
 
   useEffect(() => {
-    getUser()
-    getCategories()
-  }, [])
-
-  var getUser = async () => {
-    let id = sessionStorage.getItem('user')
-    if (id) {
-      await fetch(`${HOST}/api/user/${id}`, {
-        method: 'GET',
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data)
-        console.log(data);
-        if (data.is_superuser !== true && data.is_staff !== true) {
-          navigate('/error')
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        navigate('/error')
-      })
-    }
-    else {
+    const is_superuser = sessionStorage.getItem('is_superuser')
+    const is_staff = sessionStorage.getItem('is_staff')
+    if (is_superuser !== 'true' && is_staff !== 'true') {
       navigate('/error')
     }
-  }
+    else {
+      getCategories()
+    }
+  }, [])
 
   let getCategories = async () => {
     await fetch(`${HOST}/api/admin/category`, {

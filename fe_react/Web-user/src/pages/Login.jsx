@@ -28,6 +28,8 @@ const Login = () => {
     if (data.detail == "Login successfully") {
       sessionStorage.setItem('token', data.jwt)
       sessionStorage.setItem('user', data.user_id)
+      sessionStorage.setItem('is_superuser', data.is_superuser)
+      sessionStorage.setItem('is_staff', data.is_staff)
       await fetch(`${HOST}/api/user/${data.user_id}`, {
         method: 'GET',
       })

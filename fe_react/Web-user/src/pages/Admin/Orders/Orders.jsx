@@ -11,7 +11,6 @@ import { toPrice } from '../../../utils/helper'
 import ReactPaginate from "react-paginate";
 
 const AdminOrder = () => {
-  const [user, setUser] = useState({})
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('default')
   const navigate = useNavigate()
@@ -31,8 +30,14 @@ const AdminOrder = () => {
   };
 
   useEffect(() => {
-    getUser()
-    getOrders()
+    const is_superuser = sessionStorage.getItem('is_superuser')
+    const is_staff = sessionStorage.getItem('is_staff')
+    if (is_superuser !== 'true' && is_staff !== 'true') {
+      navigate('/error')
+    }
+    else {
+      getOrders()
+    }
   }, [])
 
   useEffect(async () => {
@@ -62,29 +67,6 @@ const AdminOrder = () => {
       return -1
     }
     return 0
-  }
-
-  var getUser = async () => {
-    let id = sessionStorage.getItem('user')
-    if (id) {
-      await fetch(`${HOST}/api/user/${id}`, {
-        method: 'GET',
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setUser(data)
-          console.log(data)
-          if (data.is_superuser !== true && data.is_staff !== true) {
-            navigate('/error')
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          navigate('/error')
-        })
-    } else {
-      navigate('/error')
-    }
   }
 
   const getOrders = async () => {

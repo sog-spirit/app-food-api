@@ -51,6 +51,8 @@ const Header = () => {
     sessionStorage.removeItem('carts');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('is_superuser');
+    sessionStorage.removeItem('is_staff');
     setUser({})
   }
 
