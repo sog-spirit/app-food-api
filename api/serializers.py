@@ -1,5 +1,16 @@
 from rest_framework import serializers
-from .models import User, Product, Category, Order, OrderDetail, Cart, Review, FavoriteProduct, History
+from .models import (
+    User,
+    Product,
+    Category,
+    Order,
+    OrderDetail,
+    Cart,
+    Review,
+    FavoriteProduct,
+    History,
+    Coupon,
+)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -98,6 +109,10 @@ class FavoriteProductSerializer(serializers.ModelSerializer):
         model = FavoriteProduct
         fields = '__all__'
 
+class CouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupon
+        fields = '__all__'
 
 class AdminUserSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
