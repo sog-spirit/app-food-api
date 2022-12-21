@@ -30,6 +30,7 @@ from .models import (
     Review,
     FavoriteProduct,
     Coupon,
+    CouponUsage,
 )
 import jwt
 from datetime import datetime, timedelta, date
@@ -403,6 +404,18 @@ class OrderAPIView(APIView):
                                 {'detail': 'Coupon expired'},
                                 status=status.HTTP_400_BAD_REQUEST
                             )
+                        try:
+                            used_coupon = CouponUsage.objects.get(user=user, coupon=coupon)
+                            return Response(
+                                {'detail': 'coupon already used'},
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                        except CouponUsage.DoesNotExist:
+                            CouponUsage.objects.create(
+                                user=user,
+                                coupon=coupon
+                            )
+
                         price *= float(1 - (coupon.discount / 100))
                     except Coupon.DoesNotExist:
                         return Response(
@@ -1281,6 +1294,17 @@ class AdminCoupons(APIView):
         )
 
 class AdminCoupon(APIView):
+    def get(self, request, coupon_id):
+        try:
+            coupon = Coupon.objects.get(id=coupon_id)
+            serializer = CouponSerializer(coupon)
+            return Response(serializer.data)
+        except Coupon.DoesNotExist:
+            return Response(
+                {'detail': 'coupon not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
     def put(self, request, coupon_id):
         payload = user_permission_authentication(request)
         try:
